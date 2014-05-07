@@ -1,0 +1,23 @@
+Eric Yi 2014-05-07
+=======================================================
+index page:
+	route: /
+
+master page:
+	route: /master
+
+	route: /master/login
+
+	route: /master/publish
+
+	route: /master/
+
+	route: /master/about
+
+reply page:
+	route: /reply
+
+about page:
+	route: /about
+
+=======================================================
