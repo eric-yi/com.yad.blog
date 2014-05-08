@@ -1,0 +1,40 @@
+#!/bin/bash
+
+# Eric Yi on 2014-05-08
+# yi_xiaobin@163.com
+
+HOME=$(cd ../"$(dirname "$0")"; pwd)
+echo $HOME
+WEBAPP=$HOME/webapp
+
+start() {
+	node $WEBAPP/main.js	
+}
+
+stop() {
+	echo ""
+}
+
+restart() {
+	stop
+	start
+}
+
+case "$1" in
+	start)
+		start
+		;;
+
+	stop)
+		stop
+		;;
+
+	restart)
+		restart
+		;;
+	
+	*)
+
+		;;
+esac
+
