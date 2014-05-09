@@ -25,6 +25,60 @@ var Server = function() {
 	};
 };
 
+var Database = function() {
+	var host = '127.0.0.1';
+	var port = 3306;
+	var username;
+	var password;
+	var name = 'yad_blog';
+	var max_connections = 5;
+
+	return {
+		setHost: function(p_host) {
+			host = p_host;
+		},
+		getHost: function() {
+			return host;
+		},
+
+		setPort: function(p_port) {
+			port = p_port;
+		},
+		getPort: function() {
+			return port;
+		},
+
+		setUsername: function(p_username) {
+			username = p_username;
+		},
+		getUsername: function() {
+			return username;
+		},
+
+		setPassword: function(p_password) {
+			password = p_password;
+		},
+		getPassword: function() {
+			return password;
+		},
+
+		setName: function(p_name) {
+			name = p_name;
+		},
+		getName: function(p_name) {
+			return name;
+		},
+
+		setMax_connections: function(p_max_connections) {
+			max_connections = p_max_connections;
+		},
+		getMax_connections: function() {
+			return max_connections;
+		}
+	};
+
+};
+
 var Config = function(path) {
 	var props = [];
 	{
@@ -47,8 +101,32 @@ var Config = function(path) {
 		}
 
 		var server = new Server();
-		server.setHost(get('server', 'host'));
-		server.setPort(get('server', 'port'));	
+		server.setHost(
+			get('server', 'host')
+		);
+		server.setPort(
+			get('server', 'port')
+		);	
+
+		var database = new Database();
+		database.setHost(
+			get('database', 'host')
+		);
+		database.setPort(
+			get('database', 'port')
+		);
+		database.setUsername(
+			get('database', 'username')
+		);
+		database.setPassword(
+			get('database', 'password')
+		);
+		database.setName(
+			get('database', 'name')
+		);
+		database.setMax_connections(
+			get('database', 'max_connection')
+		);
 	}
 
 	function get(a, e) {
@@ -63,7 +141,10 @@ var Config = function(path) {
 		get: get,
 		getServer: function() {
 			return server;
-		}
+		},
+		getDatabase: function() {
+			return database;
+		}	
 	};
 };
 
@@ -77,3 +158,5 @@ module.exports = function(path) {
 		getCfg: getConfig
 	};
 };
+
+

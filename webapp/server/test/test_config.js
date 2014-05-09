@@ -4,6 +4,6 @@
  */
 
 var Config = require('../config');
-var config = new Config('../yadBlog.cfg');
+var config = new Config('../../yad_blog.cfg');
 var v = config.getCfg().getServer().getHost();
 console.log(v);
