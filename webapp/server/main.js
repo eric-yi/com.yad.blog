@@ -17,7 +17,8 @@ function arg_opt() {
 var server;
 function init() {
   var Config = require('./config');
-  var config = new Config(config_path).getCfg();
+  var config = Config.getConfig();
+	config.init(config_path)
   server = config.getServer();
 }
 

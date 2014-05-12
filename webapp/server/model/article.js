@@ -32,11 +32,11 @@ module.exports = function() {
       return path_name;
     },
 
-    setPulish_time: function(p_publish_time) {
-      pulish_time = p_pulish_time;
+    setPublish_time: function(p_publish_time) {
+      publish_time = p_publish_time;
     },
     getPublish_time: function() {
-      return pulish_time;
+      return publish_time;
     }
   };
 };

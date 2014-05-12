@@ -103,15 +103,18 @@ Config.prototype.init = function(path) {
   var entry;
   for (var a in articles) {
     if (a != '' && articles[a] != '') {
-      this.props[stringUtil.trim(a)] = [];
-      entries = qs.parse(articles[a], '\n', '=');	
-      for (var e in entries) {
-        if (e != '' && entries[e] != '') {
-          ak = stringUtil.trim(a);
-          ek = stringUtil.trim(e);
-          this.props[ak][ek] = stringUtil.trim(entries[e]);
-        }
-      }
+      ak = stringUtil.trim(a);
+			if (ak != '' && ak.charAt(0) != '#') {
+      	this.props[ak] = [];
+      	entries = qs.parse(articles[a], '\n', '=');	
+      	for (var e in entries) {
+        	if (e != '' && entries[e] != '') {
+          	ek = stringUtil.trim(e);
+						if (ek != '' && ek.charAt(0) != '#')
+          		this.props[ak][ek] = stringUtil.trim(entries[e]);
+        	}
+      	}
+			}
     }
   }
 

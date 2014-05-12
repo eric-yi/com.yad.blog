@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS yad_blog_category (
 
 CREATE TABLE IF NOT EXISTS yad_blog_article (
   id int(11) not null auto_increment primary key,
+	category_id int(11) not null,
   title varchar(200) not null,
   path_name varchar(50) not null,
   publish_time datetime not null
