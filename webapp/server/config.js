@@ -86,18 +86,56 @@ var Database = function() {
       return max_connections;
     }
   };
+};
 
+Blog = function() {
+	this.article_path = 'articles';
+	this.about_path = 'about.html';
+	this.title = '跳跃的兰羚羊';
+};
+
+Blog.prototype.setArticle_path = function(article_path) {
+	this.article_path = article_path;
+};
+
+Blog.prototype.getArticle_path = function() {
+	return this.article_path;
+};
+
+Blog.prototype.setAbout_path = function(about_path) {
+	this.about_path = about_path;
+};
+
+Blog.prototype.getAbout_path = function() {
+	return this.about_path;
+};
+
+Blog.prototype.setTitle = function(title) {
+	this.title = title;
+};
+
+Blog.prototype.getTitle = function() {
+	return this.title;
+};
+
+Blog.prototype.setSubtitle = function(subtitle) {
+	this.subtitle = subtitle;
+};
+
+Blog.prototype.getSubtitle = function() {
+	return this.subtitle;
 };
 
 Config = function() {
   this.props = [];
   this.server = new Server();
   this.database = new Database();
+	this.blog = new Blog();
   this.x = 1;
 };
 
 Config.prototype.init = function(path) {
-  var content = require('fs').readFileSync(path, 'ascii');
+  var content = require('fs').readFileSync(path, 'utf-8');
   var qs = require('querystring');
   var articles = qs.parse(content, '[', ']');
   var entry;
@@ -143,6 +181,19 @@ Config.prototype.init = function(path) {
   this.database.setMax_connections(
     get('database', 'max_connection')
   );
+
+	this.blog.setArticle_path(
+		get(this.props, 'blog', 'article_path')
+	);
+	this.blog.setAbout_path(
+		get(this.props, 'blog', 'about_path')
+	);
+	this.blog.setTitle(
+		get(this.props, 'blog', 'title')
+	);
+	this.blog.setSubtitle(
+		get(this.props, 'blog', 'subtitle')
+	);
 };
 
 Config.prototype.getServer = function() {
@@ -151,6 +202,10 @@ Config.prototype.getServer = function() {
 
 Config.prototype.getDatabase = function() {
   return this.database;
+};
+
+Config.prototype.getBlog = function() {
+	return this.blog;
 };
 
 get = function(props, a, e) {

@@ -5,10 +5,10 @@
 
 var Routes = function(app) {
 	var index = require('./index');
-	var test = require('./test');
+	var about = require('./about');
 
 	app.use('/', index);
-	app.use('/test', test);
+	app.use('/about', about);
 };
 
 module.exports = function(app) {

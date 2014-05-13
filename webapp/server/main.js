@@ -1,9 +1,7 @@
 #!/usr/bin/env node
 
-var path = require('path');
 var debug = require('debug')('http');
-var config_path = path.join(__dirname, '..', 'yad_blog.cfg');
-console.log(config_path);
+var config_path;
 
 function arg_opt() {
   var arguments = process.argv.splice(2);
@@ -16,10 +14,11 @@ function arg_opt() {
 
 var server;
 function init() {
-  var Config = require('./config');
-  var config = Config.getConfig();
-	config.init(config_path)
-  server = config.getServer();
+	Global = require('./global');
+	var global = Global.getGlobal();
+	if (config_path)		global.setConfig_path(config_path);	
+	global.init();
+  server = global.getServer();
 }
 
 function start() {

@@ -2,8 +2,8 @@ doctype html
 html
 	head
 		title= title
-		link(rel='stylesheet', href='/stylesheets/home.css')
 		link(rel='stylesheet', href='/stylesheets/style.css')
+		link(rel='stylesheet', href='/stylesheets/home.css')
 	body
 		#rap
 			#headmenu
@@ -15,8 +15,10 @@ html
 
 			#header
 				#headerleft
-
+					h1 #{title}
+					h2 #{subtitle}
 				#headerright
+					a(href="feed.htm" title="GET FEED")
 
 			#content
 				.datecomrap
