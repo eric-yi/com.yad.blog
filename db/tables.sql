@@ -35,3 +35,10 @@ CREATE TABLE IF NOT EXISTS yad_blog_about (
   write_time datetime not null
 ) character set utf8 COMMENT='';
 
+CREATE TABLE IF NOT EXISTS yad_blog_link (
+  id int(11) not null auto_increment primary key,
+  name varchar(50) not null,
+  url varchar(200) not null
+) character set utf8 COMMENT='';
+
+

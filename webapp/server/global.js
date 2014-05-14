@@ -28,6 +28,10 @@ Global.prototype.getBlog = function() {
 	return this.config.getBlog();
 };
 
+Global.prototype.getDatabase = function() {
+	return this.config.getDatabase();
+};
+
 var global = new Global();
 exports.getGlobal = function() {
 	return global;

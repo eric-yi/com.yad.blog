@@ -91,7 +91,11 @@ var Database = function() {
 Blog = function() {
 	this.article_path = 'articles';
 	this.about_path = 'about.html';
-	this.title = '跳跃的兰羚羊';
+	this.title = '伊爱戴@钟爱一生';
+	this.subtitle = '媛媛心爱，苗苗心疼';
+	this.auth = '伊爱戴';
+	this.auth_alias = 'yad';
+	this.email = 'yi_xiaobin@163.com';
 };
 
 Blog.prototype.setArticle_path = function(article_path) {
@@ -124,6 +128,30 @@ Blog.prototype.setSubtitle = function(subtitle) {
 
 Blog.prototype.getSubtitle = function() {
 	return this.subtitle;
+};
+
+Blog.prototype.setAuth = function(auth) {
+	this.auth = auth;
+};
+
+Blog.prototype.getAuth = function() {
+	return this.auth;
+};
+
+Blog.prototype.setAuth_alias = function(auth_alias) {
+	this.auth_alias = auth_alias;
+};
+
+Blog.prototype.getAuth_alias = function() {
+	return this.auth_alias;
+};
+
+Blog.prototype.setEmail = function(email) {
+	this.email = email;
+};
+
+Blog.prototype.getEmail = function() {
+	return this.email;
 };
 
 Config = function() {
@@ -193,6 +221,15 @@ Config.prototype.init = function(path) {
 	);
 	this.blog.setSubtitle(
 		get(this.props, 'blog', 'subtitle')
+	);
+	this.blog.setAuth(
+		get(this.props, 'blog', 'auth')
+	);
+	this.blog.setAuth_alias(
+		get(this.props, 'blog', 'auth_alias')
+	);
+	this.blog.setEmail(
+		get(this.props, 'blog', 'email')
 	);
 };
 

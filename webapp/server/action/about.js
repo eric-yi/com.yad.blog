@@ -4,7 +4,7 @@ Constants = require('./constants');
 
 /* GET home page. */
 router.get('/', function(req, res) {
-  res.render('about', Constants.parameters);
+  res.render('about.htm', Constants.parameters);
 });
 
 module.exports = router;

@@ -8,7 +8,10 @@ Global = require('../global');
 var global = Global.getGlobal();
 
 exports.parameters = {
-	title:      global.getBlog().getTitle(),
-	subtitle:   global.getBlog().getSubtitle()
+	title:      	global.getBlog().getTitle(),
+	subtitle:   	global.getBlog().getSubtitle(),
+	auth:					global.getBlog().getAuth(),
+	auth_alias:		global.getBlog().getAuth_alias(),
+	email:				global.getBlog().getEmail()
 };
 
