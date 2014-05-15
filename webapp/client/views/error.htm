@@ -1,8 +1,11 @@
-<%- include header.htm %>
-
-<div id="content">
-	<h1><%= message %> <h1>
-	<h1><%= error %> <h1>
+<html>
+<head>
+</head>
+<body>
+<div>
+	<h1><%= message %><h1>
+	<h2><%= error.status %><h2>
+	<pre><%= error.stack %></pre>
 </div>
-
-<%- include footer.htm %>
+</body>
+</html>

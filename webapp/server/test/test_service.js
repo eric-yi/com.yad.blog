@@ -17,8 +17,8 @@ function test() {
 	var Service = require('../service/service');
 	var service = Service.getService();
 	service.setDao(dao);
-//	test_getArticle(service);
-	test_getCategory(service);
+	test_getArticles(service);
+//	test_getCategory(service);
 }
 
 function test_getCategory(service) {
@@ -30,12 +30,18 @@ function test_getCategory(service) {
 	});
 }
 
-function test_getArticle(service) {
-	service.getArticle(null, function(list) {
+function test_getArticles(service) {
+	Model = require('../model/model_proxy')
+	service.getArticles(null, function(list) {
+		console.log(Model.toArticleInCatetoryJson(list));
+		/*
 		for (var n in list) {
-			var article = list[n];
-			console.log(article.getId() + ',' + article.getTitle() + ',' + article.getPath_name() + ',' + article.getPublish_time());
+			var row = list[n];
+			var article = row.article;
+			var category = row.category;
+			console.log(article.getId() + ',' + article.getTitle() + ',' + article.getPath_name() + ',' + article.getPublish_time() + ',' + category.getName());
 		}
+		*/
 	});
 }
 

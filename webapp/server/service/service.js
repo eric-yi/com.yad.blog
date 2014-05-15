@@ -19,7 +19,7 @@ Service.prototype.getDao = function(dao) {
 }
 
 Service.prototype.getArticles = function(article, callback) {
-	var sql = 'select * from yad_blog_article';
+	var sql = 'select a.*, c.name as category_name, c.path_name as category_path_name, c.parent_name as category_parent_name, c.parent_path_name as category_parent_path_name from yad_blog_article a, yad_blog_v_category c where a.category_id = c.id';
 	if (article != null) {
 
 	}
@@ -28,7 +28,8 @@ Service.prototype.getArticles = function(article, callback) {
 		for (var index in results) {
 			var result = results[index];
 			var article = ModelProxy.genArticle(result);
-			list.push(article);
+			var category = ModelProxy.genCategoryWithPrefix(result);
+			list.push({article: article, category: category});
 		}
 		callback(list);
 	});

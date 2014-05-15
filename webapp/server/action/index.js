@@ -1,13 +1,14 @@
 var express = require('express');
 var router = express.Router();
 Constants = require('./constants');
-Base = require('./base');
 
 /* GET home page. */
 router.get('/', function(req, res) {
-	Base.getBaseDatas(function(datas) {	
-  	res.render('index.htm', datas);
-	});
+ 	res.render('index.htm', Constants.parameters);
+});
+
+router.get('/parameters', function(req, res) {
+  res.send(Constants.parameters_json);
 });
 
 module.exports = router;

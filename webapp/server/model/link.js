@@ -29,6 +29,13 @@ module.exports = function() {
     },
     getUrl: function() {
       return url;
-    }
+    },
+
+		toJson: function() {
+			return 	'{"id":" ' + id + 
+							'", "name":"' + name +
+							'", "url":"' + url +
+							'"}';
+		}
   };
 };

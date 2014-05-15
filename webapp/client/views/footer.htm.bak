@@ -1,0 +1,94 @@
+<div id="sidebar">
+	<div id="search">
+		<div id="search">
+			<ul>
+				<li style="margin-top:0px;">
+					<div>
+						<form id="searchform" method="post" action="/search">
+							<input type="text" name="s" id="s" size="11" />
+							<input type="image" src="/images/lens.png" title="search" alt="S" style="margin:0 0 -5px 3px;" />
+						</form>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<ul>
+		<li id="categories-3" class="widget widget_categories">
+			<h3>分类目录</h3> 
+			<ul>
+<% 
+for (var n=0; n<categories.length; n++){ 
+	var category = categories[n];
+	var top_name;
+	if (category.getParent_id() == 0) {
+		top_name = category.getName();
+		if (n != 0) {
+%>
+					</ul>
+				</li>
+<%
+		} 
+%>
+
+				<li class="cat-item"> 
+					<a href="category/<%= top_name %>"><%= top_name %></a>
+					<ul class='children'>
+<%
+	} else { 
+%>
+						<li class="cat-item"> 
+							<a href="category/<%= top_name %>/<%= category.getPath_name() %>"><%=category.getName() %></a>
+						</li>
+<% 
+	} 
+	if (n == categories.length -1) {
+%>
+					</ul>
+				</li>
+<%
+	}
+}
+%>
+			</ul>
+		</li>
+
+		<li id="recent-posts-3" class="widget widget_recent_entries">
+			<h3>近期文章</h3>
+			<ul>
+
+			</ul>
+		</li>
+
+		<li id="recent-comments-3" class="widget widget_recent_comments">
+			<h3>近期评论</h3>
+			<ul>
+
+			</ul>
+		</li>	
+
+ 		<li id="linkcat-2" class="widget widget_links">
+			<h3>友情链接</h3>
+			<ul class='xoxo blogroll'>
+<%
+for (var n=0; n<links.length; n++){ 
+	var link = links[n];
+%>
+				<li><a href="http://<%= link.getUrl() %>"><%= link.getName() %></a></li>
+<%
+}
+%>
+			</ul>
+		</li>
+	</ul>
+</div>
+	
+		<p class="footprint">@2014 <%= blog.auth %>(<%= blog.auth_alias %>)</p>
+		<script type='text/javascript' src="/javascritps/jquery.min.js"></script>
+		<script type='text/javascript' src="/javascritps/prettify.js"></script>
+		<script type='text/javascript' src="/javascripts/launch.js"></script>
+		<script type='text/javascript' src="/javascritps/contents.js"></script>
+</div>
+</body>
+</html>

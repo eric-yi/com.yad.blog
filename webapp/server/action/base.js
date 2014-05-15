@@ -3,8 +3,7 @@
  * Eric Yi on 2014-05-14
  * yi_xiaobin@163.com
  */
-
-Global = require('../global');
+Global= require('../global');
 var global = Global.getGlobal();
 
 DaoFactory = require('../dao/dao_factory');
@@ -58,6 +57,12 @@ getLinks = function(link, callback) {
 	});
 };
 
+getArticles = function(article, callback) {
+	service.getArticles(article, function(list) {
+		callback(list);
+	});
+};
+
 exports.getBaseDatas = function(callback) {
 	getCategories(null, function(categories) { 
 		getLinks(null, function(links) {
@@ -72,3 +77,6 @@ exports.getBaseDatas = function(callback) {
 };
 
 exports.service = service;
+exports.getCategories = getCategories;
+exports.getLinks = getLinks;
+exports.getArticles = getArticles;

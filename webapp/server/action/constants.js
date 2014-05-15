@@ -15,3 +15,11 @@ exports.parameters = {
 	email:				global.getBlog().getEmail()
 };
 
+exports.parameters_json = '{' +
+	'"title":"' + global.getBlog().getTitle() + '",' +
+	'"subtitle":"' + global.getBlog().getSubtitle() + '",' +
+	'"auth":"' + global.getBlog().getAuth() + '",' +
+	'"auth_alias":"' + global.getBlog().getAuth_alias() + '",' +
+	'"email":"' + global.getBlog().getEmail() + '"' +
+'}';
+

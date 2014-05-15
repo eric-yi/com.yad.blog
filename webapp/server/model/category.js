@@ -10,6 +10,8 @@ module.exports = function() {
 	var parent_id;
 	var position;
 	var path_name;
+	var parent_name;
+	var parent_path_name;
 	
 	return {
 		setId: function(p_id) {
@@ -45,6 +47,43 @@ module.exports = function() {
 		},
 		getPath_name: function() {
 			return path_name;
+		},
+
+		setParent_name: function(p_parent_name) {
+			parent_name = p_parent_name;
+		},
+		getParent_name: function() {
+			return parent_name;
+		},
+
+		setParent_path_name: function(p_parent_path_name) {
+			parent_path_name = p_parent_path_name;
+		},
+		getParent_path_name: function() {
+			return parent_path_name;
+		},
+
+		toArray: function() {
+			return {
+				id:	id,
+				name:	name,
+				parent_id: parent_id,
+				position: position,
+				path_name: path_name,
+				parent_name: parent_name,
+				parent_path_name: parent_path_name
+			};
+		},
+
+		toJson: function() {
+			return 	'{"id":" ' + id + 
+							'", "name":"' + name +
+							'", "parent_id":"' + parent_id +
+							'", "position":"' + position +
+							'", "path_name":"' + path_name +
+							'", "parent_name":"' + parent_name +
+							'", "parent_path_name":"' + parent_path_name +
+							'"}';
 		}
 	};
 };
