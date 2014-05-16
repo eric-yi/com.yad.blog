@@ -12,35 +12,35 @@ module.exports = function() {
   var publish_time;
 
   return {
-		id: this.id,
-		category_id: this.category_id,
-		title: this.title,
-		path_name: this.path_name,
-		publish_time: this.publish_time,
-		
-		toJson: function() {
-			return 	'{"id":" ' + this.id + 
-							'", "category_id":"' + this.category_id +
-							'", "title":"' + this.title +
-							'", "path_name":"' + this.path_name +
-							'", "publish_time":"' + this.publish_time +
-							'"}';
-		},
-							
-		toJson: function(category, reply_num) {
-			return 	'{"id":" ' + this.id + 
-							'", "category_id":"' + this.category_id +
-							'", "title":"' + this.title +
-							'", "path_name":"' + this.path_name +
-							'", "publish_time":"' + this.publish_time +
-							'", "category_name":"' + category.name +
-							'", "category_path_name":"' + category.path_name +
-							'", "category_parent_id":"' + category.parent_id +
-							'", "category_parent_name":"' + category.parent_name +
-							'", "category_parent_path_name":"' + category.parent_path_name +
-							'", "reply_num":"' + reply_num +
-							'"}';
+    id: this.id,
+    category_id: this.category_id,
+    title: this.title,
+    path_name: this.path_name,
+    publish_time: this.publish_time,
 
-		}
+    toJson: function() {
+      return '{"id":"' + this.id +
+        '", "category_id":"' + this.category_id +
+        '", "title":"' + this.title +
+        '", "path_name":"' + this.path_name +
+        '", "publish_time":"' + this.publish_time +
+        '"}';
+    },
+
+    toJson: function(category, reply_num) {
+      return '{"id":"' + this.id +
+        '", "category_id":"' + this.category_id +
+        '", "title":"' + this.title +
+        '", "path_name":"' + this.path_name +
+        '", "publish_time":"' + this.publish_time +
+        '", "category_name":"' + category.name +
+        '", "category_path_name":"' + category.path_name +
+        '", "category_parent_id":"' + category.parent_id +
+        '", "category_parent_name":"' + category.parent_name +
+        '", "category_parent_path_name":"' + category.parent_path_name +
+        '", "reply_num":"' + reply_num +
+        '"}';
+
+    }
   };
 };

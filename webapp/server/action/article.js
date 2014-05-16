@@ -9,13 +9,16 @@ var router = express.Router();
 Base = require('./base');
 ModelProxy = require('../model/model_proxy');
 
-router.get('/list', function(req, res) {
-	var page = Base.genPage(req);
-	var condition = {page: page};
-	Base.getArticles(condition, function(dataset) {
-		var json = ModelProxy.toArticleJson(dataset);
-		res.send(json);
-	});
+router.get('/', function(req, res) {
+  Base.getArticles(null, function(dataset) {
+    var json = ModelProxy.toArticleJson(dataset);
+    res.send(json);
+  });
+});
+
+router.get('/:id', function(req, res) {
+  console.log('enter ' + req.params.id);
+
 });
 
 module.exports = router;
