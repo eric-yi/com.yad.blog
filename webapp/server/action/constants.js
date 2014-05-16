@@ -23,3 +23,5 @@ exports.parameters_json = '{' +
 	'"email":"' + global.getBlog().email + '"' +
 '}';
 
+exports.page_size = global.getBlog().page_size;
+

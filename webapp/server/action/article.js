@@ -7,12 +7,13 @@
 var express = require('express');
 var router = express.Router();
 Base = require('./base');
-Model = require('../model/model_proxy');
+ModelProxy = require('../model/model_proxy');
 
-/* GET home page. */
 router.get('/list', function(req, res) {
-	Base.getArticles(null, function(articles) {
-		var json = Model.toArticleInCatetoryJson(articles);
+	var page = Base.genPage(req);
+	var condition = {page: page};
+	Base.getArticles(condition, function(dataset) {
+		var json = ModelProxy.toArticleJson(dataset);
 		res.send(json);
 	});
 });

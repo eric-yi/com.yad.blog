@@ -27,7 +27,7 @@ module.exports = function() {
 							'"}';
 		},
 							
-		toJson: function(category) {
+		toJson: function(category, reply_num) {
 			return 	'{"id":" ' + this.id + 
 							'", "category_id":"' + this.category_id +
 							'", "title":"' + this.title +
@@ -38,6 +38,7 @@ module.exports = function() {
 							'", "category_parent_id":"' + category.parent_id +
 							'", "category_parent_name":"' + category.parent_name +
 							'", "category_parent_path_name":"' + category.parent_path_name +
+							'", "reply_num":"' + reply_num +
 							'"}';
 
 		}

@@ -11,6 +11,7 @@ Model = require('../model/model_proxy');
 
 /* GET home page. */
 router.get('/list', function(req, res) {
+	Base.handleRequest(req);
 	Base.getCategories(null, function(categories) {
 		var json = Model.toJson(categories);
 		res.send(json);

@@ -8,7 +8,7 @@ select
 from
 	yad_blog_category
 where
-parent_id != 0;
+	parent_id != 0;
 
 CREATE OR REPLACE VIEW yad_blog_v_cate_parent
 AS
@@ -17,7 +17,25 @@ select
 from
 	yad_blog_category
 where
-parent_id = 0;
+	parent_id = 0;
+
+CREATE OR REPLACE VIEW yad_blog_v_rep_article
+AS
+select 
+	*
+from
+	yad_blog_reply
+where
+	target_type = 1;
+
+CREATE OR REPLACE VIEW yad_blog_v_rep_reply
+AS
+select 
+	*
+from
+	yad_blog_reply
+where
+	target_type = 2;
 
 CREATE OR REPLACE VIEW yad_blog_v_category
 AS

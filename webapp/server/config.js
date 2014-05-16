@@ -7,11 +7,13 @@ var stringUtil = require('./common/stringUtil');
 
 Server = function() {
   var host = '0.0.0.0';
-  var port = 80;
+  var port = 9426;
+	var cached = false;
 	
 	return {
     host: this.host,
-    port: this.hport
+    port: this.port,
+		cached: this.cached	
   };
 };
 
@@ -87,6 +89,11 @@ Config.prototype.init = function(path) {
 
   this.server.host = get(this.props, 'server', 'host');
   this.server.port = get(this.props, 'server', 'port');
+	var cached = false;
+	var cached_str = get(this.props, 'server', 'cached');
+	if (cached_str.toUpperCase() == 'ON')
+		cached = true;
+  this.server.cached = cached;
 
   this.database.host = get(this.props, 'database', 'host');
   this.database.port = get(this.props, 'database', 'port');
@@ -95,13 +102,14 @@ Config.prototype.init = function(path) {
   this.database.name = get(this.props, 'database', 'name');
   this.database.max_connections = get(this.props, 'database', 'max_connection');
 
-	this.blog.article_path = get(this.props, 'blog', 'article_path');
-	this.blog.about_path = get(this.props, 'blog', 'about_path');
+	this.blog.article_path = get(this.props, 'blog', 'article.path');
+	this.blog.about_path = get(this.props, 'blog', 'about.path');
 	this.blog.title = get(this.props, 'blog', 'title');
 	this.blog.subtitle = get(this.props, 'blog', 'subtitle');
 	this.blog.auth = get(this.props, 'blog', 'auth');
-	this.blog.auth_alias = get(this.props, 'blog', 'auth_alias');
+	this.blog.auth_alias = get(this.props, 'blog', 'auth.alias');
 	this.blog.email = get(this.props, 'blog', 'email');
+	this.blog.page_size = get(this.props, 'blog', 'page.size');
 };
 
 Config.prototype.server = this.server;

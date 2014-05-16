@@ -26,15 +26,17 @@ exports.toJson = function(models) {
 	return json;
 };
 
-exports.toArticleInCatetoryJson = function(models) {
+exports.toArticleJson = function(models) {
 	var json = '[';
 	var isFirst = true;
 	for (var n in models) {
 		var model = models[n];
 		var article = model.article;	
 		var category = model.category;
+		var reply_num = 0;
+		if (model.reply_num)	reply_num = model.reply_num;
 		if (!isFirst) json += ', ';
-		json += article.toJson(category);	
+		json += article.toJson(category, reply_num);	
 		if (isFirst)	isFirst = false;
 	}
 	json += ']';
@@ -88,3 +90,23 @@ exports.genLink = function(row) {
 
 	return link;
 };
+
+exports.genReply = function(row) {
+	Reply = require('./reply');
+	var reply = new Reply();
+	if (row['id'] != null)							reply.id = row['id'];
+	if (row['target_type'] != null)			reply.target_type = row['target_type'];
+	if (row['target_id'] != null)				reply.target_id = row['target_id'];
+	if (row['name'] != null)						reply.name = row['name'];
+	if (row['email'] != null)						reply.email = row['email'];
+	if (row['reply_path'] != null)			reply.reply_path = row['reply_path'];
+	if (row['reply_time'] != null)			reply.reply_time = row['reply_time'];
+
+	return reply;
+};
+
+exports.genPage = function() {
+	Page = require('./page');
+	var page = new Page();
+	return page;
+}

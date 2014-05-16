@@ -19,11 +19,11 @@ CREATE TABLE IF NOT EXISTS yad_blog_article (
 
 CREATE TABLE IF NOT EXISTS yad_blog_reply (
   id int(11) not null auto_increment primary key,
-  target_type int(3) not null,    -- 1:article 2:about 3:reply
-  target_id int(11) default null, -- when target_type is 2, target_id is null
+  target_type int(3) not null,    -- 1:article 2:reply 3:about 
+  target_id int(11) default null,
   name varchar(50) not null,
   email varchar(100) not null,
-  content_path varchar(200) not null,
+  reply_path varchar(200) not null,
   reply_time datetime not null
 ) character set utf8 COMMENT='';
 

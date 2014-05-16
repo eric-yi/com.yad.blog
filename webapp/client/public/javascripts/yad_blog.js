@@ -57,7 +57,7 @@ function listArticle() {
 				contents += year;
 				contents += '</div>';
 				contents += '<div class="commy">';
-				contents += '<a href="#" class="comments-link"  title="' + this.title + '">' + this.id + '</a> ';
+				contents += '<a href="#" class="comments-link"  title="' + this.title + '">' + this.reply_num + '</a> ';
 				contents += '</div>';
 				contents += '</div>';
 

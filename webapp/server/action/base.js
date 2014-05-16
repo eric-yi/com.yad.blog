@@ -17,6 +17,7 @@ var service = Service.getService();
 service.setDao(dao);
 
 Constants = require('./constants');
+Model = require('../model/model_proxy');
 
 getCategories = function(category, callback) {
 	service.getCategories(category, function(list) {
@@ -74,6 +75,18 @@ exports.getBaseDatas = function(callback) {
 			callback(datas);
 		});
 	});
+};
+
+exports.genPage = function(req) {
+	var page = Model.genPage();
+	page.size = Constants.page_size;
+	page.current = 0;
+	page.next = 0;
+	var body = req.body;
+	if (body.page_current)			page.current = page_current;
+	if (body.page_next)				page.next = page_next;
+
+	return page;	
 };
 
 exports.service = service;
