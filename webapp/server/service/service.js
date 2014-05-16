@@ -53,6 +53,18 @@ Service.prototype.getArticles = function(condition, callback) {
 	});
 };
 
+Service.prototype.getCategories = function(condition, callback) {
+	var sql = 'select * from yad_blog_category';
+	this.dao.query(sql, function(results) {
+		var list = [];
+		for (var index in results) {
+			var result = results[index];
+			var category = ModelProxy.genCategory(result);
+			list.push(category);
+		}
+		callback(list);
+	});
+};
 
 Service.prototype.getLinks = function(link, callback) {
 	var sql = 'select * from yad_blog_link';

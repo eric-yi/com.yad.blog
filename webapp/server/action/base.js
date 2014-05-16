@@ -19,8 +19,8 @@ service.setDao(dao);
 Constants = require('./constants');
 Model = require('../model/model_proxy');
 
-getCategories = function(category, callback) {
-	service.getCategories(category, function(list) {
+getCategories = function(condition, callback) {
+	service.getCategories(condition, function(list) {
 		var level1 = [];
 		for (var n in list) {
 			var category = list[n];
@@ -58,8 +58,8 @@ getLinks = function(link, callback) {
 	});
 };
 
-getArticles = function(article, callback) {
-	service.getArticles(article, function(list) {
+getArticles = function(condition, callback) {
+	service.getArticles(condition, function(list) {
 		callback(list);
 	});
 };
