@@ -21,15 +21,15 @@ Global.prototype.init = function() {
 };
 
 Global.prototype.getServer = function() {
-	return this.config.getServer();;
+	return this.config.server;;
 };
 
 Global.prototype.getBlog = function() {
-	return this.config.getBlog();
+	return this.config.blog;
 };
 
 Global.prototype.getDatabase = function() {
-	return this.config.getDatabase();
+	return this.config.database;
 };
 
 var global = new Global();

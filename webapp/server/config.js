@@ -6,34 +6,14 @@
 var stringUtil = require('./common/stringUtil');
 
 Server = function() {
-  this.host = '0.0.0.0';
-  this.port = 80;
+  var host = '0.0.0.0';
+  var port = 80;
+	
+	return {
+    host: this.host,
+    port: this.hport
+  };
 };
-
-Server.prototype = function() {
-  setHost = function(h) {
-    this.host = h;
-  },
-
-  getHost = function() {
-    return this.host;
-  },
-
-  setPort = function(p) {
-    this.port = p;
-  },
-
-  getPort = function() {
-    return this.port;
-  }
-
-  return {
-    setHost: setHost,
-    getHost: getHost,
-    setPort: setPort,
-    getPort: getPort
-  }
-} ();
 
 var Database = function() {
   var host = '127.0.0.1';
@@ -44,114 +24,35 @@ var Database = function() {
   var max_connections = 5;
 
   return {
-    setHost: function(p_host) {
-      host = p_host;
-    },
-    getHost: function() {
-      return host;
-    },
-
-    setPort: function(p_port) {
-      port = p_port;
-    },
-    getPort: function() {
-      return port;
-    },
-
-    setUsername: function(p_username) {
-      username = p_username;
-    },
-    getUsername: function() {
-      return username;
-    },
-
-    setPassword: function(p_password) {
-      password = p_password;
-    },
-    getPassword: function() {
-      return password;
-    },
-
-    setName: function(p_name) {
-      name = p_name;
-    },
-    getName: function(p_name) {
-      return name;
-    },
-
-    setMax_connections: function(p_max_connections) {
-      max_connections = p_max_connections;
-    },
-    getMax_connections: function() {
-      return max_connections;
-    }
+		host: this.hhost,
+		port: this.hport,
+		username: this.husername,
+		password: this.hpassword,
+		name: this.hname,
+		max_connections: this.hmax_connections
   };
 };
 
 Blog = function() {
-	this.article_path = 'articles';
-	this.about_path = 'about.html';
-	this.title = '伊爱戴@钟爱一生';
-	this.subtitle = '媛媛心爱，苗苗心疼';
-	this.auth = '伊爱戴';
-	this.auth_alias = 'yad';
-	this.email = 'yi_xiaobin@163.com';
-};
+	var article_path = 'articles';
+	var about_path = 'about.html';
+	var title = '伊爱戴@钟爱一生';
+	var subtitle = '媛媛心爱，苗苗心疼';
+	var auth = '伊爱戴';
+	var auth_alias = 'yad';
+	var email = 'yi_xiaobin@163.com';
+	var page_size = 10;
 
-Blog.prototype.setArticle_path = function(article_path) {
-	this.article_path = article_path;
-};
-
-Blog.prototype.getArticle_path = function() {
-	return this.article_path;
-};
-
-Blog.prototype.setAbout_path = function(about_path) {
-	this.about_path = about_path;
-};
-
-Blog.prototype.getAbout_path = function() {
-	return this.about_path;
-};
-
-Blog.prototype.setTitle = function(title) {
-	this.title = title;
-};
-
-Blog.prototype.getTitle = function() {
-	return this.title;
-};
-
-Blog.prototype.setSubtitle = function(subtitle) {
-	this.subtitle = subtitle;
-};
-
-Blog.prototype.getSubtitle = function() {
-	return this.subtitle;
-};
-
-Blog.prototype.setAuth = function(auth) {
-	this.auth = auth;
-};
-
-Blog.prototype.getAuth = function() {
-	return this.auth;
-};
-
-Blog.prototype.setAuth_alias = function(auth_alias) {
-	this.auth_alias = auth_alias;
-};
-
-Blog.prototype.getAuth_alias = function() {
-	return this.auth_alias;
-};
-
-Blog.prototype.setEmail = function(email) {
-	this.email = email;
-};
-
-Blog.prototype.getEmail = function() {
-	return this.email;
+	return {
+		article_path: this.harticle_path,
+		about_path: this.habout_path,
+		title: this.htitle,
+		subtitle: this.subtitle,
+		auth: this.hauth,
+		auth_alias: this.hauth_alias,
+		email: this.hemail,
+		page_size: this.hpage_size
+	};
 };
 
 Config = function() {
@@ -184,66 +85,28 @@ Config.prototype.init = function(path) {
     }
   }
 
-  this.server.setHost(
-    get(this.props, 'server', 'host')
-  );
-  this.server.setPort(
-    get(this.props, 'server', 'port')
-  );
+  this.server.host = get(this.props, 'server', 'host');
+  this.server.port = get(this.props, 'server', 'port');
 
-  this.database.setHost(
-    get(this.props, 'database', 'host')
-  );
-  this.database.setPort(
-    get(this.props, 'database', 'port')
-  );
-  this.database.setUsername(
-    get(this.props, 'database', 'username')
-  );
-  this.database.setPassword(
-    get(this.props, 'database', 'password')
-  );
-  this.database.setName(
-    get(this.props, 'database', 'name')
-  );
-  this.database.setMax_connections(
-    get('database', 'max_connection')
-  );
+  this.database.host = get(this.props, 'database', 'host');
+  this.database.port = get(this.props, 'database', 'port');
+  this.database.username = get(this.props, 'database', 'username');
+  this.database.password = get(this.props, 'database', 'password');
+  this.database.name = get(this.props, 'database', 'name');
+  this.database.max_connections = get(this.props, 'database', 'max_connection');
 
-	this.blog.setArticle_path(
-		get(this.props, 'blog', 'article_path')
-	);
-	this.blog.setAbout_path(
-		get(this.props, 'blog', 'about_path')
-	);
-	this.blog.setTitle(
-		get(this.props, 'blog', 'title')
-	);
-	this.blog.setSubtitle(
-		get(this.props, 'blog', 'subtitle')
-	);
-	this.blog.setAuth(
-		get(this.props, 'blog', 'auth')
-	);
-	this.blog.setAuth_alias(
-		get(this.props, 'blog', 'auth_alias')
-	);
-	this.blog.setEmail(
-		get(this.props, 'blog', 'email')
-	);
+	this.blog.article_path = get(this.props, 'blog', 'article_path');
+	this.blog.about_path = get(this.props, 'blog', 'about_path');
+	this.blog.title = get(this.props, 'blog', 'title');
+	this.blog.subtitle = get(this.props, 'blog', 'subtitle');
+	this.blog.auth = get(this.props, 'blog', 'auth');
+	this.blog.auth_alias = get(this.props, 'blog', 'auth_alias');
+	this.blog.email = get(this.props, 'blog', 'email');
 };
 
-Config.prototype.getServer = function() {
-  return this.server;
-};
-
-Config.prototype.getDatabase = function() {
-  return this.database;
-};
-
-Config.prototype.getBlog = function() {
-	return this.blog;
-};
+Config.prototype.server = this.server;
+Config.prototype.database = this.database;
+Config.prototype.blog = this.blog;
 
 get = function(props, a, e) {
   if (a == null || e == null) return null;

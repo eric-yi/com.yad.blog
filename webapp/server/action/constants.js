@@ -8,18 +8,18 @@ Global = require('../global');
 var global = Global.getGlobal();
 
 exports.parameters = {
-	title:      	global.getBlog().getTitle(),
-	subtitle:   	global.getBlog().getSubtitle(),
-	auth:					global.getBlog().getAuth(),
-	auth_alias:		global.getBlog().getAuth_alias(),
-	email:				global.getBlog().getEmail()
+	title:      	global.getBlog().title,
+	subtitle:   	global.getBlog().subtitle,
+	auth:					global.getBlog().auth,
+	auth_alias:		global.getBlog().auth_alias,
+	email:				global.getBlog().email
 };
 
 exports.parameters_json = '{' +
-	'"title":"' + global.getBlog().getTitle() + '",' +
-	'"subtitle":"' + global.getBlog().getSubtitle() + '",' +
-	'"auth":"' + global.getBlog().getAuth() + '",' +
-	'"auth_alias":"' + global.getBlog().getAuth_alias() + '",' +
-	'"email":"' + global.getBlog().getEmail() + '"' +
+	'"title":"' + global.getBlog().title + '",' +
+	'"subtitle":"' + global.getBlog().subtitle + '",' +
+	'"auth":"' + global.getBlog().auth + '",' +
+	'"auth_alias":"' + global.getBlog().auth_alias + '",' +
+	'"email":"' + global.getBlog().email + '"' +
 '}';
 

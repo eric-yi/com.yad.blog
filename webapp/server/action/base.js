@@ -23,11 +23,11 @@ getCategories = function(category, callback) {
 		var level1 = [];
 		for (var n in list) {
 			var category = list[n];
-			if (category.getParent_id() == 0)
+			if (category.parent_id == 0)
 				level1.push(category);
 		}
 		level1.sort(function(c1, c2) {
-			return c1.getPosition()>c2.getPosition() ? 1 : -1;
+			return c1.position>c2.position ? 1 : -1;
 		});
 		
 		var arrs = [];
@@ -37,11 +37,11 @@ getCategories = function(category, callback) {
 			var level2 = [];
 			for (var m in list) {
 				var l2 = list[m];
-				if (l2.getParent_id() == l1.getId())
+				if (l2.parent_id == l1.id)
 					level2.push(l2);
 			}
 			level2.sort(function(c1, c2) {
-				return c1.getPosition()>c2.getPosition() ? 1 : -1;
+				return c1.position>c2.position ? 1 : -1;
 			});
 			for (var m in level2) {
 				arrs.push(level2[m]);

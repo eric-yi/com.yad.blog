@@ -13,7 +13,6 @@ Model = require('../model/model_proxy');
 router.get('/list', function(req, res) {
 	Base.getArticles(null, function(articles) {
 		var json = Model.toArticleInCatetoryJson(articles);
-		console.log(json);
 		res.send(json);
 	});
 });

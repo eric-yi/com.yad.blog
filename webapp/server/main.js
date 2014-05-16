@@ -23,7 +23,7 @@ function init() {
 
 function start() {
   var app = require('./app');
-  var webServer = app.listen(server.getPort(), function() {
+  var webServer = app.listen(server.port, function() {
     debug('Express server listening on port ' + webServer.address().port);
   });
 

@@ -10,31 +10,14 @@ module.exports = function() {
   var url;
 
   return {
-    setId: function(p_id) {
-      id = p_id;
-    },
-    getId: function() {
-      return id;
-    },
-
-    setName: function(p_name) {
-      name = p_name;
-    },
-    getName: function() {
-      return name;
-    },
-
-    setUrl: function(p_url) {
-      url = p_url;
-    },
-    getUrl: function() {
-      return url;
-    },
+		id: this.id,
+		name: this.name,
+		url: this.url,
 
 		toJson: function() {
-			return 	'{"id":" ' + id + 
-							'", "name":"' + name +
-							'", "url":"' + url +
+			return 	'{"id":" ' + this.id + 
+							'", "name":"' + this.name +
+							'", "url":"' + this.url +
 							'"}';
 		}
   };

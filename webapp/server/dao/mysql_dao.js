@@ -15,21 +15,21 @@ MysqlPool = function() {
 };
 
 MysqlPool.prototype.init = function(db) {
-  if (db.getHost())             this.host = db.getHost();
-  if (db.getPort())             this.port = db.getPort();
-  if (db.getName())             this.database = db.getName();
-  if (db.getUsername())         this.username = db.getUsername();
-  if (db.getPassword())         this.password = db.getPassword();
-  if (db.getMax_connections())  this.max_connections = db.getMax_connections();
+  if (db.host)							this.host = db.host;
+  if (db.port)             	this.port = db.port;
+  if (db.name)             	this.database = db.name;
+  if (db.username)         	this.username = db.username;
+  if (db.password)         	this.password = db.password;
+  if (db.max_connections)  	this.max_connections = db.max_connections;
 
   var mysql = require('mysql');
   this.pool = mysql.createPool({
     host:               this.host,
     port:               this.port,
-    user:		this.username,
-    password:		this.password,
-    database:		this.database,
-    max_connections:	this.max_connections
+    user:								this.username,
+    password:						this.password,
+    database:						this.database,
+    max_connections:		this.max_connections
   });
 };
 
