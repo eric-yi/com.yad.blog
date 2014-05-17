@@ -10,15 +10,15 @@ module.exports = function() {
   var url;
 
   return {
-		id: this.id,
-		name: this.name,
-		url: this.url,
+    id:   this.id,
+    name: this.name,
+    url:  this.url,
 
-		toJson: function() {
-			return 	'{"id":" ' + this.id + 
-							'", "name":"' + this.name +
-							'", "url":"' + this.url +
-							'"}';
-		}
+    toJson: function() {
+      return '{"id":"' + this.id +
+        '", "name":"' + this.name +
+        '", "url":"' + this.url +
+        '"}';
+    }
   };
 };

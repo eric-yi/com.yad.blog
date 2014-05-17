@@ -6,28 +6,31 @@
 
 module.exports = function() {
   var id;
+  var family_id;
   var category_id;
   var title;
   var path_name;
   var publish_time;
 
   return {
-    id: this.id,
-    category_id: this.category_id,
-    title: this.title,
-    path_name: this.path_name,
+    id:           this.id,
+    family_id:    this.family_id,
+    category_id:  this.category_id,
+    title:        this.title,
+    path_name:    this.path_name,
     publish_time: this.publish_time,
 
     toJson: function() {
       return '{"id":"' + this.id +
         '", "category_id":"' + this.category_id +
+        '", "family_id":"' + this.family_id +
         '", "title":"' + this.title +
         '", "path_name":"' + this.path_name +
         '", "publish_time":"' + this.publish_time +
         '"}';
     },
 
-    toJson: function(category, reply_num) {
+    toJson: function(category, writer, reply_num) {
       return '{"id":"' + this.id +
         '", "category_id":"' + this.category_id +
         '", "title":"' + this.title +
@@ -38,6 +41,7 @@ module.exports = function() {
         '", "category_parent_id":"' + category.parent_id +
         '", "category_parent_name":"' + category.parent_name +
         '", "category_parent_path_name":"' + category.parent_path_name +
+        '", "writer":"' + writer +
         '", "reply_num":"' + reply_num +
         '"}';
 

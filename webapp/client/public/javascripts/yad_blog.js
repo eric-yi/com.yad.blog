@@ -32,8 +32,57 @@ function listCategory() {
   });
 }
 
+function listFamily() {
+  $.getJSON( '/family', function(data) {
+    var contents = '';
+    $.each(data, function(){
+      contents += '<li><a href="/family/' + this.username + '">' + this.name + '</a></li>';
+    });
+    $('#yad_family').html(contents);
+  });
+
+}
+
+function familyCategory() {
+  $.getJSON( '/category', function(data) {
+    var contents = '';
+    var n = 0;
+    var top_path;
+    $.each(data, function() {
+      var family_name = this.name;
+      var categories = this.categories;
+      if (n != 0)
+        contents += '</ul></li>';
+      contents += '<li class="cat-item">';
+      contents += '<a href="category/' + family_name + '">' + family_name + '</a>';
+      contents += '<ul class="children">';
+      for (var m in categories) {
+        var category = categories[m];
+        if (category.parent_id == 0) {
+          top_path = category.path_name;
+          if (m != 0)
+            contents += '</ul></li>';
+          contents += '<li class="cat-item">';
+          contents += '<a href="category/' + top_path + '">' + category.name + '</a>';
+          contents += '<ul class="children">';
+        } else {
+          contents += '<li class="cat-item">';
+          contents += '<a href="category/' + top_path + '/' + category.path_name + '">' + category.name + '</a>';
+          contents += '</li>';
+        }
+        if (m == categories.length - 1)
+          contents += '</ul></li>';
+      }
+      if (n == data.length - 1)
+        contents += '</ul></li>';
+      n++;
+    });
+    $('#yad_category').html(contents);
+  });
+}
+
 function listLink() {
-  $.getJSON( '/link/list', function(data) {
+  $.getJSON( '/link', function(data) {
     var contents = '';
     $.each(data, function(){
       contents += '<li><a href="http://' + this.url + '">' + this.name + '</a></li>';
@@ -107,7 +156,7 @@ function makeContents(data, auth) {
     contents += '<p>tt</p>';
     contents += '</div>';
     contents += '<div class="meta">';
-    contents += 'Written by ' + auth + ' in: <a href="/category/' + this.category_parent_path_name + '/' + this.category_path_name + '" rel="category tag">' + this.category_name + '</a>,';
+    contents += 'Written by ' + this.writer + ' in: <a href="/category/' + this.category_parent_path_name + '/' + this.category_path_name + '" rel="category tag">' + this.category_name + '</a>,';
     contents += '<a href="/category/' + this.category_parent_path_name + '" rel="category tag">' + this.category_parent_name + '</a> | <br />';
     contents += '</div>';
     contents += '</div>';
@@ -119,6 +168,7 @@ function makeContents(data, auth) {
 
 
 function init() {
+  listFamily();
   listCategory();
   listLink();
 }

@@ -6,31 +6,34 @@
 
 module.exports = function() {
   var id;
-	var target_type;
-	var target_id;
+  var target_type;
+  var target_id;
+  var family_id;
   var name;
-	var email;
-	var reply_path;
-	var reply_time;
+  var email;
+  var content;
+  var reply_time;
 
   return {
-		id: this.id,
-		target_type: this.taret_type,
-		target_id: this.target_id,
-		name: this.name,
-		email: this.email,
-		reply_path: this.reply_path,
-		reply_time: reply_time,
+    id:           this.id,
+    target_type:  this.taret_type,
+    target_id:    this.target_id,
+    family_id:    this.family_id,
+    name:         this.name,
+    email:        this.email,
+    content:      this.content,
+    reply_time:   this.reply_time,
 
-		toJson: function() {
-			return 	'{"id":" ' + this.id + 
-							'", "target_type":"' + this.target_type +
-							'", "target_id":"' + this.target_id +
-							'", "name":"' + this.name +
-							'", "email":"' + this.email +
-							'", "reply_path":"' + this.reply_path +
-							'", "reply_time":"' + this.reply_time +
-							'"}';
-		}
+    toJson: function() {
+      return '{"id":"' + this.id + 
+        '", "target_type":"' + this.target_type +
+        '", "target_id":"' + this.target_id +
+        '", "family_id":"' + this.family_id +
+        '", "name":"' + this.name +
+        '", "email":"' + this.email +
+        '", "content":"' + this.content +
+        '", "reply_time":"' + this.reply_time +
+        '"}';
+    }
   };
 };

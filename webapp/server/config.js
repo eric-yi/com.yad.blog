@@ -3,7 +3,7 @@
  * yi_xiaobin@163.com
  */
 
-var stringUtil = require('./common/stringUtil');
+var string_util = require('./common/string_util');
 
 Server = function() {
   var host = '0.0.0.0';
@@ -43,21 +43,27 @@ Blog = function() {
   var auth = '伊爱戴';
   var auth_alias = 'yad';
   var email = 'yi_xiaobin@163.com';
+  var family_name = 'family';
+  var category_name = 'categories';
+  var recent_post_name = 'recent post';
+  var recnet_reply_name = 'recent reply';
+  var link_name = 'link';
   var page_size = 10;
   var page_prev = 'previous page';
   var page_next = 'next page';
 
   return {
-    article_path: this.article_path,
-    about_path: this.about_path,
-    title: this.title,
-    subtitle: this.subtitle,
-    auth: this.auth,
-    auth_alias: this.auth_alias,
-    email: this.email,
-    page_size: this.page_size,
-    page_prev: this.page_prev,
-    page_next: this.page_next
+    article_path:   this.article_path,
+    about_path:     this.about_path,
+    title:          this.title,
+    subtitle:       this.subtitle,
+    auth:           this.auth,
+    auth_alias:     this.auth_alias,
+    email:          this.email,
+    category_name:  this.category_name,
+    page_size:      this.page_size,
+    page_prev:      this.page_prev,
+    page_next:      this.page_next
   };
 };
 
@@ -76,15 +82,15 @@ Config.prototype.init = function(path) {
   var entry;
   for (var a in articles) {
     if (a != '' && articles[a] != '') {
-      ak = stringUtil.trim(a);
+      ak = string_util.trim(a);
       if (ak != '' && ak.charAt(0) != '#') {
         this.props[ak] = [];
         entries = qs.parse(articles[a], '\n', '=');	
         for (var e in entries) {
           if (e != '' && entries[e] != '') {
-            ek = stringUtil.trim(e);
+            ek = string_util.trim(e);
             if (ek != '' && ek.charAt(0) != '#')
-              this.props[ak][ek] = stringUtil.trim(entries[e]);
+              this.props[ak][ek] = string_util.trim(entries[e]);
           }
         }
       }
@@ -111,8 +117,13 @@ Config.prototype.init = function(path) {
   this.blog.title = get(this.props, 'blog', 'title');
   this.blog.subtitle = get(this.props, 'blog', 'subtitle');
   this.blog.auth = get(this.props, 'blog', 'auth');
-  this.blog.auth_alias = get(this.props, 'blog', 'auth.alias');
+  this.blog.auth_alias = get(this.props, 'blog', 'auth_alias');
   this.blog.email = get(this.props, 'blog', 'email');
+  this.blog.family_name = get(this.props, 'blog', 'family.name');
+  this.blog.category_name = get(this.props, 'blog', 'category.name');
+  this.blog.recent_post_name = get(this.props, 'blog', 'recent.post.name');
+  this.blog.recent_reply_name = get(this.props, 'blog', 'recent.reply.name');
+  this.blog.link_name = get(this.props, 'blog', 'link.name');
   this.blog.page_size = get(this.props, 'blog', 'page.size');
   this.blog.page_prev = get(this.props, 'blog', 'page.prev');
   this.blog.page_next = get(this.props, 'blog', 'page.next');
@@ -124,9 +135,9 @@ Config.prototype.blog = this.blog;
 
 get = function(props, a, e) {
   if (a == null || e == null) return null;
-  if (a != null)              a = stringUtil.trim(a)
-    if (e != null)              e = stringUtil.trim(e)
-      if (a == '' || e == '')     return null;
+  if (a != null)              a = string_util.trim(a)
+  if (e != null)              e = string_util.trim(e)
+  if (a == '' || e == '')     return null;
   return props[a][e];
 };
 

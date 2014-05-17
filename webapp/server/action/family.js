@@ -1,20 +1,20 @@
 
 /*
- * Eric Yi on 2014-05-15
+ * Eric Yi on 2014-05-17
  * yi_xiaobin@163.com
  */
 
 var express = require('express');
 var router = express.Router();
 Base = require('./base');
-Model = require('../model/model_proxy');
+ModelProxy = require('../model/model_proxy');
 
 router.get('/', function(req, res) {
-  Base.getLinks(null, function(links) {
-    var json = Model.toJson(links);
+  Base.getFamilies(null, function(families) {
+    var json = ModelProxy.toFamilyJson(families);
     res.send(json);
   });
 });
 
-module.exports = router;
 
+module.exports = router;

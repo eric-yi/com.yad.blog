@@ -19,6 +19,12 @@ service.setDao(dao);
 Constants = require('./constants');
 Model = require('../model/model_proxy');
 
+getCategoryInFamily = function(condition, callback) {
+  service.getCategoryInFamily(condition, function(list) {
+    callback(list);
+  });
+};
+
 getCategories = function(condition, callback) {
   service.getCategories(condition, function(list) {
     var level1 = [];
@@ -64,6 +70,12 @@ getArticles = function(condition, callback) {
   });
 };
 
+getFamilies = function(condition, callback) {
+  service.getFamilies(condition, function(list) {
+    callback(list);
+  });
+};
+
 exports.getBaseDatas = function(callback) {
   getCategories(null, function(categories) {
     getLinks(null, function(links) {
@@ -91,5 +103,7 @@ exports.genPage = function(req) {
 
 exports.service = service;
 exports.getCategories = getCategories;
+exports.getCategoryInFamily = getCategoryInFamily;
 exports.getLinks = getLinks;
 exports.getArticles = getArticles;
+exports.getFamilies = getFamilies;

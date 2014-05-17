@@ -25,7 +25,7 @@ Service.prototype.getDao = function(dao) {
 Service.prototype.getArticles = function(condition, callback) {
   var _dao = this.dao;
   getReplyForArticle(_dao, function(replies) {
-    var sql = 'select a.*, c.name as category_name, c.path_name as category_path_name, c.parent_name as category_parent_name, c.parent_path_name as category_parent_path_name from yad_blog_article a, yad_blog_v_category c where a.category_id = c.id order by a.publish_time desc';
+    var sql = 'select a.*, c.name as category_name, c.path_name as category_path_name, c.parent_name as category_parent_name, c.parent_path_name as category_parent_path_name, f.name as family_name from yad_blog_article a, yad_blog_v_category c, yad_blog_master_family f where a.category_id = c.id and a.family_id = f.id order by a.publish_time desc';
     var page;
     var model;
     if (condition != null) {
@@ -43,7 +43,7 @@ Service.prototype.getArticles = function(condition, callback) {
           var category = ModelProxy.genCategoryWithPrefix(result);
           var reply_list = [];
           fetchReply(reply_list, article.id, 1, replies);
-          list.push({article: article, category: category, replies: reply_list, reply_num: reply_list.length});
+          list.push({article: article, category: category, writer: result['family_name'], replies: reply_list, reply_num: reply_list.length});
         }
         putCache(sql, list);
         var dataset = paging(page, list);
@@ -59,14 +59,101 @@ Service.prototype.getArticles = function(condition, callback) {
 Service.prototype.getCategories = function(condition, callback) {
   var sql = 'select * from yad_blog_category';
   this.dao.query(sql, function(results) {
+    var list = convertCategory(results);
+    callback(list);
+  });
+};
+
+Service.prototype.getFamilies = function(condition, callback) {
+  var sql = 'select * from yad_blog_master_family order by position asc';
+  this.dao.query(sql, function(results) {
     var list = [];
     for (var index in results) {
       var result = results[index];
-      var category = ModelProxy.genCategory(result);
-      list.push(category);
+      var family = ModelProxy.genFamily(result);
+      list.push(family);
     }
     callback(list);
   });
+};
+
+Service.prototype.getFamilyCategory = function(condition, callback) {
+  var sql = 'select * from yad_blog_category_family';
+  this.dao.query(sql, function(results) {
+    var list = [];
+    for (var index in results) {
+      var result = results[index];
+      var cf = ModelProxy.genCategoryFamily(result);
+      list.push(cf);
+    }
+    callback(list);
+  });
+};
+
+Service.prototype.getCategoryInFamily = function(condition, callback) {
+  var sql = 'select * from yad_blog_category';
+  var _dao = this.dao;
+  _dao.query(sql, function(category_results) {
+    sql = 'select id, name from yad_blog_master_family where position != -1 order by position asc';
+    _dao.query(sql, function(family_results) {
+      sql = 'select * from yad_blog_category_family';
+      _dao.query(sql, function(cf_results) {
+        var category_list = convertCategory(category_results);
+        var level1 = [];
+        for (var n in category_list) {
+          var category = category_list[n];
+          if (category.parent_id == 0)
+            level1.push(category);
+        }
+        level1.sort(function(c1, c2) {
+          return c1.position>c2.position ? 1 : -1;
+        });
+
+        var category_arrs = [];
+        for (var n in level1) {
+          var l1 = level1[n];
+          var level2 = [];
+          for (var m in category_list) {
+            var l2 = category_list[m];
+            if (l2.parent_id == l1.id)
+              level2.push(l2);
+          }
+          level2.sort(function(c1, c2) {
+            return c1.position>c2.position ? 1 : -1;
+          });
+          category_arrs.push({l1: l1, l2: level2});
+        }
+
+        var list = [];
+        for (var index in family_results) {
+          var member_info = [];
+          var result = family_results[index];
+          var family_id = result['id'];
+          var family_name = result['name'];
+          var categories = [];
+          for (var n in cf_results) {
+            var cf = ModelProxy.genCategoryFamily(cf_results[n]);
+            if (cf.family_id == family_id) {
+              for (var m in category_arrs) {
+                var c_info = category_arrs[m];
+                var l1 = c_info.l1;
+                if (l1.id == cf.category_id) {
+                  categories.push(l1);
+                  for (var i in c_info.l2) {
+                    categories.push(c_info.l2[i])
+                  }
+                }
+              }
+            }
+          }
+          member_info = {name: family_name, categories: categories};
+          list.push(member_info);
+        }
+        callback(list);
+      });
+    });
+  });
+
 };
 
 Service.prototype.getLinks = function(link, callback) {
@@ -143,6 +230,16 @@ function cacheQuery(container) {
 function putCache(sql, list) {
   if (cached)
     cache.put(sql, list);
+}
+
+function convertCategory(results) {
+  var list = [];
+  for (var index in results) {
+    var result = results[index];
+    var category = ModelProxy.genCategory(result);
+    list.push(category);
+  }
+  return list;
 }
 
 Container = function(condition, sql, callback) {

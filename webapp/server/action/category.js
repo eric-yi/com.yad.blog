@@ -7,14 +7,20 @@
 var express = require('express');
 var router = express.Router();
 Base = require('./base');
-Model = require('../model/model_proxy');
+ModelProxy = require('../model/model_proxy');
 
-/* GET home page. */
+router.get('/', function(req, res) {
+  Base.getCategoryInFamily(null, function(categories) {
+    var json = ModelProxy.toCategoryJson(categories);
+    res.send(json);
+  });
+});
+
 router.get('/list', function(req, res) {
-	Base.getCategories(null, function(categories) {
-		var json = Model.toJson(categories);
-		res.send(json);
-	});
+  Base.getCategories(null, function(categories) {
+    var json = ModelProxy.toJson(categories);
+    res.send(json);
+  });
 });
 
 module.exports = router;

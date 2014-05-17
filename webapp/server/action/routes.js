@@ -9,6 +9,7 @@ var Routes = function(app) {
   var link = require('./link');
   var article = require('./article');
   var page = require('./page');
+  var family = require('./family');
   var about = require('./about');
 
   app.use('/', index);
@@ -16,6 +17,7 @@ var Routes = function(app) {
   app.use('/link', link);
   app.use('/article', article);
   app.use('/page', page);
+  app.use('/family', family);
   app.use('/about', about);
 };
 
