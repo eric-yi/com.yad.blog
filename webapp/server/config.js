@@ -37,7 +37,8 @@ var Database = function() {
 
 Blog = function() {
   var article_path = 'articles';
-  var about_path = 'about.html';
+  var article_suffix = 'hml';
+  var article_notfound = 'the article not found';
   var title = '伊爱戴@钟爱一生';
   var subtitle = '媛媛心爱，苗苗心疼';
   var auth = '伊爱戴';
@@ -53,17 +54,18 @@ Blog = function() {
   var page_next = 'next page';
 
   return {
-    article_path:   this.article_path,
-    about_path:     this.about_path,
-    title:          this.title,
-    subtitle:       this.subtitle,
-    auth:           this.auth,
-    auth_alias:     this.auth_alias,
-    email:          this.email,
-    category_name:  this.category_name,
-    page_size:      this.page_size,
-    page_prev:      this.page_prev,
-    page_next:      this.page_next
+    article_path:       this.article_path,
+    article_suffix:     this.article_suffix,
+    article_notfound:   this.article_notfound,
+    title:              this.title,
+    subtitle:           this.subtitle,
+    auth:               this.auth,
+    auth_alias:         this.auth_alias,
+    email:              this.email,
+    category_name:      this.category_name,
+    page_size:          this.page_size,
+    page_prev:          this.page_prev,
+    page_next:          this.page_next
   };
 };
 
@@ -112,8 +114,11 @@ Config.prototype.init = function(path) {
   this.database.name = get(this.props, 'database', 'name');
   this.database.max_connections = get(this.props, 'database', 'max_connection');
 
-  this.blog.article_path = get(this.props, 'blog', 'article.path');
-  this.blog.about_path = get(this.props, 'blog', 'about.path');
+  Path = require('path');
+  var article_path = Path.join(__dirname, '..', get(this.props, 'blog', 'article.path'));
+  this.blog.article_path = article_path;
+  this.blog.article_suffix = get(this.props, 'blog', 'article.suffix');
+  this.blog.article_notfound = get(this.props, 'blog', 'article.notfound');
   this.blog.title = get(this.props, 'blog', 'title');
   this.blog.subtitle = get(this.props, 'blog', 'subtitle');
   this.blog.auth = get(this.props, 'blog', 'auth');

@@ -2,31 +2,34 @@
 
 var debug = require('debug')('http');
 var config_path;
+var server;
+var blog;
 
 function arg_opt() {
   var arguments = process.argv.splice(2);
   if (arguments.length > 0) {
     arguments.forEach(function(val, index, array) {
-      if (index == 0)		config_path = val;
+      if (index == 0) config_path = val;
     });
   }
 }
 
-var server;
 function init() {
-	Global = require('./global');
-	var global = Global.getGlobal();
-	if (config_path)		global.setConfig_path(config_path);	
-	global.init();
+  Global = require('./global');
+  FileUtil = require('./common/file_util');
+  var global = Global.getGlobal();
+  if (config_path)  global.setConfig_path(config_path);	
+  global.init();
   server = global.getServer();
+  blog = global.getBlog();
+  FileUtil.mkdir(blog.article_path);
 }
 
 function start() {
-  var app = require('./app');
-  var webServer = app.listen(server.port, function() {
+  App = require('./app');
+  var webServer = App.listen(server.port, function() {
     debug('Express server listening on port ' + webServer.address().port);
   });
-
 }
 
 function main() {

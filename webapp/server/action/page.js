@@ -10,23 +10,17 @@ Base = require('./base');
 ModelProxy = require('../model/model_proxy');
 
 router.get('/', function(req, res) {
+  var condition = {};
   var page = Base.genPage(req);
   page.num = 0;
-  paging(res, page);
+  Base.getArticlesByPage(condition, page, res);
 });
 
 router.get('/:page_num', function(req, res) {
+  var condition = {};
   var page = Base.genPage(req);
-  paging(res, page);
+  Base.getArticlesByPage(condition, page, res);
 });
 
-function paging(res, page) {
-  var condition = {page: page};
-  Base.getArticles(condition, function(dataset) {
-    var json = ModelProxy.toArticlePageJson(dataset);
-    res.send(json);
-  });
-}
 
 module.exports = router;
-

@@ -5,10 +5,13 @@
  */
 
 Global = require('../global');
-var cached = Global.getGlobal().getServer().cached;
+var global = Global.getGlobal();
+var server = global.getServer();
+var cached = server.cached;
 ModelProxy = require('../model/model_proxy');
 Cache = require('./cache');
 var cache = Cache.getCache();
+FileUtil = require('../common/file_util');
 
 Service = function() {
   this.dao;
@@ -25,13 +28,21 @@ Service.prototype.getDao = function(dao) {
 Service.prototype.getArticles = function(condition, callback) {
   var _dao = this.dao;
   getReplyForArticle(_dao, function(replies) {
-    var sql = 'select a.*, c.name as category_name, c.path_name as category_path_name, c.parent_name as category_parent_name, c.parent_path_name as category_parent_path_name, f.name as family_name from yad_blog_article a, yad_blog_v_category c, yad_blog_master_family f where a.category_id = c.id and a.family_id = f.id order by a.publish_time desc';
+    var sql = 'select a.*, c.name as category_name, c.path_name as category_path_name, c.parent_name as category_parent_name, c.parent_path_name as category_parent_path_name, f.name as family_name from yad_blog_article a, yad_blog_v_category c, yad_blog_master_family f where a.category_id = c.id and a.family_id = f.id';
     var page;
     var model;
     if (condition != null) {
       if (condition.page != null)   page = condition.page;
       if (condition.model != null)  model = condition.model;
+      if (condition.category != null) {
+        var cate_tree = condition.category;
+        if (cate_tree.length == 2)
+          sql += ' and c.path_name = "' + cate_tree[1] + '"';
+        if (cate_tree.length == 1)
+          sql += ' and (c.parent_path_name = "' + cate_tree[0] + '" or c.path_name = "' + cate_tree[0] + '")';
+      }
     }
+    sql += ' order by a.publish_time desc';
 
     var container = new Container(condition=condition, sql=sql, callback=callback);
     if (!cacheQuery(container)) {
@@ -55,6 +66,10 @@ Service.prototype.getArticles = function(condition, callback) {
     }
   });
 };
+
+Service.prototype.getArticleContent = function(filename) {
+  return FileUtil.read(filename);
+}
 
 Service.prototype.getCategories = function(condition, callback) {
   var sql = 'select * from yad_blog_category';

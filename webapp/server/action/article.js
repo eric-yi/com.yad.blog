@@ -10,16 +10,13 @@ Base = require('./base');
 ModelProxy = require('../model/model_proxy');
 
 router.get('/', function(req, res) {
-  Base.getArticles(null, function(dataset) {
-    var json = ModelProxy.toArticleJson(dataset);
-    res.send(json);
-  });
+  Base.getArticlesInAction(null, res);
 });
 
 router.get('/:id', function(req, res) {
-  console.log('enter ' + req.params.id);
-
+  var id = req.params.id;
+  var content = Base.getArticleById(id);
+  res.send(content);
 });
 
 module.exports = router;
-

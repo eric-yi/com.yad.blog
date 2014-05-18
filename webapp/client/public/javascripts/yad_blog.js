@@ -17,11 +17,11 @@ function listCategory() {
         if (n != 0)
           contents += '</ul></li>';
         contents += '<li class="cat-item">';
-        contents += '<a href="category/' + top_path + '">' + this.name + '</a>';
+        contents += '<a href="javascript:categoryForArticle(\'' + top_path + '\')">' + this.name + '</a>';
         contents += '<ul class="children">';
       } else {
         contents += '<li class="cat-item">';
-        contents += '<a href="category/' + top_path + '/' + this.path_name + '">' + this.name + '</a>';
+        contents += '<a href="javascript:categoryForArticle(\'' + top_path + '\', \'' + this.path_name + '\')">' + this.name + '</a>';
         contents += '</li>';
       }
       if (n == data.length - 1)
@@ -106,29 +106,64 @@ function pageForArticle(page_num) {
     var auth = parameters.auth;
     if (!page_num) page_num = 0;
     $.getJSON( '/page/'+page_num, function(data) {
-      var contents = makeContents(data.dataset, auth);
-      var page = data.page;
-      var hasPrev = (page.num != 0) ? true : false;
-      var position = page.num * page.size + parseInt(page.current);
-      var hasNext = (position < page.total) ? true : false;
-      if (hasPrev || hasNext) {
-        contents += '<div class="navlink">'
-        var page_num;
-        if (hasPrev) {
-          page_num = parseInt(page.num) - 1;
-          contents += '<a href="javascript:pageForArticle(' + page_num + ')">« ' + page.prev + '</a>';
-        }
-        if (hasPrev && hasNext)
-          contents += ' — ';
-        if (hasNext) {
-          page_num = parseInt(page.num) + 1;
-          contents += '<a href="javascript:pageForArticle('+ page_num + ')">' + page.next + ' »</a>';
-        }
-        contents += '</div>';
-      }
+      var contents = makeContentsInPage(data, page_num, auth, null, null);
       $('#content').html(contents);
     });
   });
+}
+
+function categoryForArticle(c_root, c_child, page_num) {
+  $.getJSON('/parameters', function(parameters) {
+    var auth = parameters.auth;
+    child = '';
+    if (!page_num) page_num = 0;
+    if (c_child) child = '/' + c_child;
+    var url = '/category/' + c_root + child + '?page=' + page_num;
+    $.getJSON(url, function(data) {
+      var contents = makeContentsInPage(data, page_num, auth, c_root, c_child);
+      $('#content').html(contents);
+    });
+  });
+
+}
+
+function makeContentsInPage(data, page_num, auth, c_root, c_child) {
+  var contents = makeContents(data.dataset, auth);
+  var page = data.page;
+  var hasPrev = (page.num != 0) ? true : false;
+  var position = page.num * page.size + parseInt(page.current);
+  var hasNext = (position < page.total) ? true : false;
+  if (hasPrev || hasNext) {
+    contents += '<div class="navlink">'
+    var page_num;
+    if (hasPrev) {
+      page_num = parseInt(page.num) - 1;
+      if (c_root) {
+        var child = 'null';
+        if (c_child)
+          child = '\'' + c_child + '\'';
+        contents += '<a href="javascript:categoryForArticle(\'' + c_root + '\', ' + child + ', \'' + page_num + '\')">' + page.prev + '</a>';
+      } else {
+        contents += '<a href="javascript:pageForArticle(' + page_num + ')">« ' + page.prev + '</a>';
+      }
+    }
+    if (hasPrev && hasNext)
+      contents += ' — ';
+    if (hasNext) {
+      page_num = parseInt(page.num) + 1;
+      if (c_root) {
+        var child = 'null';
+        if (c_child)
+          child = '\'' + c_child + '\'';
+        contents += '<a href="javascript:categoryForArticle(\'' + c_root + '\', ' + child + ', \'' + page_num + '\')">' + page.next + '</a>';
+      } else {
+        contents += '<a href="javascript:pageForArticle('+ page_num + ')">' + page.next + ' »</a>';
+      }
+    }
+    contents += '</div>';
+  }
+
+  return contents;
 }
 
 function makeContents(data, auth) {
@@ -145,13 +180,13 @@ function makeContents(data, auth) {
     contents += year;
     contents += '</div>';
     contents += '<div class="commy">';
-    contents += '<a href="/article/' + this.id + '" class="comments-link"  title="' + this.title + '">' + this.reply_num + '</a> ';
+    contents += '<a href="javascript:readArticle(' + this.id + ')" class="comments-link"  title="' + this.title + '">' + this.reply_num + '</a> ';
     contents += '</div>';
     contents += '</div>';
 
     contents += '<div class="storywrap">';
     contents += '<div class="post" id="' + this.id + '">';
-    contents += '<h3 class="storytitle"><a href="/article/' + this.id + '" rel="bookmark">' + this.title + '</a></h3>';
+    contents += '<h3 class="storytitle"><a href="javascript:readArticle(' + this.id + ')" rel="bookmark">' + this.title + '</a></h3>';
     contents += '<div class="storycontent">';
     contents += '<p>tt</p>';
     contents += '</div>';
@@ -165,6 +200,12 @@ function makeContents(data, auth) {
 
   return contents;
 }
+
+function readArticle(id) {
+  $.get( '/article/'+id, function(data) {
+    $('#content').html(data);
+  });
+};
 
 
 function init() {

@@ -88,8 +88,8 @@ exports.genArticle = function(row) {
   Article = require('./article');
   var article = new Article();
   if (row['id'] != null)            article.id = row['id'];
-  if (row['category_id'] != null)   article.id = row['category_id'];
-  if (row['family_id'] != null)     article.id = row['family_id'];
+  if (row['category_id'] != null)   article.catrgory_id = row['category_id'];
+  if (row['family_id'] != null)     article.family_id = row['family_id'];
   if (row['title'] != null)         article.title = row['title'];
   if (row['path_name'] != null)     article.path_name = row['path_name'];
   if (row['publish_time'] != null)  article.publish_time = row['publish_time'];

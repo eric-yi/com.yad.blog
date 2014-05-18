@@ -2,7 +2,7 @@
 /*
  * Eric Yi on 2014-05-17
  * yi_xiaobin@163.com
- * /
+ */ 
 
 FilePool = function() {
   var openfiles = 200;

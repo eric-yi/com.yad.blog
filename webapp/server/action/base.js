@@ -76,6 +76,13 @@ getFamilies = function(condition, callback) {
   });
 };
 
+getArticleById = function(id) {
+  var filename = global.getBlog().article_path + '/' + id + '.' + global.getBlog().article_suffix;
+  var content = service.getArticleContent(filename);
+  if (!content) content = global.getBlog().article_notfound;
+  return content;
+};
+
 exports.getBaseDatas = function(callback) {
   getCategories(null, function(categories) {
     getLinks(null, function(links) {
@@ -101,9 +108,25 @@ exports.genPage = function(req) {
   return page;	
 };
 
+exports.getArticlesInAction = function(condition, res) {
+  getArticles(condition, function(dataset) {
+    var json = ModelProxy.toArticleJson(dataset);
+    res.send(json);
+  });
+};
+
+exports.getArticlesByPage = function(condition, page, res) {
+  condition.page = page;
+  Base.getArticles(condition, function(dataset) {
+    var json = ModelProxy.toArticlePageJson(dataset);
+    res.send(json);
+  });
+}
+
 exports.service = service;
 exports.getCategories = getCategories;
 exports.getCategoryInFamily = getCategoryInFamily;
 exports.getLinks = getLinks;
 exports.getArticles = getArticles;
 exports.getFamilies = getFamilies;
+exports.getArticleById = getArticleById;
