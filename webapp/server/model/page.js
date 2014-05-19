@@ -5,28 +5,34 @@
  */
 
 module.exports = function() {
-  var total;
-  var size;
-  var num;
-  var current;
-  var prev;
-  var next;
+  var _total;
+  var _size;
+  var _num;
+  var _current;
+  var _prev;
+  var _next;
+	var _start;
+	var _end;
+	var _sql = false;
 
   return {
-    total: this.total,
-    size: this.size,
-    num: this.num,
-    current: this.current,
-    prev: this.prev,
-    next: this.next,
+    total: _total,
+    size: _size,
+    num: _num,
+    current: _current,
+    prev: _prev,
+    next: _next,
+		start: _start,
+		end: _end,
+		sql: _sql,
 
     toJson: function() {
-      return '{"total":"' + this.total +
-        '", "size":"' + this.size +
-        '", "num":"' + this.num +
-        '", "current":"' + this.current +
-        '", "prev":"' + this.prev +
-        '", "next":"' + this.next +
+      return '{"total":"' + _total +
+        '", "size":"' + _size +
+        '", "num":"' + _num +
+        '", "current":"' + _current +
+        '", "prev":"' + _prev +
+        '", "next":"' + _next +
         '"}';
     }
   };

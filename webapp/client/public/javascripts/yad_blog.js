@@ -85,7 +85,7 @@ function listLink() {
   $.getJSON( '/link', function(data) {
     var contents = '';
     $.each(data, function(){
-      contents += '<li><a href="http://' + this.url + '">' + this.name + '</a></li>';
+      contents += '<li><a onclick="javascript:_gaq.push([\'_trackEvent\',\'outbound-blogroll\',\'' + this.url + '\']);" target="_blank" href="' + this.url + '">' + this.name + '</a></li>';
     });
     $('#yad_link').html(contents);
   });
@@ -166,6 +166,23 @@ function makeContentsInPage(data, page_num, auth, c_root, c_child) {
   return contents;
 }
 
+YadDate = function(pub_date) {
+	var year = pub_date.getFullYear();
+  var month = month2chs[pub_date.getMonth()];
+  var day = pub_date.getDate();
+	return {
+		year: year,
+		month : month,
+		day: day
+	};
+};
+
+function splitTime(publish_time) {
+	var pub_date = new Date(Date.parse(publish_time));
+	var yad_date = new YadDate(pub_date);
+	return yad_date;
+}
+
 function makeContents(data, auth) {
   var contents = '';
   $.each(data, function() {
@@ -203,13 +220,53 @@ function makeContents(data, auth) {
 
 function readArticle(id) {
   $.get( '/article/'+id, function(data) {
-    $('#content').html(data);
+		var content = '<div class="datecomrap">';
+		content += '<div class="date">';
+  	$.getJSON( '/article/'+id+'/parameter', function(parameter) {
+			if (parameter.publish_time) {
+				var split_date = splitTime(parameter.publish_time);
+				content += split_date.month + '<br />';
+				content += '<span style="font-size:2em; font-weight:bold;">' + split_date.day + '</span><br />';
+				content += split_date.year;
+			};
+			content += '</div>';
+			content += '</div>';
+			content += data;
+    	$('#content').html(content);
+		});
   });
-};
+}
 
+function listRecentArticle() {
+  $.getJSON('/recent/article', function(data) {
+		var content = '';
+    $.each(data, function() {
+			content += '<li>';
+    	content += '<a href="javascript:readArticle(' + this.id + ')">' + this.title + '</a> ';
+			content += '</li>';
+		});
+		$('#yad_article_recent').html(content);
+	});
+}
+
+function listRecentReply() {
+  $.getJSON('/recent/reply', function(data) {
+		var content = '';
+    $.each(data, function() {
+			content += '<li class="recentcomments">';
+			content += '<a href="#" rel="external nofollow" class="url">' + this.auth + '</a>';
+			content += '发表在';
+    	content += '《<a href="javascript:readArticle(' + this.article_id + ')">' + this.title + '</a>》';
+			content += '</li>';
+		});
+		$('#recentcomments').html(content);
+	});
+}
 
 function init() {
   listFamily();
   listCategory();
+	listRecentArticle();
+	listRecentReply();
   listLink();
 }

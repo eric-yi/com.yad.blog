@@ -30,6 +30,7 @@ CREATE TABLE IF NOT EXISTS yad_blog_reply (
   target_type int(3) not null,    -- 1:article 2:reply 3:about
   target_id int(11) default null,
   family_id int(11) default null,
+  article_id int(11) default null,
   name varchar(50) default null,
   email varchar(100) default null,
   content varchar(200) not null,

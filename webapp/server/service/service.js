@@ -29,42 +29,66 @@ Service.prototype.getArticles = function(condition, callback) {
   var _dao = this.dao;
   getReplyForArticle(_dao, function(replies) {
     var sql = 'select a.*, c.name as category_name, c.path_name as category_path_name, c.parent_name as category_parent_name, c.parent_path_name as category_parent_path_name, f.name as family_name from yad_blog_article a, yad_blog_v_category c, yad_blog_master_family f where a.category_id = c.id and a.family_id = f.id';
-    var page;
-    var model;
-    if (condition != null) {
-      if (condition.page != null)   page = condition.page;
-      if (condition.model != null)  model = condition.model;
-      if (condition.category != null) {
-        var cate_tree = condition.category;
-        if (cate_tree.length == 2)
-          sql += ' and c.path_name = "' + cate_tree[1] + '"';
-        if (cate_tree.length == 1)
-          sql += ' and (c.parent_path_name = "' + cate_tree[0] + '" or c.path_name = "' + cate_tree[0] + '")';
-      }
+    if (condition && condition.category) {
+      var cate_tree = condition.category;
+      if (cate_tree.length == 2)
+        sql += ' and c.path_name = "' + cate_tree[1] + '"';
+      if (cate_tree.length == 1)
+        sql += ' and (c.parent_path_name = "' + cate_tree[0] + '" or c.path_name = "' + cate_tree[0] + '")';
     }
     sql += ' order by a.publish_time desc';
-
-    var container = new Container(condition=condition, sql=sql, callback=callback);
-    if (!cacheQuery(container)) {
-      _dao.query(sql, function(results) {
-        var list = [];
-        for (var index in results) {
-          var result = results[index];
-          var article = ModelProxy.genArticle(result);
-          var category = ModelProxy.genCategoryWithPrefix(result);
-          var reply_list = [];
-          fetchReply(reply_list, article.id, 1, replies);
-          list.push({article: article, category: category, writer: result['family_name'], replies: reply_list, reply_num: reply_list.length});
-        }
-        putCache(sql, list);
-        var dataset = paging(page, list);
-        if (page) {
-          dataset = {dataset: dataset, page: page};
-        }
-        callback(dataset);
-      });
-    }
+   	var container = new Container(condition=condition, sql=sql, callback=callback);
+    if (condition.page && condition.page.sql) {
+			_dao.total(sql, function(total) {
+				condition.page.total = total;
+				handlePage(condition.page);
+				sql += ' limit ' + condition.page.start + ', ' + condition.page.end;
+				container.sql = sql;
+				fetchArticles(_dao, container, replies);
+			});
+		} else {
+			fetchArticles(_dao, container, replies);
+		}
   });
+};
+
+Service.prototype.getArticleParameter = function(id, callback) {
+	var sql = 'select publish_time from yad_blog_article where id = "' + id + '"';
+  this.dao.query(sql, function(results) {
+		var result;
+		if (results.length > 0) {
+			result = results[0];
+		}
+    callback(result);
+  });
+};
+
+Service.prototype.getAbstractArticles = function(condition, callback) {
+	handlePage(condition.page);
+	var sql = 'select * from yad_blog_article order by publish_time desc limit ' + condition.page.start + ', ' + condition.page.end;
+  this.dao.query(sql, function(results) {
+		var list = [];
+		for (var n  in results) {
+			var result = results[n];
+     	var article = ModelProxy.genArticle(result);
+			list.push(article);
+		}
+		callback(list);
+	});
+};
+
+Service.prototype.getAbstractReplies = function(condition, callback) {
+	handlePage(condition.page);
+	var sql = 'select * from yad_blog_v_reply_article limit ' + condition.page.start + ', ' + condition.page.end;
+  this.dao.query(sql, function(results) {
+		var list = [];
+		for (var n  in results) {
+			var result = results[n];
+     	var reply = ModelProxy.genComplexReply(result);
+			list.push(reply);
+		}
+		callback(list);
+	});
 };
 
 Service.prototype.getArticleContent = function(filename) {
@@ -187,6 +211,28 @@ Service.prototype.getLinks = function(link, callback) {
   });
 };
 
+function fetchArticles(_dao, container, replies) {
+  if (!cacheQuery(container)) {
+  	_dao.query(container.sql, function(results) {
+    	var list = [];
+      for (var index in results) {
+        var result = results[index];
+        var article = ModelProxy.genArticle(result);
+        var category = ModelProxy.genCategoryWithPrefix(result);
+        var reply_list = [];
+        fetchReply(reply_list, article.id, 1, replies);
+        list.push({article: article, category: category, writer: result['family_name'], replies: reply_list, reply_num: reply_list.length});
+      }
+      putCache(container.sql, list);
+      var dataset = paging(container.page, list);
+      if (container.condition.page) {
+        dataset = {dataset: dataset, page: container.condition.page};
+      }
+      container.callback(dataset);
+    });
+  }
+}
+
 function getReplyForArticle(dao, callback) {
   var sql = 'select * from yad_blog_reply where target_type != 3';
   var container = new Container(condition=null, sql=sql, callback=callback);
@@ -214,15 +260,33 @@ function fetchReply(results, id, target_type, replies) {
   }
 }
 
+function handlePage(page) {
+	var start = page.num * page.size;
+  var end = parseInt(start) + parseInt(page.size);
+ 	end = end > page.total ? page.total : end;
+	page.start = start;
+	page.end = end;
+}
+
 function paging(page, dataset) {
   if (page) {
-    page.total = dataset.length;
+		if (!page.sql)
+			page.total = dataset.length;
     var start = page.num * page.size;
     var end = parseInt(start) + parseInt(page.size);
-    end = end > page.total ? page.total : end;
+		if (page.sql)
+			end = parseInt(start) + dataset.length;
+		else
+    	end = end > page.total ? page.total : end;
     page.current = end - start;
-    if (end == 0) return [];
-    return dataset.slice(start, end);
+		page.start = start;
+		page.end = end;
+
+    if (page.end == 0) return [];
+		if (page.sql)
+			return dataset;
+		else
+    	return dataset.slice(start, end);
   }
 
   return dataset;
@@ -234,7 +298,9 @@ function cacheQuery(container) {
     console.log('get form cahce');
     var page;
     if (container.condition)	page = container.condition.page;
-    var dataset = paging(page, cache.get(sql));
+		var dataset = cache.get(sql);
+		if (page && !page.sql)
+    	dataset = paging(page, cache.get(sql));
     container.callback(dataset)
     return true;
   }
@@ -262,14 +328,14 @@ Container = function(condition, sql, callback) {
   var _sql;
   var _callback;
 
-  if (condition)  this._condition = condition;
-  if (sql)        this._sql = sql;
-  if (callback)   this._callback = callback;
+  if (condition)  _condition = condition;
+  if (sql)        _sql = sql;
+  if (callback)   _callback = callback;
 
   return {
-    condition: this._condition,
-    sql: this._sql,
-    callback: this._callback
+    condition: _condition,
+    sql:			_sql,
+    callback: _callback
   };
 }
 

@@ -16,7 +16,9 @@ exports.parameters = {
   family_name:        global.getBlog().family_name,
   category_name:      global.getBlog().category_name,
   recent_post_name:   global.getBlog().recent_post_name,
+  recent_post_preview:global.getBlog().recent_post_preview,
   recent_reply_name:  global.getBlog().recent_reply_name,
+  recent_reply_preview:global.getBlog().recent_reply_preview,
   link_name:          global.getBlog().link_name
 };
 
@@ -30,7 +32,9 @@ exports.parameters_json =
   '"family_name":"' + global.getBlog().family_name + '", ' +
   '"category_name":"' + global.getBlog().category_name + '", ' +
   '"recent_post_name":"' + global.getBlog().recent_post_name + '", ' +
+  '"recent_post_preview":"' + global.getBlog().recent_post_preview + '", ' +
   '"recent_reply_name":"' + global.getBlog().recent_reply_name + '", ' +
+  '"recent_reply_preview":"' + global.getBlog().recent_reply_preview + '", ' +
   '"link_name":"' + global.getBlog().link_name + '"' +
   '}';
 

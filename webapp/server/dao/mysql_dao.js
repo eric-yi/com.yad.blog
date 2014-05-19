@@ -34,7 +34,18 @@ MysqlPool.prototype.init = function(db) {
 };
 
 MysqlPool.prototype.query = function(sql, callback) {
-  this.pool.getConnection(function(err, conn) {
+	query(this.pool, sql, callback);
+};
+
+MysqlPool.prototype.total = function(sql, callback) {
+	var count_sql = 'select count(*) as total from (' + sql + ')';
+	query(this.pool, sql, function(results) {
+		callback(results[0].total);	
+	});
+};
+
+function query(_pool, sql, callback) {
+	_pool.getConnection(function(err, conn) {
     if (err) {
       console.log('Dababase connection error!');
       throw err;
@@ -54,7 +65,7 @@ MysqlPool.prototype.query = function(sql, callback) {
       }
     });
   });
-};
+}
 
 var mysql_pool = new MysqlPool();
 function getMysqlPool() {

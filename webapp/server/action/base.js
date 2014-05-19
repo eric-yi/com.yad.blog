@@ -79,7 +79,10 @@ getFamilies = function(condition, callback) {
 getArticleById = function(id) {
   var filename = global.getBlog().article_path + '/' + id + '.' + global.getBlog().article_suffix;
   var content = service.getArticleContent(filename);
-  if (!content) content = global.getBlog().article_notfound;
+  if (!content) {
+		filename = global.getServer().view + '/' + global.getBlog().template_notfound + '.' + global.getBlog().article_suffix;
+  	content = service.getArticleContent(filename);
+	}
   return content;
 };
 
@@ -96,7 +99,7 @@ exports.getBaseDatas = function(callback) {
   });
 };
 
-exports.genPage = function(req) {
+function genPage(req) {
   var page = Model.genPage();
   page.size = Constants.page_size;
   page.prev = Constants.page_prev;
@@ -106,7 +109,7 @@ exports.genPage = function(req) {
   if (params.page_num)    page.num = params.page_num;
 
   return page;	
-};
+}
 
 exports.getArticlesInAction = function(condition, res) {
   getArticles(condition, function(dataset) {
@@ -121,7 +124,47 @@ exports.getArticlesByPage = function(condition, page, res) {
     var json = ModelProxy.toArticlePageJson(dataset);
     res.send(json);
   });
-}
+};
+
+exports.getArticleParameter = function(id, res) {
+	service.getArticleParameter(id, function(parameter) {
+		var json = '{';
+		json += '"article_notfound":"' + global.getBlog().article_notfound + '"'
+		if (parameter) {
+			if (parameter.publish_time) {
+				json += ', "publish_time":"' + parameter.publish_time + '"';
+			}
+		}
+		json += '}';
+		res.send(json);
+	});
+};
+
+exports.getRecentArticle = function(req, res) {
+	var condition = {};
+	var page = genPage(req);
+	page.num = 0;
+	page.sql = true;
+	page.size = Constants.parameters.recent_post_preview;
+	condition.page = page;
+	Base.service.getAbstractArticles(condition, function(articles) {
+		var json = ModelProxy.toJson(articles);
+		res.send(json);
+	});
+};
+
+exports.getRecentReply = function(req, res) {
+	var condition = {};
+	var page = genPage(req);
+	page.num = 0;
+	page.sql = true;
+	page.size = Constants.parameters.recent_reply_preview;
+	condition.page = page;
+	Base.service.getAbstractReplies(condition, function(replies) {
+		var json = ModelProxy.toJson(replies);
+		res.send(json);
+	});
+};
 
 exports.service = service;
 exports.getCategories = getCategories;
@@ -130,3 +173,4 @@ exports.getLinks = getLinks;
 exports.getArticles = getArticles;
 exports.getFamilies = getFamilies;
 exports.getArticleById = getArticleById;
+exports.genPage = genPage;

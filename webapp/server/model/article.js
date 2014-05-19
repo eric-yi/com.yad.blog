@@ -30,7 +30,7 @@ module.exports = function() {
         '"}';
     },
 
-    toJson: function(category, writer, reply_num) {
+    toComplexJson: function(category, writer, reply_num) {
       return '{"id":"' + this.id +
         '", "category_id":"' + this.category_id +
         '", "title":"' + this.title +

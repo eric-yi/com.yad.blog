@@ -63,7 +63,7 @@ function genArticleJson(models) {
     var reply_num = 0;
     if (model.reply_num)  reply_num = model.reply_num;
     if (!isFirst)         json += ', ';
-    json += article.toJson(category, writer, reply_num);
+    json += article.toComplexJson(category, writer, reply_num);
     if (isFirst)          isFirst = false;
   }
   json += ']';
@@ -88,7 +88,7 @@ exports.genArticle = function(row) {
   Article = require('./article');
   var article = new Article();
   if (row['id'] != null)            article.id = row['id'];
-  if (row['category_id'] != null)   article.catrgory_id = row['category_id'];
+  if (row['category_id'] != null)   article.category_id = row['category_id'];
   if (row['family_id'] != null)     article.family_id = row['family_id'];
   if (row['title'] != null)         article.title = row['title'];
   if (row['path_name'] != null)     article.path_name = row['path_name'];
@@ -136,6 +136,24 @@ exports.genReply = function(row) {
   Reply = require('./reply');
   var reply = new Reply();
   if (row['id'] != null)          reply.id = row['id'];
+  if (row['target_type'] != null) reply.target_type = row['target_type'];
+  if (row['target_id'] != null)   reply.target_id = row['target_id'];
+  if (row['family_id'] != null)   reply.target_id = row['family_id'];
+  if (row['name'] != null)        reply.name = row['name'];
+  if (row['email'] != null)       reply.email = row['email'];
+  if (row['content'] != null)     reply.reply_path = row['content'];
+  if (row['reply_time'] != null)  reply.reply_time = row['reply_time'];
+
+  return reply;
+};
+
+exports.genComplexReply = function(row) {
+  ReplyComplex = require('./reply_complex');
+  var reply = new ReplyComplex();
+  if (row['article_id'] != null)  reply.article_id = row['article_id'];
+  if (row['title'] != null)       reply.title = row['title'];
+  if (row['auth'] != null)        reply.auth = row['auth'];
+  if (row['reply_id'] != null)    reply.reply_id = row['reply_id'];
   if (row['target_type'] != null) reply.target_type = row['target_type'];
   if (row['target_id'] != null)   reply.target_id = row['target_id'];
   if (row['family_id'] != null)   reply.target_id = row['family_id'];

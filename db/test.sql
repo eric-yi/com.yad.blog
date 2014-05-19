@@ -30,9 +30,9 @@ values
 insert into yad_blog_link
   (id, name, url)
 values
-  (1, '163', 'www.163.com'),
-  (2, 'sina', 'www.sina.com'),
-  (3, 'sohu', 'www.sohu.com');
+  (1, '163', 'http://www.163.com'),
+  (2, 'sina', 'http://www.sina.com'),
+  (3, 'sohu', 'http://www.sohu.com');
 
 insert into yad_blog_article
   (id, family_id, category_id, title, path_name, publish_time)
@@ -68,14 +68,14 @@ values
 
 
 insert into yad_blog_reply
-  (id, target_type, target_id, name, email, content, reply_time)
+  (id, target_type, target_id, article_id, name, email, content, reply_time)
 values
-  (1, 1, 1, 'r1', 'test@mail.com', 'r1', '2014-05-04 12:00:00'),
-  (2, 1, 1, 'r2', 'test@mail.com', 'r2', '2014-05-04 12:00:00'),
-  (3, 2, 1, 'r1', 'test@mail.com', 'r11', '2014-05-04 12:00:00'),
-  (4, 2, 1, 'r1', 'test@mail.com', 'r12', '2014-05-04 12:00:00'),
-  (5, 2, 3, 'r1', 'test@mail.com', 'r1sfsdf', '2014-05-04 12:00:00'),
-  (6, 2, 5, 'r1', 'test@mail.com', 'r1ssss', '2014-05-04 12:00:00'),
-  (7, 1, 2, 'r1', 'test@mail.com', 'r1ss', '2014-05-04 12:00:00'),
-  (8, 2, 7, 'r1', 'test@mail.com', 'r1ss', '2014-05-04 12:00:00');
+  (1, 1, 1, 1, 'r1', 'test@mail.com', 'r1', '2014-05-04 12:00:00'),
+  (2, 1, 1, 1, 'r2', 'test@mail.com', 'r2', '2014-05-04 12:00:00'),
+  (3, 2, 1, 1, 'r1', 'test@mail.com', 'r11', '2014-05-04 12:00:00'),
+  (4, 2, 1, 1, 'r1', 'test@mail.com', 'r12', '2014-05-04 12:00:00'),
+  (5, 2, 3, 1, 'r1', 'test@mail.com', 'r1sfsdf', '2014-05-04 12:00:00'),
+  (6, 2, 5, 1, 'r1', 'test@mail.com', 'r1ssss', '2014-05-04 12:00:00'),
+  (7, 1, 2, 2, 'r1', 'test@mail.com', 'r1ss', '2014-05-04 12:00:00'),
+  (8, 2, 7, 2, 'r1', 'test@mail.com', 'r1ss', '2014-05-04 12:00:00');
 

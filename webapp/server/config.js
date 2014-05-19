@@ -9,11 +9,13 @@ Server = function() {
   var host = '0.0.0.0';
   var port = 9426;
   var cached = false;
+	var view;
 
   return {
     host: this.host,
     port: this.port,
-    cached: this.cached	
+    cached: this.cached,
+		view: this.view
   };
 };
 
@@ -47,11 +49,14 @@ Blog = function() {
   var family_name = 'family';
   var category_name = 'categories';
   var recent_post_name = 'recent post';
+  var recent_post_preview = 15;
   var recnet_reply_name = 'recent reply';
+  var recnet_reply_preview = 10;
   var link_name = 'link';
   var page_size = 10;
   var page_prev = 'previous page';
   var page_next = 'next page';
+	var template_notfound = 'notfound.htm';
 
   return {
     article_path:       this.article_path,
@@ -63,9 +68,14 @@ Blog = function() {
     auth_alias:         this.auth_alias,
     email:              this.email,
     category_name:      this.category_name,
+		recent_post_name:		this.recent_post_name,
+		recent_post_preview:this.recent_post_preview,
+		recent_reply_name:	this.recent_reply_name,
+		recent_reply_preview:this.recent_reply_preview,
     page_size:          this.page_size,
     page_prev:          this.page_prev,
-    page_next:          this.page_next
+    page_next:          this.page_next,
+    template_notfound:	this.template_notfound
   };
 };
 
@@ -127,11 +137,14 @@ Config.prototype.init = function(path) {
   this.blog.family_name = get(this.props, 'blog', 'family.name');
   this.blog.category_name = get(this.props, 'blog', 'category.name');
   this.blog.recent_post_name = get(this.props, 'blog', 'recent.post.name');
+  this.blog.recent_post_preview = get(this.props, 'blog', 'recent.post.preview');
   this.blog.recent_reply_name = get(this.props, 'blog', 'recent.reply.name');
+  this.blog.recent_reply_preview = get(this.props, 'blog', 'recent.reply.preview');
   this.blog.link_name = get(this.props, 'blog', 'link.name');
   this.blog.page_size = get(this.props, 'blog', 'page.size');
   this.blog.page_prev = get(this.props, 'blog', 'page.prev');
   this.blog.page_next = get(this.props, 'blog', 'page.next');
+  this.blog.template_notfound = get(this.props, 'blog', 'template.notfound');
 };
 
 Config.prototype.server = this.server;

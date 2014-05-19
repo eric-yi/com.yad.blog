@@ -61,3 +61,24 @@ from
   yad_blog_v_cate_child child
 where
   child.parent_id = parent.id;
+
+
+CREATE OR REPLACE VIEW yad_blog_v_reply_article
+AS
+select
+	a.id as article_id,
+	a.title as title,
+	r.name as auth,
+	r.id as reply_id,
+	r.target_type as target_type,
+	r.target_id as target_id,
+	r.content as content,
+	r.reply_time reply_time
+from
+	yad_blog_reply r,
+	yad_blog_article a
+where
+	r.target_type in (1, 2)
+	and r.article_id = a.id
+order by r.reply_time desc;
+

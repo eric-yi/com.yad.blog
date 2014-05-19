@@ -19,4 +19,9 @@ router.get('/:id', function(req, res) {
   res.send(content);
 });
 
+router.get('/:id/parameter', function(req, res) {
+  var id = req.params.id;
+	Base.getArticleParameter(id, res);
+});
+
 module.exports = router;
