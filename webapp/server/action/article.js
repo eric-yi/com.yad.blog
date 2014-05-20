@@ -13,15 +13,52 @@ router.get('/', function(req, res) {
   Base.getArticlesInAction(null, res);
 });
 
-router.get('/:id', function(req, res) {
+router.get('/id/:id', function(req, res) {
   var id = req.params.id;
   var content = Base.getArticleById(id);
   res.send(content);
 });
 
-router.get('/:id/parameter', function(req, res) {
+router.get('/id/:id/parameter', function(req, res) {
   var id = req.params.id;
 	Base.getArticleParameter(id, res);
+});
+
+router.get('/page', function(req, res) {
+  var condition = {};
+  var page = Base.genPage(req);
+	page.num = 0;
+  Base.getArticlesByPage(condition, page, res);
+});
+
+router.get('/page/:page_num', function(req, res) {
+  var condition = {};
+  var page = Base.genPage(req);
+	page.num = req.params.page_num
+  Base.getArticlesByPage(condition, page, res);
+});
+
+router.get('/category/:root', function(req, res) {
+  var tree = [];
+  tree.push(req.params.root);
+  var page = Base.genPage(req);
+  page.num = req.query.page;
+  var condition = {category: tree};
+  Base.getArticlesByPage(condition, page, res);
+});
+
+router.get('/category/:root/:child', function(req, res) {
+  var tree = [];
+  tree.push(req.params.root);
+  tree.push(req.params.child);
+  var page = Base.genPage(req);
+  page.num = req.query.page;
+  var condition = {category: tree};
+  Base.getArticlesByPage(condition, page, res);
+});
+
+router.get('/recent', function(req, res) {
+	Base.getRecentArticle(req, res);
 });
 
 module.exports = router;

@@ -8,18 +8,16 @@ var Routes = function(app) {
   var category = require('./category');
   var link = require('./link');
   var article = require('./article');
-  var page = require('./page');
   var family = require('./family');
-  var recent = require('./recent');
+  var reply = require('./reply');
   var about = require('./about');
 
   app.use('/', index);
   app.use('/category', category);
   app.use('/link', link);
   app.use('/article', article);
-  app.use('/page', page);
   app.use('/family', family);
-  app.use('/recent', recent);
+  app.use('/reply', reply);
   app.use('/about', about);
 };
 

@@ -8,11 +8,7 @@ var express = require('express');
 var router = express.Router();
 Base = require('./base');
 
-router.get('/article', function(req, res) {
-	Base.getRecentArticle(req, res);
-});
-
-router.get('/reply', function(req, res) {
+router.get('/recent', function(req, res) {
 	Base.getRecentReply(req, res);
 });
 

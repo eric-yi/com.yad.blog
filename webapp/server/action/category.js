@@ -23,23 +23,4 @@ router.get('/list', function(req, res) {
   });
 });
 
-router.get('/:root', function(req, res) {
-  var tree = [];
-  tree.push(req.params.root);
-  var page = Base.genPage(req);
-  page.num = req.query.page;
-  var condition = {category: tree};
-  Base.getArticlesByPage(condition, page, res);
-});
-
-router.get('/:root/:child', function(req, res) {
-  var tree = [];
-  tree.push(req.params.root);
-  tree.push(req.params.child);
-  var page = Base.genPage(req);
-  page.num = req.query.page;
-  var condition = {category: tree};
-  Base.getArticlesByPage(condition, page, res);
-});
-
 module.exports = router;

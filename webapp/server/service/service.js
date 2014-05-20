@@ -224,7 +224,7 @@ function fetchArticles(_dao, container, replies) {
         list.push({article: article, category: category, writer: result['family_name'], replies: reply_list, reply_num: reply_list.length});
       }
       putCache(container.sql, list);
-      var dataset = paging(container.page, list);
+      var dataset = paging(container.condition.page, list);
       if (container.condition.page) {
         dataset = {dataset: dataset, page: container.condition.page};
       }
