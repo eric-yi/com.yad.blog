@@ -1,0 +1,72 @@
+<div class="datecomrap">
+<div id="date" class="date">
+<%yad= date %>
+</div>
+</div>
+
+<div id="storywarp" class="storywrap">
+
+<div id="post" class="post">
+<h3 id="storytitle" class="storytitle">
+<%yad= storytile %>
+</h3>
+<div id="storycontent" class="storycontent">
+<%yad= storycontent %>
+</div><!-- end storycontent -->
+
+<div id="meta" class="meta">
+<%yad= meta %>
+</div><!-- end meta -->
+
+<h2 id="comments">
+<%yad= comments %>
+</h2>
+
+<ul id="commentlist">
+<%yad= commentlist %>
+</ul>
+
+<p id="feed" style="font-size:12px;">
+<%yad= feed %>
+</p>
+
+<h2 id="postcomment">留下评论</h2>
+<form action="/reply/add" method="post" id="commentform">
+<p><input type="text" name="author" id="author" value="" size="22" tabindex="1" />
+<label for="author"><small>姓名 </small></label></p>
+<p><input type="text" name="email" id="email" value="" size="22" tabindex="2" />
+<label for="email"><small>电子邮件（不会被公开） </small></label></p>
+<p><input type="text" name="url" id="url" value="" size="22" tabindex="3" />
+<label for="url"><small>站点</small></label></p>
+<p><textarea name="comment" id="comment" cols="100%" rows="10" tabindex="4"></textarea></p>
+<p><input name="submit" type="submit" id="submit" tabindex="5" value="发表评论" />
+<input type="hidden" name="comment_post_ID" value="1373" />
+</p>
+<p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="2fa7291389" /></p>		<script language="JavaScript" type="text/javascript" src="http://blog.hesey.net/wp-content/plugins/cos-html-cache/common.js.php?hash=25fec4fcd4c0c2f9127281ee47754ac2"></script>
+<script language="JavaScript" type="text/javascript">
+//<![CDATA[
+var hash = "25fec4fcd4c0c2f9127281ee47754ac2";
+var author_cookie = "comment_author_" + hash;
+var email_cookie = "comment_author_email_" + hash;
+var url_cookie = "comment_author_url_" + hash; 
+var adminmail = "heseymx{_}gmail.com";
+var adminurl = "http://blog.hesey.net";
+setCommForm();
+//]]>
+</script>
+<script type='text/javascript' src='http://blog.hesey.net/wp-content/plugins/akismet/_inc/form.js?ver=3.0.0'></script>
+<p style="display: none;"><input type="hidden" id="ak_js" name="ak_js" value="243"/></p><p><input type="hidden" id="comment_reply_ID" name="comment_reply_ID" value="0" /><input type="hidden" id="comment_reply_dp" name="comment_reply_dp" value="0" /></p><div id="cancel_reply" style="display:none;"><a href="javascript:void(0)" onclick="movecfm(null,0,1,null);" style="color:red;">点击取消回复</a></div><script type="text/javascript">
+/* <![CDATA[ */
+var commentformid = "commentform";
+var USERINFO = false;
+var atreply = "none";
+/* ]]> */
+</script>
+<script type="text/javascript" src="#"></script>
+</form>
+
+</div><!-- end post -->
+</div><!-- end storywrap -->
+
+<div class="navlink">
+</div><!-- end navlink -->

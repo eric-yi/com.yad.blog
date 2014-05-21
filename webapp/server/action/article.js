@@ -15,8 +15,9 @@ router.get('/', function(req, res) {
 
 router.get('/id/:id', function(req, res) {
   var id = req.params.id;
-  var content = Base.getArticleById(id);
-  res.send(content);
+  //var content = Base.getArticleById(id);
+	// res.send(content);
+ 	Base.getArticleContentById(id, res);
 });
 
 router.get('/id/:id/parameter', function(req, res) {
@@ -60,5 +61,11 @@ router.get('/category/:root/:child', function(req, res) {
 router.get('/recent', function(req, res) {
 	Base.getRecentArticle(req, res);
 });
+
+router.get('/template', function(req, res) {
+	var content = Base.getArticleTemplate();
+	res.send(content);
+});
+
 
 module.exports = router;

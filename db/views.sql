@@ -82,3 +82,32 @@ where
 	and r.article_id = a.id
 order by r.reply_time desc;
 
+
+
+CREATE OR REPLACE VIEW yad_blog_v_reply_info
+AS
+select
+ *
+from
+	yad_blog_reply
+where
+	target_type in (1, 2)
+	and family_id is null
+union all
+select
+ r.id as id,
+ r.target_type as target_type,
+ r.target_id as target_id,
+ r.family_id as family_id,
+ r.article_id as article_id,
+ f.name as name,
+ f.email as email,
+ r.content as content,
+ r.reply_time as reply_time
+from
+	yad_blog_reply r,
+	yad_blog_master_family f
+where
+	r.target_type in (1, 2)
+	and r.family_id = f.id;
+

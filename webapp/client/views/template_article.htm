@@ -1,0 +1,126 @@
+<div class="datecomrap">
+<div id="date" class="date">
+<%yad= month %><br />
+<span style="font-size:2em; font-weight:bold;"><%yad= day %></span><br />
+<%yad= year %>
+</div>
+</div>
+
+<div id="storywarp" class="storywrap">
+
+<div id="post-<%yad= id %>" class="post">
+<h3 id="storytitle" class="storytitle">
+<a href="javascript:readArticle(<%yad= id %>)" rel="bookmark"><%yad= storytitle %>
+</a>
+</h3>
+<div id="storycontent" class="storycontent">
+<%yad= storycontent %>
+</div><!-- end storycontent -->
+
+<div id="meta" class="meta">
+Written by <%yad= auth %> in: <a href="javascript:categoryForArticle(<%yadif (root_category != '') {%>'<%yad= root_category_path %>', '<%yad= cur_category_path %>')" 	title="查看<%yad= cur_category %><%yad} else {%>'<%yad= cur_category_path %>')" 	title="查看<%yad= cur_category %><%yad}%>中的全部文章" rel="category tag"><%yad= cur_category %></a>
+<%yad
+if (root_category != '') {
+%>
+,<a href="<a href="javascript:categoryForArticle('<%yad= root_category_path %>')" title="查看<%yad= root_category %>中的全部文章" rel="category tag"><%yad= root_category %></a> | <br />
+<%yad
+}
+%>
+</div><!-- end meta -->
+
+<h2 id="comments">
+<%yad if(reply_num==0){ %>没有<%yad }else{ %><%yad= reply_num %>条<%yad }%>评论<a href="#postcomment" title="留下评论">&raquo;</a>
+</h2>
+
+<ul id="commentlist">
+<%yad
+var first = true;
+for (var n in reply_list) {
+	var reply = reply_list[n];
+	if (reply.target_type == 1) {
+		if (!first) {
+%>
+<div class="meta">Comment | 2014 年 05 月 01 日 </div>
+</li>
+<%yad
+		} else {
+			first = false;
+		}
+%>
+<li>
+<div class="authorcomm">
+<img alt="" src="" class='avatar avatar-70 photo' height='70' width='70' />
+<%yad= reply.name %>
+</div>
+<p><%yad= reply.content %></p>
+<p class="thdrpy">[<a href="javascript:void(0)" onclick="movecfm(event,5529,1,'zxwu');">回复</a>]</p>
+<%yad
+	}else {
+%>
+<div class="comment-childs chalt" id="comment-<%yad= reply.id %>">
+<img alt="" src="" class='avatar avatar-32 photo' height='32' width='32' />
+<%yad= reply.name %>
+<p>
+<cite><a href="" rel='external nofollow' class='url'><%yad= reply.name %></a></cite>
+回复:<br />
+<small class="commentmetadata">五月 4th, 2014 at 上午 10:08</small>
+</p>
+<p><%yad= reply.content %></p>
+<p class="thdrpy">[<a href="javascript:void(0)" onclick="movecfm(event,5551,2,'Hesey');">回复</a>]</p>
+</div>
+<%yad
+	}
+}
+if (reply_list && reply_list.length > 0) {
+%>
+	<div class="meta">Comment | 2014 年 05 月 01 日 </div>
+	</li>
+<%yad
+}
+%>
+</ul>
+
+<p id="feed" style="font-size:12px;">
+<%yad= feed %>
+</p>
+
+<h2 id="postcomment">留下评论</h2>
+<form action="/reply/add" method="post" id="commentform">
+<p><input type="text" name="author" id="author" value="" size="22" tabindex="1" />
+<label for="author"><small>姓名 </small></label></p>
+<p><input type="text" name="email" id="email" value="" size="22" tabindex="2" />
+<label for="email"><small>电子邮件（不会被公开） </small></label></p>
+<p><input type="text" name="url" id="url" value="" size="22" tabindex="3" />
+<label for="url"><small>站点</small></label></p>
+<p><textarea name="comment" id="comment" cols="100%" rows="10" tabindex="4"></textarea></p>
+<p><input name="submit" type="submit" id="submit" tabindex="5" value="发表评论" />
+<input type="hidden" name="comment_post_ID" value="1373" />
+</p>
+<p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="2fa7291389" /></p>		<script language="JavaScript" type="text/javascript" src="http://blog.hesey.net/wp-content/plugins/cos-html-cache/common.js.php?hash=25fec4fcd4c0c2f9127281ee47754ac2"></script>
+<script language="JavaScript" type="text/javascript">
+//<![CDATA[
+var hash = "25fec4fcd4c0c2f9127281ee47754ac2";
+var author_cookie = "comment_author_" + hash;
+var email_cookie = "comment_author_email_" + hash;
+var url_cookie = "comment_author_url_" + hash; 
+var adminmail = "heseymx{_}gmail.com";
+var adminurl = "http://blog.hesey.net";
+setCommForm();
+//]]>
+</script>
+<script type='text/javascript' src='http://blog.hesey.net/wp-content/plugins/akismet/_inc/form.js?ver=3.0.0'></script>
+<p style="display: none;"><input type="hidden" id="ak_js" name="ak_js" value="243"/></p><p><input type="hidden" id="comment_reply_ID" name="comment_reply_ID" value="0" /><input type="hidden" id="comment_reply_dp" name="comment_reply_dp" value="0" /></p><div id="cancel_reply" style="display:none;"><a href="javascript:void(0)" onclick="movecfm(null,0,1,null);" style="color:red;">点击取消回复</a></div><script type="text/javascript">
+/* <![CDATA[ */
+var commentformid = "commentform";
+var USERINFO = false;
+var atreply = "none";
+/* ]]> */
+</script>
+<script type="text/javascript" src="#"></script>
+</form>
+
+</div><!-- end post -->
+</div><!-- end storywrap -->
+
+<div class="navlink">
+</div><!-- end navlink -->

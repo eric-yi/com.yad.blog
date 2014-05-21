@@ -8,3 +8,4 @@ ehthumbs.db
 Thumbs.db
 .log
 .swp
+/node_modules

@@ -53,7 +53,7 @@ Service.prototype.getArticles = function(condition, callback) {
 };
 
 Service.prototype.getArticleParameter = function(id, callback) {
-	var sql = 'select publish_time from yad_blog_article where id = "' + id + '"';
+  var sql = 'select a.*, c.name as category_name, c.path_name as category_path_name, c.parent_name as category_parent_name, c.parent_path_name as category_parent_path_name, f.name as family_name, r.reply_num as reply_num from yad_blog_article a, yad_blog_v_category c, yad_blog_master_family f, (select article_id, count(*) as reply_num from yad_blog_reply where article_id ="' + id + '") r where a.category_id = c.id and a.family_id = f.id and a.id = "' + id + '"';
   this.dao.query(sql, function(results) {
 		var result;
 		if (results.length > 0) {
@@ -89,6 +89,11 @@ Service.prototype.getAbstractReplies = function(condition, callback) {
 		}
 		callback(list);
 	});
+};
+
+Service.prototype.getReplyForArticleId = function(article_id, callback) {
+	var sql = 'select * from yad_blog_v_reply_info r where r.article_id = "' + article_id + '" order by r.target_type, reply_time desc';
+	queryReply(this.dao, sql, callback);
 };
 
 Service.prototype.getArticleContent = function(filename) {
@@ -210,6 +215,18 @@ Service.prototype.getLinks = function(link, callback) {
     callback(list);
   });
 };
+
+function queryReply(_dao, sql, callback) {
+	_dao.query(sql, function(results) {
+		var list = [];
+		for (var n  in results) {
+			var result = results[n];
+     	var reply = ModelProxy.genReply(result);
+			list.push(reply);
+		}
+		callback(list);
+	});
+}
 
 function fetchArticles(_dao, container, replies) {
   if (!cacheQuery(container)) {

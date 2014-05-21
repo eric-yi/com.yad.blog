@@ -219,22 +219,9 @@ function makeContents(data, auth) {
 }
 
 function readArticle(id) {
-  $.get( '/article/id/'+id, function(data) {
-		var content = '<div class="datecomrap">';
-		content += '<div class="date">';
-  	$.getJSON( '/article/id/'+id+'/parameter', function(parameter) {
-			if (parameter.publish_time) {
-				var split_date = splitTime(parameter.publish_time);
-				content += split_date.month + '<br />';
-				content += '<span style="font-size:2em; font-weight:bold;">' + split_date.day + '</span><br />';
-				content += split_date.year;
-			};
-			content += '</div>';
-			content += '</div>';
-			content += data;
-    	$('#content').html(content);
-		});
-  });
+	$.get('/article/id/'+id, function(content) {
+		$('#content').html(content);
+	});
 }
 
 function listRecentArticle() {

@@ -39,7 +39,7 @@ var Database = function() {
 
 Blog = function() {
   var article_path = 'articles';
-  var article_suffix = 'hml';
+  var article_suffix = 'htm';
   var article_notfound = 'the article not found';
   var title = '伊爱戴@钟爱一生';
   var subtitle = '媛媛心爱，苗苗心疼';
@@ -56,7 +56,8 @@ Blog = function() {
   var page_size = 10;
   var page_prev = 'previous page';
   var page_next = 'next page';
-	var template_notfound = 'notfound.htm';
+	var template_nofound = 'template_nofound';
+	var template_article = 'template_article';
 
   return {
     article_path:       this.article_path,
@@ -75,7 +76,8 @@ Blog = function() {
     page_size:          this.page_size,
     page_prev:          this.page_prev,
     page_next:          this.page_next,
-    template_notfound:	this.template_notfound
+    template_nofound:		this.template_notfound,
+    template_article:		this.template_article
   };
 };
 
@@ -145,6 +147,7 @@ Config.prototype.init = function(path) {
   this.blog.page_prev = get(this.props, 'blog', 'page.prev');
   this.blog.page_next = get(this.props, 'blog', 'page.next');
   this.blog.template_notfound = get(this.props, 'blog', 'template.notfound');
+  this.blog.template_article = get(this.props, 'blog', 'template.article');
 };
 
 Config.prototype.server = this.server;
