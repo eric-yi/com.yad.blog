@@ -36,7 +36,7 @@ function listFamily() {
   $.getJSON( '/family', function(data) {
     var content = '';
     $.each(data, function(){
-      content += '<li><a href="/family/' + this.username + '">' + this.name + '</a></li>';
+      content += '<li><a href="javascript:familyForArticle(' + this.id + ')">' + this.name + '</a></li>';
     });
     $('#yad_family').html(content);
   });
@@ -106,7 +106,7 @@ function pageForArticle(page_num) {
     var auth = parameters.auth;
     if (!page_num) page_num = 0;
     $.getJSON('/article/page/'+page_num, function(data) {
-      var content = makeContentsInPage(data, page_num, auth, null, null);
+      var content = makeContentsInPage(data, page_num, auth, null, null, null);
       $('#content').html(content);
     });
   });
@@ -120,14 +120,25 @@ function categoryForArticle(c_root, c_child, page_num) {
     if (c_child) child = '/' + c_child;
     var url = '/article/category/' + c_root + child + '?page=' + page_num;
     $.getJSON(url, function(data) {
-      var content = makeContentsInPage(data, page_num, auth, c_root, c_child);
+      var content = makeContentsInPage(data, page_num, auth, c_root, c_child, null);
       $('#content').html(content);
     });
   });
-
 }
 
-function makeContentsInPage(data, page_num, auth, c_root, c_child) {
+function familyForArticle(fid, page_num) {
+  $.getJSON('/parameters', function(parameters) {
+    var auth = parameters.auth;
+    if (!page_num) page_num = 0;
+    var url = '/article/family/' + fid + '?page=' + page_num;
+    $.getJSON(url, function(data) {
+      var content = makeContentsInPage(data, page_num, auth, null, null, fid);
+      $('#content').html(content);
+    });
+  });
+}
+
+function makeContentsInPage(data, page_num, auth, c_root, c_child, fid) {
   var content = makeContents(data.dataset, auth);
   var page = data.page;
   var hasPrev = (page.num != 0) ? true : false;
@@ -143,7 +154,9 @@ function makeContentsInPage(data, page_num, auth, c_root, c_child) {
         if (c_child)
           child = '\'' + c_child + '\'';
         content += '<a href="javascript:categoryForArticle(\'' + c_root + '\', ' + child + ', \'' + page_num + '\')">' + page.prev + '</a>';
-      } else {
+      } else if (fid) {
+				content += '<a href="javascript:familyForArticle(' + fid + ', ' + page_num + ')">« ' + page.prev + '</a>';
+			} else {
         content += '<a href="javascript:pageForArticle(' + page_num + ')">« ' + page.prev + '</a>';
       } 
     }
@@ -156,7 +169,9 @@ function makeContentsInPage(data, page_num, auth, c_root, c_child) {
         if (c_child)
           child = '\'' + c_child + '\'';
         content += '<a href="javascript:categoryForArticle(\'' + c_root + '\', ' + child + ', \'' + page_num + '\')">' + page.next + '</a>';
-      } else {
+      } else if (fid) {
+        content += '<a href="javascript:familyForArticle('+ fid + ', ' + page_num + ')">' + page.next + ' »</a>';
+			} else {
         content += '<a href="javascript:pageForArticle('+ page_num + ')">' + page.next + ' »</a>';
       }
     }
@@ -208,8 +223,8 @@ function makeContents(data, auth) {
     content += '<p>tt</p>';
     content += '</div>';
     content += '<div class="meta">';
-    content += 'Written by ' + this.writer + ' in: <a href="/category/' + this.category_parent_path_name + '/' + this.category_path_name + '" rel="category tag">' + this.category_name + '</a>,';
-    content += '<a href="/category/' + this.category_parent_path_name + '" rel="category tag">' + this.category_parent_name + '</a> | <br />';
+    content += 'Written by <a href="javascript:familyForArticle(' + this.family_id + ')">'  + this.writer + '</a> in: <a href="javascript:categoryForArticle(\'' + this.category_parent_path_name + '\', \'' + this.category_path_name + '\')" rel="category tag">' + this.category_name + '</a>,';
+    content += '<a href="javascript:categoryForArticle(\'' + this.category_parent_path_name + '\')" rel="category tag">' + this.category_parent_name + '</a> | <br />';
     content += '</div>';
     content += '</div>';
     content += '</div>';

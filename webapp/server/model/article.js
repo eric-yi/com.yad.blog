@@ -33,6 +33,7 @@ module.exports = function() {
     toComplexJson: function(category, writer, reply_num) {
       return '{"id":"' + this.id +
         '", "category_id":"' + this.category_id +
+        '", "family_id":"' + this.family_id +
         '", "title":"' + this.title +
         '", "path_name":"' + this.path_name +
         '", "publish_time":"' + this.publish_time +

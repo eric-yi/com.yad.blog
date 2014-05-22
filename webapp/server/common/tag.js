@@ -30,6 +30,8 @@ Article = function(args) {
 	if (args && args.storytitle)					this.storytitle = args.storytitle;
 	var storycontent = '';
 	if (args && args.storycontent)				this.storycontent = args.storycontent;
+	var auth_id = '';
+	if (args && args.auth_id)							this.auth_id = args.auth_id;
 	var auth = '';
 	if (args && args.auth)								this.auth = args.auth;
 	var root_category = '';
@@ -54,6 +56,7 @@ Article = function(args) {
 		day:								this.day,
 		storytitle:					this.storytitle,
 		storycontent:				this.storycontent,
+		auth_id:						this.auth_id,
 		auth:								this.auth,
 		root_category:			this.root_category,
 		root_category_path:	this.root_category_path,
@@ -71,6 +74,7 @@ Article = function(args) {
 				day:								this.day,
 				storytitle:					this.storytitle,
 				storycontent:				this.storycontent,
+				auth_id:						this.auth_id,
 				auth:								this.auth,
 				root_category:			this.root_category,
 				root_category_path:	this.root_category_path,

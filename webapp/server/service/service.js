@@ -29,12 +29,18 @@ Service.prototype.getArticles = function(condition, callback) {
   var _dao = this.dao;
   getReplyForArticle(_dao, function(replies) {
     var sql = 'select a.*, c.name as category_name, c.path_name as category_path_name, c.parent_name as category_parent_name, c.parent_path_name as category_parent_path_name, f.name as family_name from yad_blog_article a, yad_blog_v_category c, yad_blog_master_family f where a.category_id = c.id and a.family_id = f.id';
-    if (condition && condition.category) {
-      var cate_tree = condition.category;
-      if (cate_tree.length == 2)
-        sql += ' and c.path_name = "' + cate_tree[1] + '"';
-      if (cate_tree.length == 1)
-        sql += ' and (c.parent_path_name = "' + cate_tree[0] + '" or c.path_name = "' + cate_tree[0] + '")';
+    if (condition) {
+			if (condition.category) {
+      	var cate_tree = condition.category;
+      	if (cate_tree.length == 2)
+        	sql += ' and c.path_name = "' + cate_tree[1] + '"';
+      	if (cate_tree.length == 1)
+       	 sql += ' and (c.parent_path_name = "' + cate_tree[0] + '" or c.path_name = "' + cate_tree[0] + '")';
+			}
+
+			if (condition.fid != null) {
+				sql += ' and f.id = "' + condition.fid + '"';
+			}
     }
     sql += ' order by a.publish_time desc';
    	var container = new Container(condition=condition, sql=sql, callback=callback);

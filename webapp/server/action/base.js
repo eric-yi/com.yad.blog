@@ -122,6 +122,7 @@ exports.getArticleContentById = function(id, res) {
 				month = d.month;
 				day = d.day;
 			}
+			if (parameter.family_id)										auth_id = parameter.family_id;
 			if (parameter.family_name)									auth = parameter.family_name;
 			if (parameter.title)												storytitle = parameter.title;
 			if (parameter.category_name)								cur_category = parameter.category_name;
@@ -138,6 +139,7 @@ exports.getArticleContentById = function(id, res) {
 			day:								day,
 			storytitle:					storytitle,
 			storycontent:				storycontent,
+			auth_id:						auth_id,
 			auth:								auth,
 			cur_category:				cur_category,
 			cur_category_path:	cur_category_path,

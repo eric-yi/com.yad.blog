@@ -58,6 +58,14 @@ router.get('/category/:root/:child', function(req, res) {
   Base.getArticlesByPage(condition, page, res);
 });
 
+router.get('/family/:fid', function(req, res) {
+	var fid = req.params.fid;
+  var page = Base.genPage(req);
+  page.num = req.query.page;
+  var condition = {fid: fid};
+  Base.getArticlesByPage(condition, page, res);
+});
+
 router.get('/recent', function(req, res) {
 	Base.getRecentArticle(req, res);
 });
