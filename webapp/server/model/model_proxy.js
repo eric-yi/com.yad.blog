@@ -141,7 +141,7 @@ exports.genReply = function(row) {
   if (row['family_id'] != null)   reply.target_id = row['family_id'];
   if (row['name'] != null)        reply.name = row['name'];
   if (row['email'] != null)       reply.email = row['email'];
-  if (row['content'] != null)     reply.reply_path = row['content'];
+  if (row['content'] != null)     reply.content = row['content'];
   if (row['reply_time'] != null)  reply.reply_time = row['reply_time'];
 
   return reply;

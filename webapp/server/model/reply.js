@@ -4,6 +4,7 @@
  * yi_xiaobin@163.com
  */
 
+date_util = require('../common/date_util');
 module.exports = function() {
   var id;
   var target_type;
@@ -23,6 +24,10 @@ module.exports = function() {
     email:        this.email,
     content:      this.content,
     reply_time:   this.reply_time,
+		
+		reply_date: function() {
+			return date_util.split(this.reply_time);
+		},
 
     toJson: function() {
       return '{"id":"' + this.id + 

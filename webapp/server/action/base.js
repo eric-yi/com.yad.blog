@@ -23,6 +23,12 @@ tag = require('../common/tag');
 date_util = require('../common/date_util');
 Tree = require('../common/tree');
 
+init = function() {
+	console.log('initialize ...');
+};
+
+init;
+
 getCategoryInFamily = function(condition, callback) {
   service.getCategoryInFamily(condition, function(list) {
     callback(list);
@@ -92,7 +98,6 @@ getArticleById = function(id) {
 
 getArticleTemplate = function() {
 	var filename = global.getServer().view + '/' + global.getBlog().template_article + '.' + global.getBlog().article_suffix;
-	console.log(filename);
   var content = service.getArticleContent(filename);
   return content;
 };
@@ -153,12 +158,37 @@ exports.getArticleContentById = function(id, res) {
 	});
 };
 
-
 function sortReplies(replies) {
 	var root = new Tree(null, null);
 	var redList = [];
-	putChildReply(root, replies, redList);
-	return root.genNodeList();
+	for (var n in replies) {
+		var reply = replies[n];
+		if (reply.target_type == 1)
+			pushChildTree(redList, reply, root);
+	}
+	for (var m in root.children)
+		putChildReply(root.children[m], replies, redList);
+	return treeToReply(root, 1);
+}
+
+function treeToReply(tree, sort_type) {
+	reply_list = [];
+	putNodeToReply(reply_list, tree, sort_type);
+	return reply_list;
+}
+
+function putNodeToReply(reply_list, tree, sort_type) {
+	if (tree.node != null)
+		reply_list.push({reply: tree.node});
+	tree.sortChildren(sort_type);
+	for (var n in tree.children) {
+		var child = tree.children[n];
+		if (child.node.target_type != 1)
+			reply_list.push({reply: child.node, label: 'start'});
+		putNodeToReply(reply_list, child, sort_type);	
+		if (child.node.target_type != 1)
+			reply_list.push({reply: child.node, label: 'end'});
+	}
 }
 
 function putChildReply(tree, replies, redList) {
@@ -175,14 +205,19 @@ function putChildReply(tree, replies, redList) {
 		if (red)
 			continue;
 	
-		if (reply.target_type == 1 || (tree.node && reply.target_type == 2 && reply.target_id == tree.node.id)) {
-			redList.push(reply.id);
-			var serial = reply.reply_time.getTime();
-			var child = new Tree(reply, serial);
-			tree.children.push(child);
+		if (tree.node && reply.target_type == 2 && reply.target_id == tree.node.id) {
+			var child = pushChildTree(redList, reply, tree);
 			putChildReply(child, replies, redList);
 		}
 	}
+}
+
+function pushChildTree(redList, reply, tree) {
+	redList.push(reply.id);
+	var serial = reply.reply_time.getTime();
+	var node = new Tree(reply, serial);
+	tree.children.push(node);
+	return node;
 }
 
 function sendArticle(res, template_html, args) {

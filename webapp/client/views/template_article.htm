@@ -35,12 +35,19 @@ if (root_category != '') {
 <ul id="commentlist">
 <%yad
 var first = true;
+var r2_counter = 0;
 for (var n in reply_list) {
-	var reply = reply_list[n];
+	var reply = reply_list[n].reply;
+	var reply_label = reply_list[n].label;
+	var reply_date = reply.reply_date();
+	var day12 = '上午';
+	if (reply_date.hour < 1 || reply_date.hour >= 13)
+		day12 = '下午';
 	if (reply.target_type == 1) {
+		r2_counter = 0;
 		if (!first) {
 %>
-<div class="meta">Comment | 2014 年 05 月 01 日 </div>
+<div class="meta">Comment | <%yad= reply_date.year %> 年 <%yad= reply_date.mon %> 月 <%yad= reply_date.day %> 日 </div>
 </li>
 <%yad
 		} else {
@@ -56,32 +63,41 @@ for (var n in reply_list) {
 <p class="thdrpy">[<a href="javascript:void(0)" onclick="movecfm(event,5529,1,'zxwu');">回复</a>]</p>
 <%yad
 	}else {
+		if (reply_label) {
+			if (reply_label == 'end') {
 %>
-<div class="comment-childs chalt" id="comment-<%yad= reply.id %>">
+</div>
+<%yad
+			}
+			continue;
+		}
+%>
+<div class="comment-childs<%yad if(r2_counter%2==0) { %> chalt<%yad } %>" id="comment-<%yad= reply.id %>">
 <img alt="" src="" class='avatar avatar-32 photo' height='32' width='32' />
 <%yad= reply.name %>
 <p>
 <cite><a href="" rel='external nofollow' class='url'><%yad= reply.name %></a></cite>
 回复:<br />
-<small class="commentmetadata">五月 4th, 2014 at 上午 10:08</small>
+<small class="commentmetadata"><%yad= reply_date.month %>月 <%yad= reply_date.day %>th, <%yad= reply_date.year %> at <%yad= day12 %> <%yad= reply_date.hour2 %>:<%yad= reply_date.minute2 %></small>
 </p>
 <p><%yad= reply.content %></p>
 <p class="thdrpy">[<a href="javascript:void(0)" onclick="movecfm(event,5551,2,'Hesey');">回复</a>]</p>
-</div>
 <%yad
+		r2_counter++;
 	}
 }
 if (reply_list && reply_list.length > 0) {
 %>
-	<div class="meta">Comment | 2014 年 05 月 01 日 </div>
-	</li>
+<div class="meta">Comment | <%yad= reply_date.year %> 年 <%yad= reply_date.mon %> 月 <%yad= reply_date.day %> 日 </div>
+</li>
 <%yad
 }
 %>
 </ul>
 
 <p id="feed" style="font-size:12px;">
-<%yad= feed %>
+<a href="#">订阅本文回复内容</a>
+<a rel="trackback" href="#content">返回文章</a>
 </p>
 
 <h2 id="postcomment">留下评论</h2>
