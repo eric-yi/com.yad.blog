@@ -96,6 +96,12 @@ getArticleById = function(id) {
   return content;
 };
 
+getArticleSummary = function(id) {
+  var filename = global.getBlog().article_path + '/' + id + global.getBlog().article_summary_suffix + '.' + global.getBlog().article_suffix;
+  var content = service.getArticleContent(filename);
+ 	return content;
+};
+
 getArticleTemplate = function() {
 	var filename = global.getServer().view + '/' + global.getBlog().template_article + '.' + global.getBlog().article_suffix;
   var content = service.getArticleContent(filename);
@@ -317,3 +323,4 @@ exports.getFamilies = getFamilies;
 exports.getArticleById = getArticleById;
 exports.genPage = genPage;
 exports.getArticleTemplate = getArticleTemplate;
+exports.getArticleSummary = getArticleSummary;

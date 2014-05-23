@@ -40,6 +40,7 @@ var Database = function() {
 Blog = function() {
   var article_path = 'articles';
   var article_suffix = 'htm';
+  var article_sumarry_suffix = '_summary';
   var article_notfound = 'the article not found';
   var title = '伊爱戴@钟爱一生';
   var subtitle = '媛媛心爱，苗苗心疼';
@@ -60,24 +61,25 @@ Blog = function() {
 	var template_article = 'template_article';
 
   return {
-    article_path:       this.article_path,
-    article_suffix:     this.article_suffix,
-    article_notfound:   this.article_notfound,
-    title:              this.title,
-    subtitle:           this.subtitle,
-    auth:               this.auth,
-    auth_alias:         this.auth_alias,
-    email:              this.email,
-    category_name:      this.category_name,
-		recent_post_name:		this.recent_post_name,
-		recent_post_preview:this.recent_post_preview,
-		recent_reply_name:	this.recent_reply_name,
-		recent_reply_preview:this.recent_reply_preview,
-    page_size:          this.page_size,
-    page_prev:          this.page_prev,
-    page_next:          this.page_next,
-    template_nofound:		this.template_notfound,
-    template_article:		this.template_article
+    article_path:       				this.article_path,
+    article_suffix:     				this.article_suffix,
+    article_summary_suffix:     this.article_summary_suffix,
+    article_notfound:   				this.article_notfound,
+    title:              				this.title,
+    subtitle:           				this.subtitle,
+    auth:               				this.auth,
+    auth_alias:         				this.auth_alias,
+    email:              				this.email,
+    category_name:      				this.category_name,
+		recent_post_name:						this.recent_post_name,
+		recent_post_preview:				this.recent_post_preview,
+		recent_reply_name:					this.recent_reply_name,
+		recent_reply_preview:				this.recent_reply_preview,
+    page_size:          				this.page_size,
+    page_prev:          				this.page_prev,
+    page_next:          				this.page_next,
+    template_nofound:						this.template_notfound,
+    template_article:						this.template_article
   };
 };
 
@@ -130,6 +132,7 @@ Config.prototype.init = function(path) {
   var article_path = Path.join(__dirname, '..', get(this.props, 'blog', 'article.path'));
   this.blog.article_path = article_path;
   this.blog.article_suffix = get(this.props, 'blog', 'article.suffix');
+  this.blog.article_summary_suffix = get(this.props, 'blog', 'article.summary.suffix');
   this.blog.article_notfound = get(this.props, 'blog', 'article.notfound');
   this.blog.title = get(this.props, 'blog', 'title');
   this.blog.subtitle = get(this.props, 'blog', 'subtitle');

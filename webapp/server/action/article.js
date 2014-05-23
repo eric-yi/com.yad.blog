@@ -25,6 +25,12 @@ router.get('/id/:id/parameter', function(req, res) {
 	Base.getArticleParameter(id, res);
 });
 
+router.get('/id/:id/summary', function(req, res) {
+  var id = req.params.id;
+	var content = Base.getArticleSummary(id);
+	res.send(content);
+});
+
 router.get('/page', function(req, res) {
   var condition = {};
   var page = Base.genPage(req);

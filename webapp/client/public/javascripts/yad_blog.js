@@ -212,7 +212,7 @@ function makeContents(data, auth) {
     content += year;
     content += '</div>';
     content += '<div class="commy">';
-    content += '<a href="javascript:readArticle(' + this.id + ')" class="comments-link"  title="' + this.title + '">' + this.reply_num + '</a> ';
+    content += '<a href="javascript:readArticle(\'' + this.id + '\', \'comments\')" class="comments-link"  title="' + this.title + '">' + this.reply_num + '</a> ';
     content += '</div>';
     content += '</div>';
 
@@ -220,7 +220,10 @@ function makeContents(data, auth) {
     content += '<div class="post" id="' + this.id + '">';
     content += '<h3 class="storytitle"><a href="javascript:readArticle(' + this.id + ')" rel="bookmark">' + this.title + '</a></h3>';
     content += '<div class="storycontent">';
-    content += '<p>tt</p>';
+		var summary = '';
+		if (this.summary)
+			summary = summaryToHtml(this.summary);
+		content += summary;
     content += '</div>';
     content += '<div class="meta">';
     content += 'Written by <a href="javascript:familyForArticle(' + this.family_id + ')">'  + this.writer + '</a> in: <a href="javascript:categoryForArticle(\'' + this.category_parent_path_name + '\', \'' + this.category_path_name + '\')" rel="category tag">' + this.category_name + '</a>,';
@@ -233,10 +236,36 @@ function makeContents(data, auth) {
   return content;
 }
 
-function readArticle(id) {
+function summaryToHtml(summary){
+	return String(summary)
+		.replace(/&amp;/g, '&')
+	  .replace(/&lt;/g, '<')
+	  .replace(/&gt;/g, '>')
+	  .replace(/&#39;/g, '\'')
+	  .replace(/&quot;/g, '"');
+}
+
+function readArticle(id, anchor) {
 	$.get('/article/id/'+id, function(content) {
-		$('#content').html(content);
+		$('#content').html(content); 
 	});
+	if (anchor) {
+		setTimeout(function() {
+			location.hash = '#' + anchor;
+		}, 100);
+		//setAnchorById(anchor);
+	} else {
+		location.hash = '#';
+	}
+}
+
+function setAnchorById(id) {
+	var oid = $('#'+id);
+	if (oid) {
+		location.hash = '#' + id;
+		return;
+	}
+	setTimeout("setAnchorById()", 100);
 }
 
 function listRecentArticle() {

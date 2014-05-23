@@ -30,5 +30,5 @@ exports.mkdir = function(dir) {
 exports.read = function(filename) {
   if (Fs.existsSync(filename))
     return content = Fs.readFileSync(filename, 'utf-8');
-  return false;
+  return '';
 };

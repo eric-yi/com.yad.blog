@@ -11,7 +11,8 @@ var cached = server.cached;
 ModelProxy = require('../model/model_proxy');
 Cache = require('./cache');
 var cache = Cache.getCache();
-FileUtil = require('../common/file_util');
+file_util = require('../common/file_util');
+string_util = require('../common/string_util');
 
 Service = function() {
   this.dao;
@@ -103,7 +104,7 @@ Service.prototype.getReplyForArticleId = function(article_id, callback) {
 };
 
 Service.prototype.getArticleContent = function(filename) {
-  return FileUtil.read(filename);
+  return file_util.read(filename);
 }
 
 Service.prototype.getCategories = function(condition, callback) {
@@ -241,6 +242,8 @@ function fetchArticles(_dao, container, replies) {
       for (var index in results) {
         var result = results[index];
         var article = ModelProxy.genArticle(result);
+				var summary_path = global.getBlog().article_path + '/' + article.id + global.getBlog().article_summary_suffix + '.' + global.getBlog().article_suffix;
+				article.summary = string_util.escape_html(file_util.read(summary_path));
         var category = ModelProxy.genCategoryWithPrefix(result);
         var reply_list = [];
         fetchReply(reply_list, article.id, 1, replies);

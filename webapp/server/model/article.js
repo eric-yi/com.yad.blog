@@ -11,6 +11,7 @@ module.exports = function() {
   var title;
   var path_name;
   var publish_time;
+	var summary;
 
   return {
     id:           this.id,
@@ -19,6 +20,7 @@ module.exports = function() {
     title:        this.title,
     path_name:    this.path_name,
     publish_time: this.publish_time,
+    summary: 			this.summary,
 
     toJson: function() {
       return '{"id":"' + this.id +
@@ -32,6 +34,7 @@ module.exports = function() {
 
     toComplexJson: function(category, writer, reply_num) {
       return '{"id":"' + this.id +
+        '", "summary":"' + this.summary +
         '", "category_id":"' + this.category_id +
         '", "family_id":"' + this.family_id +
         '", "title":"' + this.title +
