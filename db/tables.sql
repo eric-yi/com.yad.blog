@@ -1,6 +1,17 @@
 -- Eric Yi on 2014-05-09
 -- yi_xiaobin@163.com
 
+CREATE TABLE IF NOT EXISTS yad_blog_info (
+  title varchar(50) not null,
+  subtitle varchar(50) not null,
+  auth varchar(50) not null,
+  auth_alias varchar(50) not null,
+  email varchar(50) not null,
+  about_title varchar(100) not null,
+  about_time datetime not null
+) character set utf8 COMMENT='';
+
+
 CREATE TABLE IF NOT EXISTS yad_blog_category (
   id int(11) not null auto_increment primary key,
   name varchar(50) not null,
@@ -25,9 +36,9 @@ CREATE TABLE IF NOT EXISTS yad_blog_article (
   publish_time datetime not null
 ) character set utf8 COMMENT='';
 
-CREATE TABLE IF NOT EXISTS yad_blog_reply (
+CREATE TABLE IF NOT EXISTS yad_blog_comment (
   id int(11) not null auto_increment primary key,
-  target_type int(3) not null,    -- 1:article 2:reply 3:about
+  target_type int(3) not null,    -- 1:article 2:comment 3:about
   target_id int(11) default null,
   family_id int(11) default null,
   article_id int(11) default null,

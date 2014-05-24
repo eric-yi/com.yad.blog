@@ -1,10 +1,9 @@
 var express = require('express');
 var router = express.Router();
-Constants = require('./constants');
+Base = require('./base');
 
-/* GET home page. */
 router.get('/', function(req, res) {
-  res.render('about.htm', Constants.parameters);
+  Base.getAbout(res);
 });
 
 module.exports = router;

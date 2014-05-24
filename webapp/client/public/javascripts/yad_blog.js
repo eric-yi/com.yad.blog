@@ -155,10 +155,10 @@ function makeContentsInPage(data, page_num, auth, c_root, c_child, fid) {
           child = '\'' + c_child + '\'';
         content += '<a href="javascript:categoryForArticle(\'' + c_root + '\', ' + child + ', \'' + page_num + '\')">' + page.prev + '</a>';
       } else if (fid) {
-				content += '<a href="javascript:familyForArticle(' + fid + ', ' + page_num + ')">« ' + page.prev + '</a>';
-			} else {
+        content += '<a href="javascript:familyForArticle(' + fid + ', ' + page_num + ')">« ' + page.prev + '</a>';
+      } else {
         content += '<a href="javascript:pageForArticle(' + page_num + ')">« ' + page.prev + '</a>';
-      } 
+      }
     }
     if (hasPrev && hasNext)
       content += ' — ';
@@ -171,7 +171,7 @@ function makeContentsInPage(data, page_num, auth, c_root, c_child, fid) {
         content += '<a href="javascript:categoryForArticle(\'' + c_root + '\', ' + child + ', \'' + page_num + '\')">' + page.next + '</a>';
       } else if (fid) {
         content += '<a href="javascript:familyForArticle('+ fid + ', ' + page_num + ')">' + page.next + ' »</a>';
-			} else {
+      } else {
         content += '<a href="javascript:pageForArticle('+ page_num + ')">' + page.next + ' »</a>';
       }
     }
@@ -182,20 +182,20 @@ function makeContentsInPage(data, page_num, auth, c_root, c_child, fid) {
 }
 
 YadDate = function(pub_date) {
-	var year = pub_date.getFullYear();
+  var year = pub_date.getFullYear();
   var month = month2chs[pub_date.getMonth()];
   var day = pub_date.getDate();
-	return {
-		year: year,
-		month : month,
-		day: day
-	};
+  return {
+    year: year,
+    month : month,
+    day: day
+  };
 };
 
 function splitTime(publish_time) {
-	var pub_date = new Date(Date.parse(publish_time));
-	var yad_date = new YadDate(pub_date);
-	return yad_date;
+  var pub_date = new Date(Date.parse(publish_time));
+  var yad_date = new YadDate(pub_date);
+  return yad_date;
 }
 
 function makeContents(data, auth) {
@@ -220,10 +220,10 @@ function makeContents(data, auth) {
     content += '<div class="post" id="' + this.id + '">';
     content += '<h3 class="storytitle"><a href="javascript:readArticle(' + this.id + ')" rel="bookmark">' + this.title + '</a></h3>';
     content += '<div class="storycontent">';
-		var summary = '';
-		if (this.summary)
-			summary = summaryToHtml(this.summary);
-		content += summary;
+    var summary = '';
+    if (this.summary)
+      summary = summaryToHtml(this.summary);
+    content += summary;
     content += '</div>';
     content += '<div class="meta">';
     content += 'Written by <a href="javascript:familyForArticle(' + this.family_id + ')">'  + this.writer + '</a> in: <a href="javascript:categoryForArticle(\'' + this.category_parent_path_name + '\', \'' + this.category_path_name + '\')" rel="category tag">' + this.category_name + '</a>,';
@@ -237,67 +237,144 @@ function makeContents(data, auth) {
 }
 
 function summaryToHtml(summary){
-	return String(summary)
-		.replace(/&amp;/g, '&')
-	  .replace(/&lt;/g, '<')
-	  .replace(/&gt;/g, '>')
-	  .replace(/&#39;/g, '\'')
-	  .replace(/&quot;/g, '"');
+  return String(summary)
+  .replace(/&amp;/g, '&')
+  .replace(/&lt;/g, '<')
+  .replace(/&gt;/g, '>')
+  .replace(/&#39;/g, '\'')
+  .replace(/&quot;/g, '"');
 }
 
 function readArticle(id, anchor) {
-	$.get('/article/id/'+id, function(content) {
-		$('#content').html(content); 
-	});
-	if (anchor) {
-		setTimeout(function() {
-			location.hash = '#' + anchor;
-		}, 100);
-		//setAnchorById(anchor);
-	} else {
-		location.hash = '#';
-	}
+  $.get('/article/id/'+id, function(content) {
+    $('#content').html(content);
+  });
+  if (anchor) {
+    setAnchorById(anchor);
+  } else {
+    location.hash = '#';
+  }
 }
 
 function setAnchorById(id) {
-	var oid = $('#'+id);
-	if (oid) {
-		location.hash = '#' + id;
-		return;
-	}
-	setTimeout("setAnchorById()", 100);
+  var oid = $('#'+id);
+  if (oid) {
+    setTimeout(function() {
+      location.hash = '#' + id;
+    }, 200);
+    return;
+  }
+  setTimeout("setAnchorById()", 200);
 }
 
 function listRecentArticle() {
   $.getJSON('/article/recent', function(data) {
-		var content = '';
+    var content = '';
     $.each(data, function() {
-			content += '<li>';
-    	content += '<a href="javascript:readArticle(' + this.id + ')">' + this.title + '</a> ';
-			content += '</li>';
-		});
-		$('#yad_article_recent').html(content);
-	});
+      content += '<li>';
+      content += '<a href="javascript:readArticle(' + this.id + ')">' + this.title + '</a> ';
+      content += '</li>';
+    });
+    $('#yad_article_recent').html(content);
+  });
 }
 
-function listRecentReply() {
-  $.getJSON('/reply/recent', function(data) {
-		var content = '';
+function listRecentComment() {
+  $.getJSON('/comment/recent', function(data) {
+    var content = '';
     $.each(data, function() {
-			content += '<li class="recentcomments">';
-			content += '<a href="#" rel="external nofollow" class="url">' + this.auth + '</a>';
-			content += '发表在';
-    	content += '《<a href="javascript:readArticle(' + this.article_id + ')">' + this.title + '</a>》';
-			content += '</li>';
-		});
-		$('#recentcomments').html(content);
-	});
+      content += '<li class="recentcomments">';
+      content += '<a href="#" rel="external nofollow" class="url">' + this.auth + '</a>';
+      content += '发表在';
+      content += '《<a href="javascript:readArticle(' + this.article_id + ')">' + this.title + '</a>》';
+      content += '</li>';
+    });
+    $('#recentcomments').html(content);
+  });
+}
+
+function addComment() {
+  if ($('#author').val() == '' || $('#comment').val() == '') {
+    alert('姓名或内容不能为空');
+    return false;
+  }
+  var article_id = $('#article_id').val();
+  $.ajax({
+    url: '/comment/add',
+    type: 'POST',
+    data: $('#commentform').serialize(),
+    success: function(message) {
+      defReply();
+      var message = $.parseJSON(message);
+      if (message.success == 'true') {
+        readArticle(article_id, 'comments');
+      } else {
+        alert('Error: ' + message.msg);
+        return false;
+      }
+    },
+    error: function(message) {
+      defReply();
+      alert('Server Error:' + message);
+    }
+  });
+}
+
+function addAboutComment() {
+  if ($('#author').val() == '' || $('#comment').val() == '') {
+    alert('姓名或内容不能为空');
+    return false;
+  }
+  $.ajax({
+    url: '/comment/add',
+    type: 'POST',
+    data: $('#commentform').serialize(),
+    success: function(message) {
+      defReply();
+      var message = $.parseJSON(message);
+      if (message.success == 'true') {
+        about('comments');
+      } else {
+        alert('Error: ' + message.msg);
+        return false;
+      }
+    },
+    error: function(message) {
+      defReply();
+      alert('Server Error:' + message);
+    }
+  });
+}
+
+
+function moveReply(comment_id, reply_type) {
+  location.hash = '#postcomment';
+  $('#author').focus();
+  $('#reply_id').val(comment_id);
+  $('#reply_type').val(reply_type);
+}
+
+function defReply() {
+  $('#reply_id').val(-1);
+  $('#reply_type').val(-1);
+}
+
+function about(anchor) {
+  $.get('/about', function(content) {
+    $('#content').html(content);
+  });
+  if (anchor) {
+    setAnchorById(anchor);
+  } else {
+    location.hash = '#';
+  }
+
 }
 
 function init() {
   listFamily();
   listCategory();
-	listRecentArticle();
-	listRecentReply();
+  listRecentArticle();
+  listRecentComment();
   listLink();
 }

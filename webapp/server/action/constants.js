@@ -8,18 +8,18 @@ Global = require('../global');
 var global = Global.getGlobal();
 
 exports.parameters = {
-  title:              global.getBlog().title,
-  subtitle:           global.getBlog().subtitle,
-  auth:               global.getBlog().auth,
-  auth_alias:         global.getBlog().auth_alias,
-  email:              global.getBlog().email,
-  family_name:        global.getBlog().family_name,
-  category_name:      global.getBlog().category_name,
-  recent_post_name:   global.getBlog().recent_post_name,
-  recent_post_preview:global.getBlog().recent_post_preview,
-  recent_reply_name:  global.getBlog().recent_reply_name,
-  recent_reply_preview:global.getBlog().recent_reply_preview,
-  link_name:          global.getBlog().link_name
+  title:                  global.getBlog().title,
+  subtitle:               global.getBlog().subtitle,
+  auth:                   global.getBlog().auth,
+  auth_alias:             global.getBlog().auth_alias,
+  email:                  global.getBlog().email,
+  family_name:            global.getBlog().family_name,
+  category_name:          global.getBlog().category_name,
+  recent_post_name:       global.getBlog().recent_post_name,
+  recent_post_preview:    global.getBlog().recent_post_preview,
+  recent_comment_name:    global.getBlog().recent_comment_name,
+  recent_comment_preview: global.getBlog().recent_comment_preview,
+  link_name:              global.getBlog().link_name
 };
 
 exports.parameters_json =
@@ -33,8 +33,8 @@ exports.parameters_json =
   '"category_name":"' + global.getBlog().category_name + '", ' +
   '"recent_post_name":"' + global.getBlog().recent_post_name + '", ' +
   '"recent_post_preview":"' + global.getBlog().recent_post_preview + '", ' +
-  '"recent_reply_name":"' + global.getBlog().recent_reply_name + '", ' +
-  '"recent_reply_preview":"' + global.getBlog().recent_reply_preview + '", ' +
+  '"recent_comment_name":"' + global.getBlog().recent_comment_name + '", ' +
+  '"recent_comment_preview":"' + global.getBlog().recent_comment_preview + '", ' +
   '"link_name":"' + global.getBlog().link_name + '"' +
   '}';
 

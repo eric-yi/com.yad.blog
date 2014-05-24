@@ -9,13 +9,13 @@ Server = function() {
   var host = '0.0.0.0';
   var port = 9426;
   var cached = false;
-	var view;
+  var view;
 
   return {
     host: this.host,
     port: this.port,
     cached: this.cached,
-		view: this.view
+    view: this.view
   };
 };
 
@@ -51,35 +51,39 @@ Blog = function() {
   var category_name = 'categories';
   var recent_post_name = 'recent post';
   var recent_post_preview = 15;
-  var recnet_reply_name = 'recent reply';
-  var recnet_reply_preview = 10;
+  var recnet_comment_name = 'recent comment';
+  var recnet_comment_preview = 10;
   var link_name = 'link';
   var page_size = 10;
   var page_prev = 'previous page';
   var page_next = 'next page';
-	var template_nofound = 'template_nofound';
-	var template_article = 'template_article';
+  var template_nofound = 'template_nofound';
+  var template_article = 'template_article';
+  var template_about = 'template_about';
+  var about_content = 'about_content';
 
   return {
-    article_path:       				this.article_path,
-    article_suffix:     				this.article_suffix,
+    article_path:               this.article_path,
+    article_suffix:             this.article_suffix,
     article_summary_suffix:     this.article_summary_suffix,
-    article_notfound:   				this.article_notfound,
-    title:              				this.title,
-    subtitle:           				this.subtitle,
-    auth:               				this.auth,
-    auth_alias:         				this.auth_alias,
-    email:              				this.email,
-    category_name:      				this.category_name,
-		recent_post_name:						this.recent_post_name,
-		recent_post_preview:				this.recent_post_preview,
-		recent_reply_name:					this.recent_reply_name,
-		recent_reply_preview:				this.recent_reply_preview,
-    page_size:          				this.page_size,
-    page_prev:          				this.page_prev,
-    page_next:          				this.page_next,
-    template_nofound:						this.template_notfound,
-    template_article:						this.template_article
+    article_notfound:           this.article_notfound,
+    title:                      this.title,
+    subtitle:                   this.subtitle,
+    auth:                       this.auth,
+    auth_alias:                 this.auth_alias,
+    email:                      this.email,
+    category_name:              this.category_name,
+    recent_post_name:           this.recent_post_name,
+    recent_post_preview:        this.recent_post_preview,
+    recent_comment_name:        this.recent_comment_name,
+    recent_comment_preview:     this.recent_comment_preview,
+    page_size:                  this.page_size,
+    page_prev:                  this.page_prev,
+    page_next:                  this.page_next,
+    template_nofound:           this.template_notfound,
+    template_article:           this.template_article,
+    template_about:             this.template_about,
+    about_content:              this.about_content
   };
 };
 
@@ -143,14 +147,16 @@ Config.prototype.init = function(path) {
   this.blog.category_name = get(this.props, 'blog', 'category.name');
   this.blog.recent_post_name = get(this.props, 'blog', 'recent.post.name');
   this.blog.recent_post_preview = get(this.props, 'blog', 'recent.post.preview');
-  this.blog.recent_reply_name = get(this.props, 'blog', 'recent.reply.name');
-  this.blog.recent_reply_preview = get(this.props, 'blog', 'recent.reply.preview');
+  this.blog.recent_comment_name = get(this.props, 'blog', 'recent.comment.name');
+  this.blog.recent_comment_preview = get(this.props, 'blog', 'recent.comment.preview');
   this.blog.link_name = get(this.props, 'blog', 'link.name');
   this.blog.page_size = get(this.props, 'blog', 'page.size');
   this.blog.page_prev = get(this.props, 'blog', 'page.prev');
   this.blog.page_next = get(this.props, 'blog', 'page.next');
   this.blog.template_notfound = get(this.props, 'blog', 'template.notfound');
   this.blog.template_article = get(this.props, 'blog', 'template.article');
+  this.blog.template_about = get(this.props, 'blog', 'template.about');
+  this.blog.about_content = get(this.props, 'blog', 'about.content');
 };
 
 Config.prototype.server = this.server;
@@ -160,8 +166,8 @@ Config.prototype.blog = this.blog;
 get = function(props, a, e) {
   if (a == null || e == null) return null;
   if (a != null)              a = string_util.trim(a)
-  if (e != null)              e = string_util.trim(e)
-  if (a == '' || e == '')     return null;
+    if (e != null)              e = string_util.trim(e)
+      if (a == '' || e == '')     return null;
   return props[a][e];
 };
 

@@ -1,6 +1,12 @@
 -- Eric Yi on 2014-05-14
 -- yi_xiaobin@163.com
 
+insert into yad_blog_info
+  (title, subtitle, auth, auth_alias, email, about_title, about_time)
+values
+  ('伊爱戴@钟爱一生', '媛媛心爱，苗苗心疼', '伊爱戴',
+   'yad', 'yi_xiaobin@163.com', '关于美好家庭', sysdate());
+
 insert into yad_blog_master_family
   (id, username, password, name, member_id, position)
 values
@@ -67,7 +73,7 @@ values
   (30, 2, 6, '面向GC的Java编程', '9', '2015-05-18 12:00:00');
 
 
-insert into yad_blog_reply
+insert into yad_blog_comment
   (id, target_type, target_id, article_id, name, email, content, reply_time)
 values
   (1, 1, 1, 1, 'r1', 'test@mail.com', 'r1', '2014-05-04 12:00:00'),

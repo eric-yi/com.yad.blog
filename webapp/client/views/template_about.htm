@@ -18,14 +18,7 @@
 </div><!-- end storycontent -->
 
 <div id="meta" class="meta">
-Written by <a href="javascript:familyForArticle(<%yad= auth_id %>)"><%yad= auth %></a> in: <a href="javascript:categoryForArticle(<%yadif (root_category != '') {%>'<%yad= root_category_path %>', '<%yad= cur_category_path %>')" 	title="查看<%yad= cur_category %><%yad} else {%>'<%yad= cur_category_path %>')" 	title="查看<%yad= cur_category %><%yad}%>中的全部文章" rel="category tag"><%yad= cur_category %></a>
-<%yad
-if (root_category != '') {
-%>
-,<a href="javascript:categoryForArticle('<%yad= root_category_path %>')" title="查看<%yad= root_category %>中的全部文章" rel="category tag"><%yad= root_category %></a> | <br />
-<%yad
-}
-%>
+Written by <%yad= auth %> in:|
 </div><!-- end meta -->
 
 <h2 id="comments">
@@ -43,7 +36,7 @@ for (var n in comment_list) {
   var day12 = '上午';
   if (reply_date.hour < 1 || reply_date.hour >= 13)
     day12 = '下午';
-    if (comment.target_type == 1) {
+    if (comment.target_type == 3) {
       r2_counter = 0;
       if (!first) {
 %>
@@ -60,7 +53,7 @@ for (var n in comment_list) {
 <%yad= comment.name %>
 </div>
 <p><%yad= comment.content %></p>
-<p class="thdrpy">[<a href="javascript:void(0)" onclick="moveReply(<%yad= comment.id %>, 2);">回复</a>]</p>
+<p class="thdrpy">[<a href="javascript:void(0)" onclick="moveReply(<%yad= comment.id %>, 4);">回复</a>]</p>
 <%yad
     }else {
       if (comment_label) {
@@ -81,7 +74,7 @@ for (var n in comment_list) {
 <small class="commentmetadata"><%yad= reply_date.month %>月 <%yad= reply_date.day %>th, <%yad= reply_date.year %> at <%yad= day12 %> <%yad= reply_date.hour2 %>:<%yad= reply_date.minute2 %></small>
 </p>
 <p><%yad= comment.content %></p>
-<p class="thdrpy">[<a href="javascript:void(0)" onclick="moveReply(<%yad= comment.id %>, 2);";>回复</a>]</p>
+<p class="thdrpy">[<a href="javascript:void(0)" onclick="moveReply(<%yad= comment.id%>, 4);";>回复</a>]</p>
 <%yad
     r2_counter++;
   }
@@ -108,11 +101,11 @@ if (comment_list && comment_list.length > 0) {
 <label for="email"><small>电子邮件（不会被公开） </small></label></p>
 <p><textarea name="comment" id="comment" cols="100%" rows="10" tabindex="4"></textarea></p>
 <p>
-<input name="submit" type="button" id="submit" tabindex="5" value="发表评论" onclick="addComment()" />
+<input name="submit" type="button" id="submit" tabindex="5" value="发表评论" onclick="addAboutComment()" />
 </p>
-<input type="hidden" id="article_id" name="article_id" value="<%yad= id %>" />
-<input type="hidden" id="target_id" name="target_id" value="<%yad= id %>" />
-<input type="hidden" id="target_type" name="target_type" value="1" />
+<input type="hidden" id="article_id" name="article_id" value="-1" />
+<input type="hidden" id="target_id" name="target_id" value="-1" />
+<input type="hidden" id="target_type" name="target_type" value="3" />
 <input type="hidden" id="reply_id" name="reply_id" value="-1" />
 <input type="hidden" id="reply_type" name="reply_type" value="-1" />
 </form>

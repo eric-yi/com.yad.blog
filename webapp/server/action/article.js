@@ -16,32 +16,32 @@ router.get('/', function(req, res) {
 router.get('/id/:id', function(req, res) {
   var id = req.params.id;
   //var content = Base.getArticleById(id);
-	// res.send(content);
- 	Base.getArticleContentById(id, res);
+  // res.send(content);
+  Base.getArticleContentById(id, res);
 });
 
 router.get('/id/:id/parameter', function(req, res) {
   var id = req.params.id;
-	Base.getArticleParameter(id, res);
+  Base.getArticleParameter(id, res);
 });
 
 router.get('/id/:id/summary', function(req, res) {
   var id = req.params.id;
-	var content = Base.getArticleSummary(id);
-	res.send(content);
+  var content = Base.getArticleSummary(id);
+  res.send(content);
 });
 
 router.get('/page', function(req, res) {
   var condition = {};
   var page = Base.genPage(req);
-	page.num = 0;
+  page.num = 0;
   Base.getArticlesByPage(condition, page, res);
 });
 
 router.get('/page/:page_num', function(req, res) {
   var condition = {};
   var page = Base.genPage(req);
-	page.num = req.params.page_num
+  page.num = req.params.page_num;
   Base.getArticlesByPage(condition, page, res);
 });
 
@@ -65,7 +65,7 @@ router.get('/category/:root/:child', function(req, res) {
 });
 
 router.get('/family/:fid', function(req, res) {
-	var fid = req.params.fid;
+  var fid = req.params.fid;
   var page = Base.genPage(req);
   page.num = req.query.page;
   var condition = {fid: fid};
@@ -73,12 +73,12 @@ router.get('/family/:fid', function(req, res) {
 });
 
 router.get('/recent', function(req, res) {
-	Base.getRecentArticle(req, res);
+  Base.getRecentArticle(req, res);
 });
 
 router.get('/template', function(req, res) {
-	var content = Base.getArticleTemplate();
-	res.send(content);
+  var content = Base.getArticleTemplate();
+  res.send(content);
 });
 
 

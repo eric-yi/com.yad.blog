@@ -24,16 +24,16 @@ AS
 select
   *
 from
-  yad_blog_reply
+  yad_blog_comment
 where
   target_type = 1;
 
-CREATE OR REPLACE VIEW yad_blog_v_rep_reply
+CREATE OR REPLACE VIEW yad_blog_v_rep_comment
 AS
 select
   *
 from
-  yad_blog_reply
+  yad_blog_comment
 where
   target_type = 2;
 
@@ -63,19 +63,19 @@ where
   child.parent_id = parent.id;
 
 
-CREATE OR REPLACE VIEW yad_blog_v_reply_article
+CREATE OR REPLACE VIEW yad_blog_v_comment_article
 AS
 select
 	a.id as article_id,
 	a.title as title,
 	r.name as auth,
-	r.id as reply_id,
+	r.id as comment_id,
 	r.target_type as target_type,
 	r.target_id as target_id,
 	r.content as content,
 	r.reply_time reply_time
 from
-	yad_blog_reply r,
+	yad_blog_comment r,
 	yad_blog_article a
 where
 	r.target_type in (1, 2)
@@ -84,15 +84,15 @@ order by r.reply_time desc;
 
 
 
-CREATE OR REPLACE VIEW yad_blog_v_reply_info
+CREATE OR REPLACE VIEW yad_blog_v_comment_info
 AS
 select
- *
+  *
 from
-	yad_blog_reply
+  yad_blog_comment
 where
-	target_type in (1, 2)
-	and family_id is null
+  target_type in (1, 2)
+  and family_id is null
 union all
 select
  r.id as id,
@@ -105,7 +105,7 @@ select
  r.content as content,
  r.reply_time as reply_time
 from
-	yad_blog_reply r,
+	yad_blog_comment r,
 	yad_blog_master_family f
 where
 	r.target_type in (1, 2)

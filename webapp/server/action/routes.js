@@ -9,7 +9,7 @@ var Routes = function(app) {
   var link = require('./link');
   var article = require('./article');
   var family = require('./family');
-  var reply = require('./reply');
+  var comment = require('./comment');
   var about = require('./about');
 
   app.use('/', index);
@@ -17,7 +17,7 @@ var Routes = function(app) {
   app.use('/link', link);
   app.use('/article', article);
   app.use('/family', family);
-  app.use('/reply', reply);
+  app.use('/comment', comment);
   app.use('/about', about);
 };
 

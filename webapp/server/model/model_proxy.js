@@ -61,10 +61,10 @@ function genArticleJson(models) {
     var category = model.category;
     var writer = model.writer;
     var reply_num = 0;
-    if (model.reply_num)  reply_num = model.reply_num;
-    if (!isFirst)         json += ', ';
+    if (model.reply_num)    reply_num = model.reply_num;
+    if (!isFirst)           json += ', ';
     json += article.toComplexJson(category, writer, reply_num);
-    if (isFirst)          isFirst = false;
+    if (isFirst)            isFirst = false;
   }
   json += ']';
   return json;
@@ -132,37 +132,37 @@ exports.genLink = function(row) {
   return link;
 };
 
-exports.genReply = function(row) {
-  Reply = require('./reply');
-  var reply = new Reply();
-  if (row['id'] != null)          reply.id = row['id'];
-  if (row['target_type'] != null) reply.target_type = row['target_type'];
-  if (row['target_id'] != null)   reply.target_id = row['target_id'];
-  if (row['family_id'] != null)   reply.target_id = row['family_id'];
-  if (row['name'] != null)        reply.name = row['name'];
-  if (row['email'] != null)       reply.email = row['email'];
-  if (row['content'] != null)     reply.content = row['content'];
-  if (row['reply_time'] != null)  reply.reply_time = row['reply_time'];
+exports.genComment = function(row) {
+  Comment = require('./comment');
+  var comment = new Comment();
+  if (row['id'] != null)            comment.id = row['id'];
+  if (row['target_type'] != null)   comment.target_type = row['target_type'];
+  if (row['target_id'] != null)     comment.target_id = row['target_id'];
+  if (row['family_id'] != null)     comment.target_id = row['family_id'];
+  if (row['name'] != null)          comment.name = row['name'];
+  if (row['email'] != null)         comment.email = row['email'];
+  if (row['content'] != null)       comment.content = row['content'];
+  if (row['reply_time'] != null)    comment.reply_time = row['reply_time'];
 
-  return reply;
+  return comment;
 };
 
-exports.genComplexReply = function(row) {
-  ReplyComplex = require('./reply_complex');
-  var reply = new ReplyComplex();
-  if (row['article_id'] != null)  reply.article_id = row['article_id'];
-  if (row['title'] != null)       reply.title = row['title'];
-  if (row['auth'] != null)        reply.auth = row['auth'];
-  if (row['reply_id'] != null)    reply.reply_id = row['reply_id'];
-  if (row['target_type'] != null) reply.target_type = row['target_type'];
-  if (row['target_id'] != null)   reply.target_id = row['target_id'];
-  if (row['family_id'] != null)   reply.target_id = row['family_id'];
-  if (row['name'] != null)        reply.name = row['name'];
-  if (row['email'] != null)       reply.email = row['email'];
-  if (row['content'] != null)     reply.reply_path = row['content'];
-  if (row['reply_time'] != null)  reply.reply_time = row['reply_time'];
+exports.genComplexComment = function(row) {
+  CommentComplex = require('./comment_complex');
+  var comment = new CommentComplex();
+  if (row['article_id'] != null)    comment.article_id = row['article_id'];
+  if (row['title'] != null)         comment.title = row['title'];
+  if (row['auth'] != null)          comment.auth = row['auth'];
+  if (row['comment_id'] != null)    comment.reply_id = row['reply_id'];
+  if (row['target_type'] != null)   comment.target_type = row['target_type'];
+  if (row['target_id'] != null)     comment.target_id = row['target_id'];
+  if (row['family_id'] != null)     comment.target_id = row['family_id'];
+  if (row['name'] != null)          comment.name = row['name'];
+  if (row['email'] != null)         comment.email = row['email'];
+  if (row['content'] != null)       comment.content = row['content'];
+  if (row['replyt_time'] != null)   comment.reply_time = row['reply_time'];
 
-  return reply;
+  return comment;
 };
 
 exports.genFamily = function(row) {
@@ -196,4 +196,19 @@ exports.genPage = function() {
   Page = require('./page');
   var page = new Page();
   return page;
-}
+};
+
+exports.genInfo = function(row) {
+  Info = require('./info');
+  var info = new Info();
+  if (row['title'] != null)             info.title = row['title'];
+  if (row['subtitle'] != null)          info.subtitle = row['subtitle'];
+  if (row['auth'] != null)              info.auth = row['auth'];
+  if (row['auth_alias'] != null)        info.auth_alias = row['auth_alias'];
+  if (row['email'] != null)             info.email = row['email'];
+  if (row['about_title'] != null)       info.about_title = row['about_title'];
+  if (row['about_time'] != null)        info.about_time = row['about_time'];
+  if (row['about_reply_num'] != null)   info.about_reply_num = row['about_reply_num'];
+
+  return info;
+};

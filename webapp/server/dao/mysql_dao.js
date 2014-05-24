@@ -34,23 +34,60 @@ MysqlPool.prototype.init = function(db) {
 };
 
 MysqlPool.prototype.query = function(sql, callback) {
-	query(this.pool, sql, callback);
+  query(this.pool, sql, callback);
+};
+
+MysqlPool.prototype.insert = function(sql, callback) {
+  query(this.pool, sql, callback);
+};
+
+MysqlPool.prototype.del = function(sql, callback) {
+  query(this.pool, sql, callback);
+};
+
+MysqlPool.prototype.update = function(sql, callback) {
+  query(this.pool, sql, callback);
 };
 
 MysqlPool.prototype.total = function(sql, callback) {
-	var count_sql = 'select count(*) as total from (' + sql + ')';
-	query(this.pool, sql, function(results) {
-		callback(results[0].total);	
-	});
+  var count_sql = 'select count(*) as total from (' + sql + ')';
+  query(this.pool, sql, function(results) {
+    callback(results[0].total);	
+  });
 };
 
 function query(_pool, sql, callback) {
-	_pool.getConnection(function(err, conn) {
+  _pool.getConnection(function(err, conn) {
     if (err) {
       console.log('Dababase connection error!');
       throw err;
     }
-    var q = conn.query(sql, function(err, results) {
+
+    conn.query(sql, function(err, results) {
+      if (err) {
+        console.log('Database query error!');
+        throw err;
+      }
+      callback(results);
+    });
+
+    conn.release(function(err) {
+      if (err) {
+        console.log('Database connection close error!');
+        throw err;
+      }
+    });
+  });
+}
+
+function safeQuery(_pool, sql, params, callback) {
+  _pool.getConnection(function(err, conn) {
+    if (err) {
+      console.log('Dababase connection error!');
+      throw err;
+    }
+
+    conn.query(sql, params, function(err, results) {
       if (err) {
         console.log('Database query error!');
         throw err;
