@@ -99,12 +99,12 @@ Service.prototype.getAbstractComments = function(condition, callback) {
 };
 
 Service.prototype.getCommentForArticleId = function(article_id, callback) {
-  var sql = 'select * from yad_blog_v_comment_info where article_id = "' + article_id + '" order by target_type, reply_time desc';
+  var sql = 'select * from yad_blog_v_comment_info where article_id = "' + article_id + '" order by target_type, reply_time';
   queryComment(this.dao, sql, callback);
 };
 
 Service.prototype.getCommentForAbout = function(callback) {
-  var sql = 'select * from yad_blog_comment where target_type in (3, 4) order by reply_time desc';
+  var sql = 'select * from yad_blog_comment where target_type in (3, 4) order by reply_time';
   queryComment(this.dao, sql, callback);
 };
 
