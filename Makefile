@@ -16,6 +16,7 @@ install:
 	$(NPM) install morgan
 	$(NPM) install cookie-parser
 	$(NPM) install body-parser
+	$(NPM) install express-session
 	$(NPM) install MD5
 	mv node_modules $(server)
 
