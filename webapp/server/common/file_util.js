@@ -6,7 +6,7 @@
 
 Path = require('path');
 Fs = require('fs');
-var mode = 0755;
+var mode = '0755';
 
 exports.mkdir = function(dir) {
   var arr = dir.split('/');

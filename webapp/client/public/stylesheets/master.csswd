@@ -1,0 +1,32 @@
+.editComment, .editableComment, .textComment{
+  display: inline;
+}
+.comment-childs{
+  border: 1px solid #999;
+  margin: 5px 2px 2px 4px;
+  padding: 4px 2px 2px 4px;
+  background-color: white;
+}
+.chalt{
+  background-color: #E2E2E2;
+}
+#newcomment{
+  border:1px dashed #777;width:90%;
+}
+#newcommentsubmit{
+  color:red;
+}
+.adminreplycomment{
+  border:1px dashed #777;
+  width:99%;
+  margin:4px;
+  padding:4px;
+}
+.mvccls{
+  color: #999;
+}
+.recentcomments a{
+  display:inline !important;
+  padding:0 !important;
+  margin:0 !important;
+}

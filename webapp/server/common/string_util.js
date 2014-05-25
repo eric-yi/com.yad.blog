@@ -29,6 +29,12 @@ exports.dealNull = function(str, dec) {
 
 exports.lineToHtml = function(str) {
   return String(str)
-      .replace(/\r\n/g, '<br/>')
-      .replace(/\n/g, '<br/>');
+    .replace(/\r\n/g, '<br/>')
+    .replace(/\n/g, '<br/>');
+};
+
+exports.isEmpty = function(str) {
+  if (str == null || str.trim() == '')
+    return true;
+  return false;
 };

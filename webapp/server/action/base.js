@@ -41,7 +41,7 @@ init = function() {
   console.log('initialize ...');
 };
 
-init;
+init();
 
 getCategoryInFamily = function(condition, callback) {
   service.getCategoryInFamily(condition, function(list) {

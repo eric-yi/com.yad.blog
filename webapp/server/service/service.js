@@ -238,7 +238,6 @@ Service.prototype.addComment = function(comment, callback) {
             + comment.email + ', '
             + comment.content + ', '
             + comment.reply_time + ')';
-  console.log(sql);
   this.dao.insert(sql, function(results) {
     var result = results[0];
     callback(result);
@@ -251,7 +250,18 @@ Service.prototype.getInfo = function(callback) {
     var info = ModelProxy.genInfo(results[0]);
     callback(info);
   });
+};
 
+Service.prototype.getFamilyByLogin = function(username, password, callback) {
+  var sql = 'select * from yad_blog_master_family where username = "' + username + '" and password = "' + password + '"';
+  this.dao.query(sql, function(results) {
+    var info = {code: -2};
+    if (results.length > 0) {
+      info.code = 0;
+      info.family = ModelProxy.genFamily(results[0]);
+    }
+    callback(info);
+  });
 };
 
 function queryComment(_dao, sql, callback) {

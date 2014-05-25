@@ -29,10 +29,9 @@ module.exports = function() {
     weido:        this.weico,
 
     toJson: function() {
-      return '{"id":"' + this.id + 
+      return '{"id":"' + this.id +
         '", "position":"' + this.position +
         '", "username":"' + this.username +
-//        '", "password":"' + this.password +
         '", "name":"' + this.name +
         '", "member_id":"' + this.member_id +
         '", "email":"' + this.email +

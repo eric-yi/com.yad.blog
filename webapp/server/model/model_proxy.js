@@ -182,6 +182,23 @@ exports.genFamily = function(row) {
   return family;
 };
 
+exports.copyFamily = function(_family) {
+  Family = require('./master_family');
+  var family = new Family();
+  if (_family.id != null)          family.id = _family.id;
+  if (_family.position != null)    family.position = _family.position;
+  if (_family.username != null)    family.username = _family.username;
+  if (_family.password != null)    family.password = _family.password;
+  if (_family.name != null)        family.name = _family.name;
+  if (_family.member_id != null)   family.member_id = _family.member_id;
+  if (_family.email != null)       family.email = _family.email;
+  if (_family.qq != null)          family.qq = _family.qq;
+  if (_family.weibo != null)       family.weibo = _family.weibo;
+  if (_family.weico != null)       family.weico = _family.weico;
+
+  return family;
+};
+
 exports.genCategoryFamily = function(row) {
   CF = require('./category_family');
   var cf = new CF();

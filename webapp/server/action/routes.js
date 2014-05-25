@@ -11,6 +11,7 @@ var Routes = function(app) {
   var family = require('./family');
   var comment = require('./comment');
   var about = require('./about');
+  var master = require('./master');
 
   app.use('/', index);
   app.use('/category', category);
@@ -19,6 +20,7 @@ var Routes = function(app) {
   app.use('/family', family);
   app.use('/comment', comment);
   app.use('/about', about);
+  app.use('/master', master);
 };
 
 module.exports = function(app) {
