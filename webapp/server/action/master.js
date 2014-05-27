@@ -22,27 +22,35 @@ router.post('/login', function(req, res) {
   login(req, res);
 });
 
+router.get('/logout', function(req, res) {
+  var message = new Message();
+  if (isLogin(req)) {
+    req.session.family = null;
+  }
+  res.send(message.toSuccessJson());
+});
+
 function isLogin(req) {
-	if (req.session.family)
-		return true;
-	return false;
+  if (req.session.family)
+    return true;
+  return false;
 }
 
 function requestLogin(req, res) {
-	if (isLogin(req)) {
-  	var message = new Message();
-		message.success = true;
-		message.msg = 1;
-		res.send(message.toJson());
-		return true;
-	}
-	return false;
+  if (isLogin(req)) {
+    var message = new Message();
+    message.success = true;
+    message.msg = 1;
+    res.send(message.toJson());
+    return true;
+  }
+  return false;
 }
 
 function login(req, res) {
-	if (requestLogin(req, res)) {
-		return;
-	}
+  if (requestLogin(req, res)) {
+    return;
+  }
   var message = new Message();
   message.success = false;
   var username = req.body.username;

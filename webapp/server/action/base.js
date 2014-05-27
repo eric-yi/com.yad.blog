@@ -31,6 +31,12 @@ Message = function() {
     success:  this.success,
     msg:      this.msg,
 
+    toSuccessJson: function() {
+      this.success = true;
+      this.msg = 1;
+      return '{"success":"' + this.success + '", "msg":"' + this.msg + '"}';
+    },
+
     toJson: function() {
       return '{"success":"' + this.success + '", "msg":"' + this.msg + '"}';
     }

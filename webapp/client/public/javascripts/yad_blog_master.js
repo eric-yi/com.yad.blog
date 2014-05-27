@@ -3,14 +3,12 @@ function showLogin() {
     if (family.id != null) {
       closeLoginBox();
     } else {
-      $('#username').focus();
       showLoginBox();
     }
   });
 }
 
 function showLoginBox() {
-  var loginBox = 'login-box';
   $('#login-box').fadeIn(300);
   var popMargTop = ($('#login-box').height() + 24) / 2;
   var popMargLeft = ($('#login-box').width() + 24) / 2;
@@ -25,7 +23,7 @@ function showLoginBox() {
 
 function closeLoginBox() {
   $('#mask, .login-popup').fadeOut(300 , function() {
-    ('#mask').remove();
+    //('#mask').remove();
   });
 }
 
@@ -52,7 +50,7 @@ function login() {
       if (message.success == 'true') {
         $('#_message').html('');
         closeLoginBox();
-				refresh();
+        refresh();
       } else {
         var msg = message.msg;
         if (msg == -1)
@@ -69,40 +67,43 @@ function login() {
 }
 
 function logout() {
-	var a = confirm('出门了？');
-	if (a) {
-		$.getJSON('/master/logout', function() {
-			refresh();
-		});
-	}
+  var a = confirm('出门了？');
+  if (a) {
+    $.getJSON('/master/logout', function() {
+      refresh();
+      $('#tool-container').hide();
+      showLoginBox();
+    });
+  }
 }
 
 function familyCall(callback) {
-	var isLogin = false;
-	$.getJSON('/master/family', function(family) {
+  var isLogin = false;
+  $.getJSON('/master/family', function(family) {
     if (family.id != null)
-			isLogin = true;
-		callback(isLogin, family);
+      isLogin = true;
+    callback(isLogin, family);
   });
 }
 
 function refresh() {
-	familyCall(function(isLogin, family) {
-		if (isLogin) {
-			$('#options').show();
-		} else {
-			$('#options').hide();
-		}
-	});
+  familyCall(function(isLogin, family) {
+    if (isLogin) {
+      $('#options').show();
+    } else {
+      $('#options').hide();
+    }
+  });
 }
 
 refresh();
 
+var op_hidden = false;
 jQuery(document).ready(function($) {
-	$('#btn-options').toolbar({
-		content: '#toolbar-options',
-		position: 'left-top',
-		hideOnClick: true
-	});
+  $('#btn-options').toolbar({
+    content: '#toolbar-options',
+    position: 'left-top',
+    hideOnClick: false
+  });
 });
 
