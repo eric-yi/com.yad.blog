@@ -22,7 +22,27 @@ router.post('/login', function(req, res) {
   login(req, res);
 });
 
+function isLogin(req) {
+	if (req.session.family)
+		return true;
+	return false;
+}
+
+function requestLogin(req, res) {
+	if (isLogin(req)) {
+  	var message = new Message();
+		message.success = true;
+		message.msg = 1;
+		res.send(message.toJson());
+		return true;
+	}
+	return false;
+}
+
 function login(req, res) {
+	if (requestLogin(req, res)) {
+		return;
+	}
   var message = new Message();
   message.success = false;
   var username = req.body.username;

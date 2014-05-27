@@ -5,6 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
+var global = require('./global').getGlobal();;
 
 var app = express();
 
@@ -19,7 +20,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '..', 'client/public')));
-app.use(session({secret: '0GBlJZ9EKBt2Zbi2flRPvztczCewBxXK'}));
+app.use(session({
+	secret: '0GBlJZ9EKBt2Zbi2flRPvztczCewBxXK',
+	//store: sessionStore,
+	cookie: {maxAge: global.getServer().session_expired}
+}));
 
 // routes
 var Routes = require('./action/routes');

@@ -10,12 +10,14 @@ Server = function() {
   var port = 9426;
   var cached = false;
   var view;
+	var session_expired = 30 * 60 * 1000;
 
   return {
     host: this.host,
     port: this.port,
     cached: this.cached,
-    view: this.view
+    view: this.view,
+		session_expired: this.session_expired
   };
 };
 
@@ -124,6 +126,7 @@ Config.prototype.init = function(path) {
   if (cached_str.toUpperCase() == 'ON')
     cached = true;
   this.server.cached = cached;
+	this.server.session_expired = get(this.props, 'server', 'session.expired') * 60 * 1000;
 
   this.database.host = get(this.props, 'database', 'host');
   this.database.port = get(this.props, 'database', 'port');

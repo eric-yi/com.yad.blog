@@ -8,7 +8,7 @@ node_modules	=$(server)/node_modules
 .PHONY : clean
 
 install:
-	(NPM) install express
+	$(NPM) install express
 	$(NPM) install ejs
 	$(NPM) install mysql
 	$(NPM) install debug
@@ -25,4 +25,3 @@ env :
 
 clean:
 	$(RM) -rf $(node_modules)
-	$(NPM) install express

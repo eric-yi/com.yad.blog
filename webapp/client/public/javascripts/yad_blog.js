@@ -378,3 +378,4 @@ function init() {
   listRecentComment();
   listLink();
 }
+

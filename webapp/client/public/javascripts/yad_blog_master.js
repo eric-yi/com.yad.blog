@@ -52,6 +52,7 @@ function login() {
       if (message.success == 'true') {
         $('#_message').html('');
         closeLoginBox();
+				refresh();
       } else {
         var msg = message.msg;
         if (msg == -1)
@@ -66,3 +67,42 @@ function login() {
     }
   });
 }
+
+function logout() {
+	var a = confirm('出门了？');
+	if (a) {
+		$.getJSON('/master/logout', function() {
+			refresh();
+		});
+	}
+}
+
+function familyCall(callback) {
+	var isLogin = false;
+	$.getJSON('/master/family', function(family) {
+    if (family.id != null)
+			isLogin = true;
+		callback(isLogin, family);
+  });
+}
+
+function refresh() {
+	familyCall(function(isLogin, family) {
+		if (isLogin) {
+			$('#options').show();
+		} else {
+			$('#options').hide();
+		}
+	});
+}
+
+refresh();
+
+jQuery(document).ready(function($) {
+	$('#btn-options').toolbar({
+		content: '#toolbar-options',
+		position: 'left-top',
+		hideOnClick: true
+	});
+});
+
