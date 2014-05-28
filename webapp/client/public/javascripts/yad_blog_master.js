@@ -103,7 +103,6 @@ function closeInfo() {
   $('#info-box').fadeOut(300 , function() {
     $('#mask').remove();
   });
-  return false;
 }
 
 function refresh() {
