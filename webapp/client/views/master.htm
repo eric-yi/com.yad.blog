@@ -19,6 +19,42 @@
   </form>
 </div>
 
+<div id="info-box" class="login-popup">
+	<form id="infoform" class="signin">
+    <fieldset class="textbox">
+			<label>
+        <span style="width:50px;">名字:</span>
+        <input id="family_name" name="family_name" value="" type="text" autocomplete="on">
+			</label>
+			<label>
+        <span>钥匙:</span>
+        <input id="family_password" name="family_password" value="" type="password">
+			</label>
+			<label>
+        <span style="width:150px;">Email:</span>
+        <input id="family_email" name="family_email" value="" type="text">
+			</label>
+			<label>
+        <span>QQ:</span>
+        <input id="family_qq" name="family_qq" value="" type="text">
+			</label>
+			<label>
+        <span>微博:</span>
+        <input id="family_weibo" name="family_weibo" value="" type="text">
+			</label>
+			<label>
+        <span>微信:</span>
+        <input id="family_weico" name="family_weico" value="" type="text">
+			</label>
+			<p align="right">
+     		<button type="button" onclick="">确 定</button>
+     		<button type="button" onclick="">放 弃</button>
+			</p>
+    	<span id="family_message" style="color:red;text-align:center;"></span>
+    </fieldset>
+  </form>
+</div>
+
 <script>showLogin();</script>
 
 <%- include master_footer.htm %>

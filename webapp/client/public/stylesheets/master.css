@@ -143,3 +143,12 @@ form.signin input::-webkit-input-placeholder {
 	display: block;
 	margin: 5px auto 0px auto;
 }
+
+.info_name {
+	width: 100px;
+	font-align: left;
+}
+
+#infoform fieldset p span {
+	width: 30px;
+}

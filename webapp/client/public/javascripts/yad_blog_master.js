@@ -86,6 +86,19 @@ function familyCall(callback) {
   });
 }
 
+function editInfo() {
+	$('#info-box').fadeIn(300);
+ 	var popMargTop = ($('#info-box').height() + 24) / 2;
+ 	var popMargLeft = ($('#info-box').width() + 24) / 2;
+ 	$('#info-box').css({
+   	'margin-top' : -popMargTop,
+   	'margin-left' : -popMargLeft
+ 	});
+ 	$('body').append('<div id="mask"></div>');
+ 	$('#mask').fadeIn(300);
+  $('#family_name').focus();
+}
+
 function refresh() {
   familyCall(function(isLogin, family) {
     if (isLogin) {
