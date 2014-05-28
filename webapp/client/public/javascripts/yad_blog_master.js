@@ -87,16 +87,23 @@ function familyCall(callback) {
 }
 
 function editInfo() {
-	$('#info-box').fadeIn(300);
- 	var popMargTop = ($('#info-box').height() + 24) / 2;
- 	var popMargLeft = ($('#info-box').width() + 24) / 2;
- 	$('#info-box').css({
-   	'margin-top' : -popMargTop,
-   	'margin-left' : -popMargLeft
- 	});
- 	$('body').append('<div id="mask"></div>');
- 	$('#mask').fadeIn(300);
+  $('#info-box').fadeIn(300);
+  var popMargTop = ($('#info-box').height() + 24) / 2;
+  var popMargLeft = ($('#info-box').width() + 24) / 2;
+  $('#info-box').css({
+    'margin-top' : -popMargTop,
+    'margin-left' : -popMargLeft
+  });
+  $('body').append('<div id="mask"></div>');
+  $('#mask').fadeIn(300);
   $('#family_name').focus();
+}
+
+function closeInfo() {
+  $('#info-box').fadeOut(300 , function() {
+    $('#mask').remove();
+  });
+  return false;
 }
 
 function refresh() {
@@ -111,12 +118,11 @@ function refresh() {
 
 refresh();
 
-var op_hidden = false;
 jQuery(document).ready(function($) {
   $('#btn-options').toolbar({
     content: '#toolbar-options',
     position: 'left-top',
-    hideOnClick: false
+    hideOnClick: true
   });
 });
 
