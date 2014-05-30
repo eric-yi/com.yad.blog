@@ -19,9 +19,9 @@
   </form>
 </div>
 
-<div id="info-box" class="login-popup">
-  <a href="javascript:closeInfo();" class="close"><img src="/images/close_pop.png" class="btn_close" title="Close Window" alt="Close" /></a>
-  <form id="infoform" class="signin">
+<div id="member-box" class="login-popup">
+  <a href="javascript:closeMember();" class="close"><img src="/images/close_pop.png" class="btn_close" title="Close Window" alt="Close" /></a>
+  <form id="memberform" class="signin">
     <fieldset class="textbox">
       <label>
         <span style="width:50px;">名字:</span>
@@ -52,9 +52,10 @@
         <input id="family_weico" name="family_weico" value="" type="text">
       </label>
       <p align="right">
-      <button type="button" onclick="">确 定</button>
-      <button type="button" onclick="">放 弃</button>
+      <button type="button" onclick="editMember()">确 定</button>
+      <button type="button" onclick="resetMember()">放 弃</button>
       </p>
+      <input type="hidden" id="family_id" name="family_id" value="" />
       <span id="family_message" style="color:red;text-align:center;"></span>
     </fieldset>
   </form>

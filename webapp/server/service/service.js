@@ -238,8 +238,7 @@ Service.prototype.addComment = function(comment, callback) {
             + comment.email + ', '
             + comment.content + ', '
             + comment.reply_time + ')';
-  this.dao.insert(sql, function(results) {
-    var result = results[0];
+  this.dao.insert(sql, function(result) {
     callback(result);
   });
 };
@@ -261,6 +260,21 @@ Service.prototype.getFamilyByLogin = function(username, password, callback) {
       info.family = ModelProxy.genFamily(results[0]);
     }
     callback(info);
+  });
+};
+
+Service.prototype.updateFamily = function(family, callback) {
+  var sql = 'update yad_blog_master_family set' +
+            ' name = ' + family.name +
+            ', password = ' + family.password +
+            ', email = ' + family.email +
+            ', qq = ' + family.qq +
+            ', weibo = ' + family.weibo +
+            ', weico = ' + family.weico +
+            ' where id = ' + family.id;
+  console.log(sql);
+  this.dao.update(sql, function(result) {
+    callback(result);
   });
 };
 

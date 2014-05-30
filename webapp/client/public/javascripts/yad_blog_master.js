@@ -1,5 +1,5 @@
 function showLogin() {
-  $.getJSON('/family/current', function(family) {
+  $.getJSON('/family/member/current', function(family) {
     if (family.id != null) {
       closeLoginBox();
     } else {
@@ -77,37 +77,62 @@ function logout() {
   }
 }
 
+var member;
 function familyCall(callback) {
   var isLogin = false;
-  $.getJSON('/family/current', function(family) {
+  $.getJSON('/family/member/current', function(family) {
     if (family.id != null)
       isLogin = true;
+    member = family;
     callback(isLogin, family);
   });
 }
 
-function editInfo() {
-	familyCall(function(isLogin, family) {
-		if (isLogin) {
-			$('#family_name').val(family.name);
-			if (family.email != 'undefined')
-				$('#family_email').val(family.email);
-			if (family.qq != 'undefined')
-				$('#family_qq').val(family.qq);
-			if (family.weibo != 'undefined')
-				$('#family_weibo').val(family.weibo);
-			if (family.weico != 'undefined')
-				$('#family_weico').val(family.weico);
-			showInfo();
-		}
-	});
+function fetchMember() {
+  $.getJSON('/family/member/current', function(family) {
+    member = family;
+  });
 }
 
-function showInfo() {
-  $('#info-box').fadeIn(300);
-  var popMargTop = ($('#info-box').height() + 24) / 2;
-  var popMargLeft = ($('#info-box').width() + 24) / 2;
-  $('#info-box').css({
+function openMember() {
+  $('#family_message').html('');
+  familyCall(function(isLogin, family) {
+    if (isLogin) {
+      resetMember(family);
+      showMember();
+    }
+  });
+}
+
+function resetMember(_member) {
+  if (!_member)  _member = this.member;
+  $('#family_id').val(_member.id);
+  $('#family_name').val(_member.name);
+  $('#family_password').val('');
+  $('#family_repassword').val('');
+  if (_member.email != 'undefined')
+    $('#family_email').val(_member.email);
+  else
+    $('#family_email').val('');
+  if (_member.qq != 'undefined')
+    $('#family_qq').val(_member.qq);
+  else
+    $('#family_qq').val('');
+  if (_member.weibo != 'undefined')
+    $('#family_weibo').val(_member.weibo);
+  else
+    $('#family_weibo').val('');
+  if (_member.weico != 'undefined')
+    $('#family_weico').val(_member.weico);
+  else
+    $('#family_weico').val('');
+}
+
+function showMember() {
+  $('#member-box').fadeIn(300);
+  var popMargTop = ($('#member-box').height() + 24) / 2;
+  var popMargLeft = ($('#member-box').width() + 24) / 2;
+  $('#member-box').css({
     'margin-top' : -popMargTop,
     'margin-left' : -popMargLeft
   });
@@ -116,10 +141,48 @@ function showInfo() {
   $('#family_name').focus();
 }
 
-function closeInfo() {
-  $('#info-box').fadeOut(300 , function() {
+function closeMember() {
+  $('#family_message').html('');
+  $('#member-box').fadeOut(300 , function() {
     $('#mask').remove();
   });
+}
+
+function editMember() {
+  var a = confirm('确认修改吗？');
+  if (!a) {
+    return false;
+  }
+  if ($('#family_name').val() == ''&& $('#family_name').val() == '') {
+    $('#family_message').html('名字不能为空');
+    return false;
+  }
+  if ($('#family_password').val() != '' && $('#family_password').val() != $('#family_repassword').val()) {
+    $('#family_message').html('钥匙更换不符合要求');
+    return false;
+  }
+  var family_id = $('#family_id').val();
+  $.ajax({
+    url: '/family/' + family_id + '/edit',
+    type: 'POST',
+    data: $('#memberform').serialize(),
+    success: function(message) {
+      var message = $.parseJSON(message);
+      if (message.success == 'true') {
+        $('#family_message').html('修改完成');
+        fetchMember();
+      } else {
+        var msg = message.msg;
+        if (msg == -1)
+          $('#family_message').html('修改失败');
+        return false;
+      }
+    },
+    error: function(message) {
+      $('#family_message').html(message);
+    }
+  });
+
 }
 
 function refresh() {

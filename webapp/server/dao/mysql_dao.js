@@ -38,15 +38,15 @@ MysqlPool.prototype.query = function(sql, callback) {
 };
 
 MysqlPool.prototype.insert = function(sql, callback) {
-  query(this.pool, sql, callback);
+  _iud(this.pool, sql, callback);
 };
 
 MysqlPool.prototype.del = function(sql, callback) {
-  query(this.pool, sql, callback);
+  _iud(this.pool, sql, callback);
 };
 
 MysqlPool.prototype.update = function(sql, callback) {
-  query(this.pool, sql, callback);
+  _iud(this.pool, sql, callback);
 };
 
 MysqlPool.prototype.total = function(sql, callback) {
@@ -55,6 +55,30 @@ MysqlPool.prototype.total = function(sql, callback) {
     callback(results[0].total);	
   });
 };
+
+function _iud(_pool, sql, callback) {
+  _pool.getConnection(function(err, conn) {
+    if (err) {
+      console.log('Dababase connection error!');
+      throw err;
+    }
+
+    conn.query(sql, function(err, results) {
+      if (err) {
+        console.log('Database query error!');
+        throw err;
+      }
+      callback(results[0]);
+    });
+
+    conn.release(function(err) {
+      if (err) {
+        console.log('Database connection close error!');
+        throw err;
+      }
+    });
+  });
+}
 
 function query(_pool, sql, callback) {
   _pool.getConnection(function(err, conn) {

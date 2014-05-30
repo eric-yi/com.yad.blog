@@ -27,6 +27,14 @@ exports.dealNull = function(str, dec) {
   return dec + str.toString() + dec;
 };
 
+exports.formToSql = function(str, dec) {
+  if (str == null || str == '')
+    return 'null';
+  if (dec == null)  dec = '';
+  return dec + str.toString() + dec;
+
+};
+
 exports.lineToHtml = function(str) {
   return String(str)
     .replace(/\r\n/g, '<br/>')

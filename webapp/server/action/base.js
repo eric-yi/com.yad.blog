@@ -389,6 +389,24 @@ exports.getRecentComments = function(req, res) {
   });
 };
 
+function isLogin(req) {
+  if (req.session.family)
+    return true;
+  return false;
+}
+
+function requestLogin(req, res) {
+  if (isLogin(req)) {
+    var message = new Message();
+    message.success = true;
+    message.msg = 1;
+    res.send(message.toJson());
+    return true;
+  }
+  return false;
+}
+
+
 exports.service = service;
 exports.getCategories = getCategories;
 exports.getCategoryInFamily = getCategoryInFamily;
@@ -400,3 +418,5 @@ exports.genPage = genPage;
 exports.getArticleTemplate = getArticleTemplate;
 exports.getArticleSummary = getArticleSummary;
 exports.Message = Message;
+exports.isLogin = isLogin;
+exports.requestLogin = requestLogin;

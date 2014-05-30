@@ -26,7 +26,7 @@ module.exports = function() {
     email:        this.email,
     qq:           this.qq,
     weibo:        this.weibo,
-    weido:        this.weico,
+    weico:        this.weico,
 
     toJson: function() {
       return '{"id":"' + this.id +
