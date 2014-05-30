@@ -10,14 +10,6 @@ router.get('/', function(req, res) {
   res.render('master.htm', Constants.parameters);
 });
 
-router.get('/family', function(req, res) {
-  var json = '{}';
-  var family = req.session.family;
-  if (family)
-    json = ModelProxy.copyFamily(family).toJson();
-  res.send(json);
-});
-
 router.post('/login', function(req, res) {
   login(req, res);
 });

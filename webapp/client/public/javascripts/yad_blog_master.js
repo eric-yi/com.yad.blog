@@ -1,5 +1,5 @@
 function showLogin() {
-  $.getJSON( '/master/family', function(family) {
+  $.getJSON('/family/current', function(family) {
     if (family.id != null) {
       closeLoginBox();
     } else {
@@ -79,7 +79,7 @@ function logout() {
 
 function familyCall(callback) {
   var isLogin = false;
-  $.getJSON('/master/family', function(family) {
+  $.getJSON('/family/current', function(family) {
     if (family.id != null)
       isLogin = true;
     callback(isLogin, family);
@@ -87,6 +87,23 @@ function familyCall(callback) {
 }
 
 function editInfo() {
+	familyCall(function(isLogin, family) {
+		if (isLogin) {
+			$('#family_name').val(family.name);
+			if (family.email != 'undefined')
+				$('#family_email').val(family.email);
+			if (family.qq != 'undefined')
+				$('#family_qq').val(family.qq);
+			if (family.weibo != 'undefined')
+				$('#family_weibo').val(family.weibo);
+			if (family.weico != 'undefined')
+				$('#family_weico').val(family.weico);
+			showInfo();
+		}
+	});
+}
+
+function showInfo() {
   $('#info-box').fadeIn(300);
   var popMargTop = ($('#info-box').height() + 24) / 2;
   var popMargLeft = ($('#info-box').width() + 24) / 2;

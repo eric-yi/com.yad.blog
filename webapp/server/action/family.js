@@ -16,4 +16,12 @@ router.get('/', function(req, res) {
   });
 });
 
+router.get('/current', function(req, res) {
+	var json = '{}';
+  var family = req.session.family;
+  if (family)
+		json = ModelProxy.copyFamily(family).toJson();
+	res.send(json);
+});
+
 module.exports = router;
