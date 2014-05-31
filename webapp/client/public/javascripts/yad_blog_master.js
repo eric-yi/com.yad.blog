@@ -182,7 +182,43 @@ function editMember() {
       $('#family_message').html(message);
     }
   });
+}
 
+function enterPost() {
+  familyCall(function(isLogin, family) {
+    if (isLogin) {
+      var content = '<textarea id="post-editor" name="post-editor">'
+      content += '</textarea>';
+      $('#content').html(content);
+      $('#post-editor').ckeditor();
+    }
+  });
+}
+
+function openPost() {
+  familyCall(function(isLogin, family) {
+    if (isLogin) {
+      showPost();
+    }
+  });
+}
+
+function showPost() {
+  $('#post-box').fadeIn(300);
+  var popMargTop = ($('#post-box').height() + 24) / 2;
+  var popMargLeft = ($('#post-box').width() + 24) / 2;
+  $('#post-box').css({
+    'margin-top' : -popMargTop,
+    'margin-left' : -popMargLeft
+  });
+  $('body').append('<div id="mask"></div>');
+  $('#mask').fadeIn(300);
+}
+
+function closePost() {
+  $('#post-box').fadeOut(300 , function() {
+    $('#mask').remove();
+  });
 }
 
 function refresh() {
@@ -205,3 +241,9 @@ jQuery(document).ready(function($) {
   });
 });
 
+CKEDITOR.disableAutoInline = true;
+/*
+$(document).ready(function() {
+  $('#post-editor').ckeditor();
+});
+*/
