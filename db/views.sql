@@ -66,23 +66,21 @@ where
 CREATE OR REPLACE VIEW yad_blog_v_comment_article
 AS
 select
-	a.id as article_id,
-	a.title as title,
-	r.name as auth,
-	r.id as comment_id,
-	r.target_type as target_type,
-	r.target_id as target_id,
-	r.content as content,
-	r.reply_time reply_time
+  a.id as article_id,
+  a.title as title,
+  r.name as auth,
+  r.id as comment_id,
+  r.target_type as target_type,
+  r.target_id as target_id,
+  r.content as content,
+  r.reply_time reply_time
 from
-	yad_blog_comment r,
-	yad_blog_article a
+  yad_blog_comment r,
+  yad_blog_article a
 where
-	r.target_type in (1, 2)
-	and r.article_id = a.id
+  r.target_type in (1, 2)
+  and r.article_id = a.id
 order by r.reply_time desc;
-
-
 
 CREATE OR REPLACE VIEW yad_blog_v_comment_info
 AS
@@ -105,9 +103,9 @@ select
  r.content as content,
  r.reply_time as reply_time
 from
-	yad_blog_comment r,
-	yad_blog_master_family f
+  yad_blog_comment r,
+  yad_blog_master_family f
 where
-	r.target_type in (1, 2)
-	and r.family_id = f.id;
+  r.target_type in (1, 2)
+  and r.family_id = f.id;
 

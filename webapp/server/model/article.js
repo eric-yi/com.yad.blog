@@ -12,6 +12,7 @@ module.exports = function() {
   var path_name;
   var publish_time;
   var summary;
+  var content;
 
   return {
     id:           this.id,
@@ -21,6 +22,7 @@ module.exports = function() {
     path_name:    this.path_name,
     publish_time: this.publish_time,
     summary:      this.summary,
+    content:      this.content,
 
     toJson: function() {
       return '{"id":"' + this.id +

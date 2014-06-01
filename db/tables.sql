@@ -33,7 +33,8 @@ CREATE TABLE IF NOT EXISTS yad_blog_article (
   category_id int(11) not null,
   title varchar(200) not null,
   path_name varchar(50) not null,
-  publish_time datetime not null
+  publish_time datetime not null,
+  status int(3)not null default 0 -- status: 0,normail 1,delete
 ) character set utf8 COMMENT='';
 
 CREATE TABLE IF NOT EXISTS yad_blog_comment (

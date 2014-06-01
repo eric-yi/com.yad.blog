@@ -81,5 +81,47 @@ router.get('/template', function(req, res) {
   res.send(content);
 });
 
+router.post('/add', function(req, res) {
+  Base.tipLogin(req, res, function() {
+    var family_id = req.body.family_id;
+    var catetory_id = req.body.category_id;
+    var title = req.body.title;
+    var content = req.body.content;
+    var pushblish_time = new date();
+
+
+  });
+});
+
+router.post('/:id/edit', function(req, res) {
+  Base.tipLogin(req, res, function() {
+    var id = req.params.id;
+    var catetory_id = req.body.category_id;
+    var title = req.body.title;
+    var content = req.body.content;
+    var publish_time = new date();
+
+    var article = ModelProxy.copyArticle({
+        id:           id,
+        catetory_id:  category_id,
+        title:        title,
+        content:      content,
+        publish_time: publish_time
+    });
+    Base.service.updateArticle(article, function(result) {
+      res.send(Base.Message.toSuccessJson());
+    });
+  });
+
+});
+
+router.get('/:id/delete': function(req, res) {
+  Base.tipLogin(req, res, function() {
+    var id = req.paras.id;
+    Base.service.deleteArticle(id, function(result) {
+      res.send(Base.Message.toSuccessJson());
+    });
+  });
+});
 
 module.exports = router;

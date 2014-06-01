@@ -12,7 +12,7 @@ exports.split = function(date) {
 
 exports.formatTime = function(date) {
   var sd = split_date(date);
-  return sd.year + '-' + sd.mon + '-' + sd.day2 + ' ' + sd.hour2 + ':' + sd.minute2 + ':00';
+  return sd.year + '-' + sd.mon + '-' + sd.day2 + ' ' + sd.hour2 + ':' + sd.minute2 + ':' + sd.second;
 };
 
 function split_date(date) {
@@ -28,6 +28,7 @@ function split_date(date) {
   if (hour < 10)    hour2 = '0' + hour;
   var minute2 = minute;
   if (minute < 10)  minute2 = '0' + minute;
+  var second = date.getSecond();
   return {
     year:     year,
     month:    month,
@@ -37,7 +38,7 @@ function split_date(date) {
     hour:     hour,
     hour2:    hour2,
     minute:   minute,
-    minute2:  minute2
+    minute2:  minute2,
+    second:   second
   };
-
 }

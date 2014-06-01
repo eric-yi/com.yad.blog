@@ -395,6 +395,16 @@ function isLogin(req) {
   return false;
 }
 
+function tipLogin(req, res, callback) {
+  if (!isLogin(req) {
+    var message = new Message();
+    message.msg = -1;
+    res.send(messsage.toJson());
+  } else {
+    callback;
+  }
+}
+
 function requestLogin(req, res) {
   if (isLogin(req)) {
     var message = new Message();
@@ -405,7 +415,6 @@ function requestLogin(req, res) {
   }
   return false;
 }
-
 
 exports.service = service;
 exports.getCategories = getCategories;
@@ -420,3 +429,4 @@ exports.getArticleSummary = getArticleSummary;
 exports.Message = Message;
 exports.isLogin = isLogin;
 exports.requestLogin = requestLogin;
+exports.tipLogin = tipLogin;
