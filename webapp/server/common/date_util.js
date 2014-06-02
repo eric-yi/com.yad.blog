@@ -28,7 +28,7 @@ function split_date(date) {
   if (hour < 10)    hour2 = '0' + hour;
   var minute2 = minute;
   if (minute < 10)  minute2 = '0' + minute;
-  var second = date.getSecond();
+  var second = date.getSeconds();
   return {
     year:     year,
     month:    month,

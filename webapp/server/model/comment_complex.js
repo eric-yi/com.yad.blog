@@ -5,9 +5,9 @@
  */
 
 module.exports = function() {
-	var article_id;
-	var title;
-	var auth;
+  var article_id;
+  var title;
+  var auth;
   var reply_id;
   var target_type;
   var target_id;
@@ -19,8 +19,8 @@ module.exports = function() {
 
   return {
     article_id:   this.article_id,
-    title:   			this.title,
-    auth:   			this.auth,
+    title:        this.title,
+    auth:         this.auth,
     reply_id:     this.reply_id,
     target_type:  this.taret_type,
     target_id:    this.target_id,

@@ -94,9 +94,11 @@ function listLink() {
 function listArticle() {
   $.getJSON('/parameters', function(parameters) {
     var auth = parameters.auth;
-    $.getJSON('/article', function(data) {
-      var content = makeContents(data, auth);
-      $('#content').html(content);
+    $.getJSON('/family/member/current', function(family) {
+      $.getJSON('/article', function(data) {
+        var content = makeContents(data, auth, family);
+        $('#content').html(content);
+      });
     });
   });
 }
@@ -104,10 +106,12 @@ function listArticle() {
 function pageForArticle(page_num) {
   $.getJSON('/parameters', function(parameters) {
     var auth = parameters.auth;
-    if (!page_num) page_num = 0;
-    $.getJSON('/article/page/'+page_num, function(data) {
-      var content = makeContentsInPage(data, page_num, auth, null, null, null);
-      $('#content').html(content);
+    $.getJSON('/family/member/current', function(family) {
+      if (!page_num) page_num = 0;
+      $.getJSON('/article/page/'+page_num, function(data) {
+        var content = makeContentsInPage(data, page_num, auth, family, null, null, null);
+        $('#content').html(content);
+      });
     });
   });
 }
@@ -115,13 +119,15 @@ function pageForArticle(page_num) {
 function categoryForArticle(c_root, c_child, page_num) {
   $.getJSON('/parameters', function(parameters) {
     var auth = parameters.auth;
-    child = '';
-    if (!page_num) page_num = 0;
-    if (c_child) child = '/' + c_child;
-    var url = '/article/category/' + c_root + child + '?page=' + page_num;
-    $.getJSON(url, function(data) {
-      var content = makeContentsInPage(data, page_num, auth, c_root, c_child, null);
-      $('#content').html(content);
+    $.getJSON('/family/member/current', function(family) {
+      child = '';
+      if (!page_num) page_num = 0;
+      if (c_child) child = '/' + c_child;
+      var url = '/article/category/' + c_root + child + '?page=' + page_num;
+      $.getJSON(url, function(data) {
+        var content = makeContentsInPage(data, page_num, auth, family, c_root, c_child, null);
+        $('#content').html(content);
+      });
     });
   });
 }
@@ -129,17 +135,19 @@ function categoryForArticle(c_root, c_child, page_num) {
 function familyForArticle(fid, page_num) {
   $.getJSON('/parameters', function(parameters) {
     var auth = parameters.auth;
-    if (!page_num) page_num = 0;
-    var url = '/article/family/' + fid + '?page=' + page_num;
-    $.getJSON(url, function(data) {
-      var content = makeContentsInPage(data, page_num, auth, null, null, fid);
-      $('#content').html(content);
+    $.getJSON('/family/member/current', function(family) {
+      if (!page_num) page_num = 0;
+      var url = '/article/family/' + fid + '?page=' + page_num;
+      $.getJSON(url, function(data) {
+        var content = makeContentsInPage(data, page_num, auth, family, null, null, fid);
+        $('#content').html(content);
+      });
     });
   });
 }
 
-function makeContentsInPage(data, page_num, auth, c_root, c_child, fid) {
-  var content = makeContents(data.dataset, auth);
+function makeContentsInPage(data, page_num, auth, family, c_root, c_child, fid) {
+  var content = makeContents(data.dataset, auth, family);
   var page = data.page;
   var hasPrev = (page.num != 0) ? true : false;
   var position = page.num * page.size + parseInt(page.current);
@@ -198,8 +206,11 @@ function splitTime(publish_time) {
   return yad_date;
 }
 
-function makeContents(data, auth) {
+function makeContents(data, auth, family) {
   var content = '';
+  var family_id = -1;
+  if (family.id != undefined)
+    family_id = family.id;
   $.each(data, function() {
     var pub_date = new Date(Date.parse(this.publish_time));
     var year = pub_date.getFullYear();
@@ -218,7 +229,12 @@ function makeContents(data, auth) {
 
     content += '<div class="storywrap">';
     content += '<div class="post" id="' + this.id + '">';
-    content += '<h3 class="storytitle"><a href="javascript:readArticle(' + this.id + ')" rel="bookmark">' + this.title + '</a></h3>';
+    content += '<h3 class="storytitle"><a href="javascript:readArticle(' + this.id + ')" rel="bookmark">' + this.title + '</a>';
+    if (this.family_id == family_id) {
+      content += '<div id="storyop" style="float:right;">编辑 | 删除</div>';
+    }
+    content += '</h3>';
+
     content += '<div class="storycontent">';
     var summary = '';
     if (this.summary)

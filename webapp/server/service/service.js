@@ -43,6 +43,12 @@ Service.prototype.getArticles = function(condition, callback) {
       if (condition.fid != null) {
         sql += ' and f.id = "' + condition.fid + '"';
       }
+
+      if (condition.family_id != null) {
+        sql += ' and (a.status = 0 or a.family_id = ' + condition.family_id + ')';
+      } else {
+        sql += ' and a.status = 0';
+      }
     }
     sql += ' order by a.publish_time desc';
     var container = new Container(condition=condition, sql=sql, callback=callback);
@@ -359,7 +365,7 @@ function resourcesInCategory(_dao, id, callback) {
         article_ids:      art_idList
       });
     });
-  };
+  });
 }
 
 function queryComment(_dao, sql, callback) {

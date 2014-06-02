@@ -3,9 +3,6 @@
  * Erci Yi on 2014-05-12
  * yi_xiaobin@163.com
  */
-Article = require('./article');
-Category = require('./category');
-
 // common function
 exports.toArray = function(models) {
   var arr = [];
@@ -88,6 +85,7 @@ function genJson(models) {
 
 // only for single model
 exports.genArticle = function(row) {
+  Article = require('./article');
   var article = new Article();
   if (row['id'] != null)            article.id = row['id'];
   if (row['category_id'] != null)   article.category_id = row['category_id'];
@@ -95,11 +93,13 @@ exports.genArticle = function(row) {
   if (row['title'] != null)         article.title = row['title'];
   if (row['path_name'] != null)     article.path_name = row['path_name'];
   if (row['publish_time'] != null)  article.publish_time = row['publish_time'];
+  if (row['status'] != null)        article.status = row['status'];
 
   return article;
 };
 
 exports.copyArticle = function(_article) {
+  Article = require('./article');
   var article = new Article();
   if (_article.id != null)          article.id = _article.id;
   if (_article.category_id != null) article.category_id = _article.category_id;
@@ -114,6 +114,7 @@ exports.copyArticle = function(_article) {
 };
 
 exports.genCategory = function(row) {
+  Category = require('./category');
   var category = new Category();
   if (row['id'] != null)        category.id = row['id'];
   if (row['name'] != null)      category.name = row['name'];
@@ -123,6 +124,7 @@ exports.genCategory = function(row) {
 };
 
 exports.copyCategory = function(_catetory) {
+  Category = require('./category');
   var category = new Category();
   if (_category.id != null)        category.id = _category.id;
   if (_category.name != null)      category.name = _category.name;
@@ -132,6 +134,7 @@ exports.copyCategory = function(_catetory) {
 }
 
 exports.genCategory = function(row) {
+  Category = require('./category');
   var category = new Category();
   if (row['id'] != null)        category.id = row['id'];
   if (row['name'] != null)      category.name = row['name'];
@@ -143,6 +146,7 @@ exports.genCategory = function(row) {
 };
 
 exports.genCategoryWithPrefix = function(row) {
+  Category = require('./category');
   var category = new Category();
   if (row['category_id'] != null)               category.id = row['category_id'];
   if (row['category_name'] != null)             category.name = row['category_name'];

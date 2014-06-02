@@ -187,8 +187,23 @@ function editMember() {
 function enterPost() {
   familyCall(function(isLogin, family) {
     if (isLogin) {
-      var content = '<textarea id="post-editor" name="post-editor">'
+      var content = '<form id="article_add_form" class="postform">';
+      content += '<fieldset class="textbox">';
+      content += '<label class="username">';
+      content += '<span>标 题</span>';
+      content += '<input id="title" name="title" value="" type="text">';
+      content += '</label>';
+      content += '<label>';
+      content += '<span>内 容</span>';
+      content += '<textarea id="post-editor" name="post-editor">'
       content += '</textarea>';
+      content += '</label>';
+      content += '<p align="right">';
+      content += '<button type="button">保 存</button>';
+      content += '<button type="button">发 布</button>';
+      content += '</p>';
+      content += '</fieldset>';
+      content += '</form>';
       $('#content').html(content);
       $('#post-editor').ckeditor();
     }

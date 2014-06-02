@@ -23,6 +23,7 @@ module.exports = function() {
     publish_time: this.publish_time,
     summary:      this.summary,
     content:      this.content,
+    status:       this.status,
 
     toJson: function() {
       return '{"id":"' + this.id +
@@ -31,6 +32,7 @@ module.exports = function() {
         '", "title":"' + this.title +
         '", "path_name":"' + this.path_name +
         '", "publish_time":"' + this.publish_time +
+        '", "status":"' + this.status +
         '"}';
     },
 
@@ -42,6 +44,7 @@ module.exports = function() {
         '", "title":"' + this.title +
         '", "path_name":"' + this.path_name +
         '", "publish_time":"' + this.publish_time +
+        '", "status":"' + this.status +
         '", "category_name":"' + category.name +
         '", "category_path_name":"' + category.path_name +
         '", "category_parent_id":"' + category.parent_id +

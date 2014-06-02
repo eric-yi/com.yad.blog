@@ -24,10 +24,10 @@ module.exports = function() {
     email:        this.email,
     content:      this.content,
     reply_time:   this.reply_time,
-		
-		reply_date: function() {
-			return date_util.split(this.reply_time);
-		},
+
+    reply_date: function() {
+      return date_util.split(this.reply_time);
+    },
 
     toJson: function() {
       return '{"id":"' + this.id + 

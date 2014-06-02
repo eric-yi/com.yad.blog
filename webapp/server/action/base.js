@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 
 /*
  * Eric Yi on 2014-05-14
@@ -370,6 +372,7 @@ exports.getRecentArticle = function(req, res) {
   page.sql = true;
   page.size = Constants.parameters.recent_post_preview;
   condition.page = page;
+  handleArticleCondition(req, condition);
   Base.service.getAbstractArticles(condition, function(articles) {
     var json = ModelProxy.toJson(articles);
     res.send(json);
@@ -389,6 +392,12 @@ exports.getRecentComments = function(req, res) {
   });
 };
 
+function handleArticleCondition(req, condition) {
+  if (isLogin(req)) {
+    condition.family_id = req.session.family.id;
+  }
+};
+
 function isLogin(req) {
   if (req.session.family)
     return true;
@@ -396,7 +405,7 @@ function isLogin(req) {
 }
 
 function tipLogin(req, res, callback) {
-  if (!isLogin(req) {
+  if (!isLogin(req)) {
     var message = new Message();
     message.msg = -1;
     res.send(messsage.toJson());
@@ -430,3 +439,4 @@ exports.Message = Message;
 exports.isLogin = isLogin;
 exports.requestLogin = requestLogin;
 exports.tipLogin = tipLogin;
+exports.handleArticleCondition = handleArticleCondition;

@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 
 /*
  * Eric Yi on 2014-05-15
@@ -35,6 +36,7 @@ router.get('/page', function(req, res) {
   var condition = {};
   var page = Base.genPage(req);
   page.num = 0;
+  Base.handleArticleCondition(req, condition);
   Base.getArticlesByPage(condition, page, res);
 });
 
@@ -42,6 +44,7 @@ router.get('/page/:page_num', function(req, res) {
   var condition = {};
   var page = Base.genPage(req);
   page.num = req.params.page_num;
+  Base.handleArticleCondition(req, condition);
   Base.getArticlesByPage(condition, page, res);
 });
 
@@ -51,6 +54,7 @@ router.get('/category/:root', function(req, res) {
   var page = Base.genPage(req);
   page.num = req.query.page;
   var condition = {category: tree};
+  Base.handleArticleCondition(req, condition);
   Base.getArticlesByPage(condition, page, res);
 });
 
@@ -61,6 +65,7 @@ router.get('/category/:root/:child', function(req, res) {
   var page = Base.genPage(req);
   page.num = req.query.page;
   var condition = {category: tree};
+  Base.handleArticleCondition(req, condition);
   Base.getArticlesByPage(condition, page, res);
 });
 
@@ -115,7 +120,7 @@ router.post('/:id/edit', function(req, res) {
 
 });
 
-router.get('/:id/delete': function(req, res) {
+router.get('/:id/delete', function(req, res) {
   Base.tipLogin(req, res, function() {
     var id = req.paras.id;
     Base.service.deleteArticle(id, function(result) {
