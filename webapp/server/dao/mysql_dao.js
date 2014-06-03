@@ -41,6 +41,13 @@ MysqlPool.prototype.insert = function(sql, callback) {
   _iud(this.pool, sql, callback);
 };
 
+MysqlPool.prototype.insertReturnId = function(sql, callback) {
+	var _pool = this.pool;
+  _iudRetId(_pool, sql, function(id) {
+		callback(id);
+	});
+};
+
 MysqlPool.prototype.del = function(sql, callback) {
   _iud(this.pool, sql, callback);
 };
@@ -80,6 +87,34 @@ function _iud(_pool, sql, callback) {
   });
 }
 
+function _iudRetId(_pool, sql, callback) {
+  _pool.getConnection(function(err, conn) {
+    if (err) {
+      console.log('Dababase connection error!');
+      throw err;
+    }
+
+    conn.query(sql, function(err, results) {
+      if (err) {
+        console.log('Database query error!');
+        throw err;
+      }
+			conn.query('select last_insert_id() as id', function(err, idrs) {
+				if (idrs.length == 0)
+					throw new Error('Error: get id after insert');
+				var id = idrs[0]['id'];
+      	callback(id);
+			});
+    });
+
+    conn.release(function(err) {
+      if (err) {
+        console.log('Database connection close error!');
+        throw err;
+      }
+    });
+  });
+}
 function query(_pool, sql, callback) {
   _pool.getConnection(function(err, conn) {
     if (err) {

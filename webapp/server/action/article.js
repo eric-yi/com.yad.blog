@@ -88,13 +88,29 @@ router.get('/template', function(req, res) {
 
 router.post('/add', function(req, res) {
   Base.tipLogin(req, res, function() {
+		var content_from = 'post-editor';
     var family_id = req.body.family_id;
-    var catetory_id = req.body.category_id;
+		var category_id = req.body.category_id;
     var title = req.body.title;
-    var content = req.body.content;
-    var pushblish_time = new date();
+    var content = req.body.content_form;
+    var publish_time = new Date();
 
-
+		var article = ModelProxy.copyArticle({
+				family_id:		string_util.formToSql(family_id, '"'),
+        category_id:  string_util.formToSql(category_id, '"'),
+        title:        string_util.formToSql(title, '"'),
+        content:      content,
+        publish_time: publish_time
+    });
+		Base.service.addArticle(article, function(result) {
+			var message = new Base.Message();
+			if (result == 1) { 
+      	res.send(message.toSuccessJson());
+			} else {
+				message.msg = result;
+				res.send(message.toJson());
+			}
+		});
   });
 });
 

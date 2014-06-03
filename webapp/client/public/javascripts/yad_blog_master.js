@@ -187,27 +187,92 @@ function editMember() {
 function enterPost() {
   familyCall(function(isLogin, family) {
     if (isLogin) {
-      var content = '<form id="article_add_form" class="postform">';
-      content += '<fieldset class="textbox">';
-      content += '<label class="username">';
-      content += '<span>标 题</span>';
-      content += '<input id="title" name="title" value="" type="text">';
-      content += '</label>';
-      content += '<label>';
-      content += '<span>内 容</span>';
-      content += '<textarea id="post-editor" name="post-editor">'
-      content += '</textarea>';
-      content += '</label>';
-      content += '<p align="right">';
-      content += '<button type="button">保 存</button>';
-      content += '<button type="button">发 布</button>';
-      content += '</p>';
-      content += '</fieldset>';
-      content += '</form>';
-      $('#content').html(content);
-      $('#post-editor').ckeditor();
+			$.getJSON('/category/family/'+family.id+'/root', function(roots) {
+      	var content = '<form id="article_add_form" class="postform">';
+      	content += '<fieldset class="textbox">';
+      	content += '<label>';
+      	content += '<span>分 类：</span>';
+				content += '<select id="root_cat" onchange="javascript:loadChildCategory(this.value);">';
+				$.each(roots, function() {
+					content += '<option value="' + this.id + '">' + this.name + '</option>';
+				});
+				content += '</select>';
+				content += '<select id="child_cat">'
+				content += '</select>';
+      	content += '</label>';
+      	content += '<label>';
+      	content += '<span>标 题：</span>';
+      	content += '<input id="title" name="title" value="" type="text">';
+      	content += '</label>';
+      	content += '<label>';
+      	content += '<span>内 容：</span>';
+      	content += '<textarea id="post-editor" name="post-editor">'
+      	content += '</textarea>';
+      	content += '</label>';
+      	content += '<p align="right">';
+      	content += '<input type="hidden" id="family_id" name="family_id" value="' + family.id +  '" />';
+      	content += '<input type="hidden" id="category_id" name="category_id" value="" />';
+      	content += '<button type="button">保 存</button>';
+      	content += '<button type="button" onclick="javascript:publishArticle();">发 布</button>';
+      	content += '</p>';
+      	content += '</fieldset>';
+
+      	content += '</form>';
+				content += '<script>loadChildCategory($("#root_cat").val())</script>';
+      	$('#content').html(content);
+      	$('#post-editor').ckeditor();
+			});
     }
   });
+}
+
+function loadChildCategory(root_id) {
+	$.getJSON('/category/'+root_id+'/children', function(categories) {
+		var content = '<option value="-1">根</optioni>';
+		$.each(categories, function() {
+			content += '<option value="' + this.id + '">' + this.name + '</option>';
+		});
+		$('#child_cat').html(content);
+	});
+}
+
+function publishArticle() {
+	familyCall(function(isLogin, family) {
+    if (isLogin) {
+			if ($('#title').val() == '') {
+				alert('标题不能为空');
+				return false;
+			}
+			if ($('#post-editor').val() == '') {
+				alert('内容不能为空');
+				return false;
+			}
+			var root_cat = $('#root_cat').val();
+			var child_cat = $('#child_cat').val();
+			$('#category_id').val(root_cat);
+			if (child_cat != -1) {
+				$('#category_id').val(child_cat);
+			}
+			$.ajax({
+				url: '/article/add',
+				type: 'POST',
+				data: $('#article_add_form').serialize(),
+				success: function(message) {
+					if (message.success == 'true') {
+						alert('发布完成');
+					} else {
+				 		alert('Error: ' + message.msg);
+						return false;
+					}
+				},
+				error: function(message) {
+					alert('Server Error:' + message);
+				}
+			});
+		} else {
+			alert('进家后，才能发布');
+		}
+	});
 }
 
 function openPost() {

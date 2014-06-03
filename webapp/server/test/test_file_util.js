@@ -4,9 +4,21 @@
  * yi_xiaobin@163.com
  */
 
-FileUtil = require('../common/file_util');
+file_util = require('../common/file_util');
 function test() {
-  FileUtil.mkdir('/data/src/yi_xiaobin@github.com/com.yad.blog/webapp/articles');
+	test_write();
+}
+
+function test_mkdir() {
+  file_util.mkdir('/data/src/yi_xiaobin@github.com/com.yad.blog/webapp/articles');
+}
+
+function test_write() {
+	try {
+		file_util.write('./test', 'sdfsdfsdf');
+	} catch (e) {
+		console.log(e);
+	}
 }
 
 test();

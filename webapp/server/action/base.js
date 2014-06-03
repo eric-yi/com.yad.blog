@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-
 /*
  * Eric Yi on 2014-05-14
  * yi_xiaobin@163.com
@@ -183,7 +182,6 @@ exports.getAbout = function(res) {
     }
   });
 };
-
 
 exports.getArticleContentById = function(id, res) {
   service.getArticleParameter(id, function(parameter) {
@@ -410,7 +408,7 @@ function tipLogin(req, res, callback) {
     message.msg = -1;
     res.send(messsage.toJson());
   } else {
-    callback;
+    callback();
   }
 }
 

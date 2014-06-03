@@ -49,4 +49,20 @@ router.post('/:id/edit', function(req, res) {
   });
 });
 
+router.get('/family/:id/root', function(req, res) {
+	var id = req.params.id;
+	Base.service.getRootCategoriesInFamily(id, function(categories) {
+    var json = ModelProxy.toJson(categories);
+    res.send(json);
+	});
+});
+
+router.get('/:id/children', function(req, res) {
+	var id = req.params.id;
+	Base.service.getSecondCategories(id, function(categories) {
+    var json = ModelProxy.toJson(categories);
+    res.send(json);
+	});
+});
+
 module.exports = router;

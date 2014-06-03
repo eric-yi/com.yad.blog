@@ -153,6 +153,24 @@ Service.prototype.getFamilyCategory = function(condition, callback) {
   });
 };
 
+Service.prototype.getRootCategoriesInFamily = function(id, callback) {
+	var sql = 'select c.* from yad_blog_category c, yad_blog_category_family f where c.parent_id = 0 and c.id = f.category_id and f.family_id = ' + id + ' order by c.position';
+	if (id == 1)
+		sql = 'select * from yad_blog_category where parent_id = 0 order by position';
+	this.dao.query(sql, function(results) {
+		var category_list = convertCategory(results);
+		callback(category_list);
+	});
+};
+
+Service.prototype.getSecondCategories = function(parent_id, callback) {
+	var sql = 'select * from yad_blog_category where parent_id = ' + parent_id + ' order by position';
+	this.dao.query(sql, function(results) {
+		var category_list = convertCategory(results);
+		callback(category_list);
+	});
+};
+
 Service.prototype.getCategoryInFamily = function(condition, callback) {
   var sql = 'select * from yad_blog_category';
   var _dao = this.dao;
@@ -270,8 +288,56 @@ Service.prototype.getFamilyByLogin = function(username, password, callback) {
   });
 };
 
+Service.prototype.addFamily = function(family, callback) {
+	var _dao = this.dao;
+	var sql = 'select * from yad_blog_master_family where username = ' + family.username + 'or name = ' + family.name;
+	_dao.query(sql, function(rs) {
+		if (rs.length > 0) {
+			callback(-1);
+		} else {
+			sql = 'insert into yad_blog_master_family(username, password, name, member_id, position, email, qq, weibo, weico) values('
+						+ family.username + ','
+						+ family.password + ','
+						+ family.name + ','
+						+ family.member_id + ','
+						+ family.position + ','
+						+ family.email + ','
+						+ family.qq + ','
+						+ family.weibo + ','
+						+ family.weico + ')';
+			_dao.insert(sql, function(result) {
+				callback(1);
+			});
+		}
+	});
+};
+
+Service.prototype.deleteFamily = function(id, callback) {
+	var _dao = this.dao;
+	resouceInFamily(_dao, id, function(resource) {
+		var category_ids = resource.category_ids;
+		var articles = resource.articles;
+		if (articles.length > 0) {
+			callback(-1);
+		} else if (category_ids.length > 0) {
+			callback(-2);
+		} else {
+			sql = 'delete from yad_blog_master_family where id = ' + id;
+			_dao.delete(sql, function(result) {
+				callback(1);
+			});
+		}
+	});
+};
+
 Service.prototype.updateFamily = function(family, callback) {
-  var sql = 'update yad_blog_master_family set' +
+	var _dao = this.dao;
+	var sql = 'select * from yad_blog_master_family where name = ' + family.name;
+	_dao.query(sql, function(rs) {
+		if (rs.length > 0) {
+			callback(-1);
+		} else {
+  		sql = 'update yad_blog_master_family set' +
             ' name = ' + family.name +
             ', password = ' + family.password +
             ', email = ' + family.email +
@@ -279,9 +345,29 @@ Service.prototype.updateFamily = function(family, callback) {
             ', weibo = ' + family.weibo +
             ', weico = ' + family.weico +
             ' where id = ' + family.id;
-  this.dao.update(sql, function(result) {
-    callback(result);
-  });
+  		_dao.update(sql, function(result) {
+    		callback(result);
+  		});
+		}
+	});
+};
+
+Service.prototype.addArticle = function(article, callback) {
+	var _dao = this.dao;
+	var sql = 'insert into yad_blog_article(family_id, category_id, title, path_name, publish_time) values('
+						+ article.family_id + ','
+						+ article.category_id + ','
+						+ article.title + ','
+						+ '-1' + ', "'
+						+ date_util.formatTime(article.publish_time) + '")';
+	_dao.insertReturnId(sql, function(id) {
+		sql = 'update yad_blog_article set path_name = ' + id + ' where id = ' + id;
+		_dao.update(sql, function(result) {
+			//TODO: write content of article
+
+			callback(1);
+		});
+	});
 };
 
 Service.prototype.deleteAritcle = function(id, callback) {
@@ -292,9 +378,9 @@ Service.prototype.deleteAritcle = function(id, callback) {
 };
 
 Service.prototype.updateArticle = function(article, callback) {
-  var content = article.content();
-  //TODO : edit content in html
-  
+	var content = article.content();
+ 	var realpath = global.getBlog().article_path + '/' + article.path_name + '.' + global.getBlog().article_suffix; 
+	file_util.write(realpath, content);
   var sql = 'update yad_blog_article set' +
             ' category_id = ' + article.category_id +
             ', title = ' + article.title +
@@ -305,6 +391,25 @@ Service.prototype.updateArticle = function(article, callback) {
   });
 };
 
+Service.prototype.addCategory = function(category, callback) {
+	var _dao = this.dao;
+	var sql = 'select * from yad_blog_category where name = ' + category.name + ' and parent_id = ' + category.parent_id;
+	_dao.query(sql, function(rs) {
+		if (rs.length > 0) {
+			callback(-1);
+		} else {
+			sql = 'insert into yad_blog_category(name, parent_id, position, path_name) values('
+						+ category.name + ', '
+						+ category.parent_id + ', '
+						+ category.position + ', '
+						+ category.path_name + ') ';
+			this.dao.insert(sql, function(result) {
+				callback(1);
+			});
+		}
+	});
+};
+
 Service.prototype.deleteCategory = function(id, callback) {
   var _dao = this.dao;
 
@@ -312,8 +417,11 @@ Service.prototype.deleteCategory = function(id, callback) {
     var article_ids = resource.article_ids;
     var category_ids = resource.category_ids;
     if (article_ids.length > 0) {
-      callback(1);
-    } else {
+      callback(-1);
+    } else if (category_ids > 0) {
+			callback(-2);
+		} else {
+			/*
       var ids;
       var first = true;
       for (var n in category_ids) {
@@ -327,11 +435,16 @@ Service.prototype.deleteCategory = function(id, callback) {
       _dao.update(sql, function(result) {
         callback(1);
       });
+			*/
+			var sql = 'delete from yad_blog_category where id = ' + id;
+      _dao.update(sql, function(result) {
+        callback(1);
+      });
     }
   });
 };
 
-Service.prototype.updateCatetory = function(category, callback) {
+Service.prototype.updateCategory = function(category, callback) {
   var sql = 'update yad_blog_category set' +
             ' name = ' + category.name +
             ', parent_id = ' + category.parent_id +
@@ -339,8 +452,20 @@ Service.prototype.updateCatetory = function(category, callback) {
   this.dao.update(sql, function(result) {
     callback(1);
   });
-
 };
+
+function resourceInFamily(_dao, id, callback) {
+	var sql = 'select category_id from yad_blog_category_family where family_id = ' + id;
+	_dao.query(sql, function(category_ids) {
+		sql = 'select * from yad_blog_article where family_id = ' + id;
+		_dao.query(sql, function(articles) {
+			callback({
+				category_ids: category_ids,
+				articles:			articles
+			});
+		});
+	});
+}
 
 function resourcesInCategory(_dao, id, callback) {
   var sql = 'select * from yad_blog_v_category where parent_id = ' + id;

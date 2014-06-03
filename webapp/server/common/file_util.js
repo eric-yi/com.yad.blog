@@ -32,3 +32,19 @@ exports.read = function(filename) {
     return content = Fs.readFileSync(filename, 'utf-8');
   return '';
 };
+
+exports.writeContent = function(filename, content) {
+	if (!Fs.existsSync(filename))
+		throw new Error(filename + ' not found');
+
+	write(filname, content);
+};
+
+exports.write = write;
+
+function write(filename, content) {
+	Fs.writeFile(filename, content, function(err) {
+		if (err)
+			throw err;
+	});
+}
