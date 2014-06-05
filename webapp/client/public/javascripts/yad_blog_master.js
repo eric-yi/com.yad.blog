@@ -1,3 +1,5 @@
+document.write('<script type="text/javascript" src="/javascripts/yad_blog.js"></script>');
+
 function showLogin() {
   $.getJSON('/family/member/current', function(family) {
     if (family.id != null) {
@@ -51,6 +53,7 @@ function login() {
         $('#_message').html('');
         closeLoginBox();
         refresh();
+				init();
       } else {
         var msg = message.msg;
         if (msg == -1)
@@ -72,6 +75,7 @@ function logout() {
     $.getJSON('/master/logout', function() {
       refresh();
       $('#tool-container').hide();
+			init();
       showLoginBox();
     });
   }
@@ -184,7 +188,7 @@ function editMember() {
   });
 }
 
-function enterPost() {
+function showPostContent(article) {
   familyCall(function(isLogin, family) {
     if (isLogin) {
 			$.getJSON('/category/family/'+family.id+'/root', function(roots) {
@@ -221,9 +225,21 @@ function enterPost() {
 				content += '<script>loadChildCategory($("#root_cat").val())</script>';
       	$('#content').html(content);
       	$('#post-editor').ckeditor();
+				resetPostValue(article);
 			});
     }
   });
+}
+
+function resetPostValue(article) {
+	if (article != null) {
+		$('#title').val(article.title);
+		CKEDITOR.instances['post-editor'].setData(article.content)
+	}
+}
+
+function enterPost() {
+	showPostContent(null);
 }
 
 function loadChildCategory(root_id) {
@@ -243,10 +259,12 @@ function publishArticle() {
 				alert('标题不能为空');
 				return false;
 			}
-			if ($('#post-editor').val() == '') {
+			var editor = $('#post-editor');
+			if (editor.val() == '') {
 				alert('内容不能为空');
 				return false;
 			}
+			editor.val(CKEDITOR.instances['post-editor'].getData());
 			var root_cat = $('#root_cat').val();
 			var child_cat = $('#child_cat').val();
 			$('#category_id').val(root_cat);
@@ -258,6 +276,7 @@ function publishArticle() {
 				type: 'POST',
 				data: $('#article_add_form').serialize(),
 				success: function(message) {
+      		var message = $.parseJSON(message);
 					if (message.success == 'true') {
 						alert('发布完成');
 					} else {
@@ -298,6 +317,38 @@ function showPost() {
 function closePost() {
   $('#post-box').fadeOut(300 , function() {
     $('#mask').remove();
+  });
+}
+
+function editPost(id) {
+
+}
+
+function deletePost(id) {
+	familyCall(function(isLogin, family) {
+    if (isLogin) {
+  		var a = confirm('删除吗？');
+			if (a) {
+				$.ajax({
+					url: '/article/'+id+'/delete',
+					type: 'GET',
+					success: function(message) {
+      			var message = $.parseJSON(message);
+						if (message.success == 'true') {
+							init();
+							alert('已删除');
+						} else {
+				 			alert('Error: ' + message.msg);
+							return false;
+						}
+					},
+					error: function(message) {
+						alert('Server Error:' + message);
+					}
+				});
+
+			}
+    }
   });
 }
 

@@ -158,17 +158,23 @@ form.postform .textbox label {
 }
 
 form.postform .textbox span {
-  //display: block;
+  /*
+	display: block;
+	*/
 }
 
 form.postform p, form.postform span {
   color: #999;
-  font-size: 16px;
+  /*
+	font-size: 16px;
+	*/
   line-height: 18px;
 }
 
 form.postform .textbox input {
-  //background: #666666;
+  /*
+	background: #666666;
+	*/
   border-bottom: 1px solid #333;
   border-left: 1px solid #000;
   border-right: 1px solid #333;
@@ -177,7 +183,9 @@ form.postform .textbox input {
   border-radius: 3px 3px 3px 3px;
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
+	/*
   font: 13px Arial, Helvetica, sans-serif;
+	*/
   padding: 6px 6px 4px;
   width: 98%;
 }

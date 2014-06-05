@@ -390,9 +390,15 @@ exports.getRecentComments = function(req, res) {
   });
 };
 
+function sendSuccessMsg(res) {
+	var message = new Message();
+	var data = message.toSuccessJson();
+	res.send(data);
+}
+
 function handleArticleCondition(req, condition) {
   if (isLogin(req)) {
-    condition.family_id = req.session.family.id;
+    //condition.family_id = req.session.family.id;
   }
 };
 
@@ -414,10 +420,7 @@ function tipLogin(req, res, callback) {
 
 function requestLogin(req, res) {
   if (isLogin(req)) {
-    var message = new Message();
-    message.success = true;
-    message.msg = 1;
-    res.send(message.toJson());
+		sendSuccessMsg(res);
     return true;
   }
   return false;
@@ -438,3 +441,4 @@ exports.isLogin = isLogin;
 exports.requestLogin = requestLogin;
 exports.tipLogin = tipLogin;
 exports.handleArticleCondition = handleArticleCondition;
+exports.sendSuccessMsg = sendSuccessMsg;

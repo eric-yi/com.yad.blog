@@ -209,8 +209,11 @@ function splitTime(publish_time) {
 function makeContents(data, auth, family) {
   var content = '';
   var family_id = -1;
+	var member_id = -1;
   if (family.id != undefined)
     family_id = family.id;
+  if (family.member_id != undefined)
+    member_id = family.member_id;
   $.each(data, function() {
     var pub_date = new Date(Date.parse(this.publish_time));
     var year = pub_date.getFullYear();
@@ -230,8 +233,11 @@ function makeContents(data, auth, family) {
     content += '<div class="storywrap">';
     content += '<div class="post" id="' + this.id + '">';
     content += '<h3 class="storytitle"><a href="javascript:readArticle(' + this.id + ')" rel="bookmark">' + this.title + '</a>';
-    if (this.family_id == family_id) {
-      content += '<div id="storyop" style="float:right;">编辑 | 删除</div>';
+    if (member_id == 1 || this.family_id == family_id) {
+      content += '<div id="storyop" style="float:right;font-size=9px;">';
+			content += '<a onclick="editPost(' + this.id + ')"><i class="icon-edit"></i></a>';
+			content += '<a onclick="deletePost(' + this.id + ')"><i class="icon-remove"></i></a>';
+			content += '</div>';
     }
     content += '</h3>';
 
@@ -393,5 +399,6 @@ function init() {
   listRecentArticle();
   listRecentComment();
   listLink();
+	pageForArticle();
 }
 

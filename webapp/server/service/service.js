@@ -45,11 +45,10 @@ Service.prototype.getArticles = function(condition, callback) {
       }
 
       if (condition.family_id != null) {
-        sql += ' and (a.status = 0 or a.family_id = ' + condition.family_id + ')';
-      } else {
-        sql += ' and a.status = 0';
+        sql += ' and a.family_id = ' + condition.family_id;
       }
     }
+    sql += ' and a.status = 0';
     sql += ' order by a.publish_time desc';
     var container = new Container(condition=condition, sql=sql, callback=callback);
     if (condition.page && condition.page.sql) {
@@ -361,19 +360,20 @@ Service.prototype.addArticle = function(article, callback) {
 						+ '-1' + ', "'
 						+ date_util.formatTime(article.publish_time) + '")';
 	_dao.insertReturnId(sql, function(id) {
-		sql = 'update yad_blog_article set path_name = ' + id + ' where id = ' + id;
+		article.path_name = id;
+		sql = 'update yad_blog_article set path_name = ' + article.path_name + ' where id = ' + id;
 		_dao.update(sql, function(result) {
-			//TODO: write content of article
-
+ 			var filename = global.getBlog().article_path + '/' + article.path_name + '.' + global.getBlog().article_suffix; 
+			file_util.write(filename, article.content);
 			callback(1);
 		});
 	});
 };
 
-Service.prototype.deleteAritcle = function(id, callback) {
+Service.prototype.deleteArticle = function(id, callback) {
   var sql = 'update yad_blog_article set status = -1 where id = ' + id;
   this.dao.update(sql, function(result) {
-    callback(result);
+    callback(1);
   });
 };
 
