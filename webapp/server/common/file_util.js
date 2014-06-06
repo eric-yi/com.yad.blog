@@ -34,17 +34,17 @@ exports.read = function(filename) {
 };
 
 exports.writeContent = function(filename, content) {
-	if (!Fs.existsSync(filename))
-		throw new Error(filename + ' not found');
+  if (!Fs.existsSync(filename))
+    throw new Error(filename + ' not found');
 
-	write(filname, content);
+  write(filname, content);
 };
 
 exports.write = write;
 
 function write(filename, content) {
-	Fs.writeFile(filename, content, function(err) {
-		if (err)
-			throw err;
-	});
+  Fs.writeFile(filename, content, function(err) {
+    if (err)
+      throw err;
+  });
 }

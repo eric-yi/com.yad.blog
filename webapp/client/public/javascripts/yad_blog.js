@@ -6,8 +6,13 @@
 
 var month2chs = new Array('一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二');
 
-function listCategory() {
+function listCategory(family) {
   $.getJSON( '/category/list', function(data) {
+    var isadmin = false;
+    if (family != null) {
+      $('#category-title').append('<a id="category-add" href="javascript:addCategory();"><i class="icon-plus-sign" style="margin-top:0px;margin-left:10px;"></i></a>');
+      if (family.id == 1) isadmin = true;
+    }
     var content = '';
     var n = 0;
     var top_path;
@@ -18,10 +23,19 @@ function listCategory() {
           content += '</ul></li>';
         content += '<li class="cat-item">';
         content += '<a href="javascript:categoryForArticle(\'' + top_path + '\')">' + this.name + '</a>';
+        if (isadmin) {
+          content += '<a href="javascript:editFamily();"><i class="icon-plus-sign" style="margin-top:0px;margin-left:10px;"></i></a>';
+          content += '<a href="javascript:editFamily();"><i class="icon-edit" style="margin-top:0px;margin-left:5px;"></i></a>';
+          content += '<a href="javascript:deleteFamily();"><i class="icon-remove-sign" style="margin-top:0px;margin-left:5px"></i></a>';
+        }
         content += '<ul class="children">';
       } else {
         content += '<li class="cat-item">';
         content += '<a href="javascript:categoryForArticle(\'' + top_path + '\', \'' + this.path_name + '\')">' + this.name + '</a>';
+        if (isadmin) {
+          content += '<a href="javascript:editFamily();"><i class="icon-edit" style="margin-top:0px;margin-left:10px;"></i></a>';
+          content += '<a href="javascript:deleteFamily();"><i class="icon-remove-sign" style="margin-top:0px;margin-left:5px"></i></a>';
+        }
         content += '</li>';
       }
       if (n == data.length - 1)
@@ -32,15 +46,21 @@ function listCategory() {
   });
 }
 
-function listFamily() {
+function listFamily(isadmin) {
   $.getJSON( '/family', function(data) {
+    if (isadmin)
+      $('#family-title').append('<a id="family-add" href="javascript:addFamily();"><i class="icon-plus-sign" style="margin-top:0px;margin-left:10px;"></i></a>');
     var content = '';
     $.each(data, function(){
-      content += '<li><a href="javascript:familyForArticle(' + this.id + ')">' + this.name + '</a></li>';
+      content += '<li><a href="javascript:familyForArticle(' + this.id + ')">' + this.name + '</a>';
+      if (isadmin) {
+        content += '<a href="javascript:editFamily();"><i class="icon-edit" style="margin-top:0px;margin-left:10px;"></i></a>';
+        content += '<a href="javascript:deleteFamily();"><i class="icon-remove-sign" style="margin-top:0px;margin-left:5px"></i></a>';
+      }
+      content += '</li>';
     });
     $('#yad_family').html(content);
   });
-
 }
 
 function familyCategory() {
@@ -81,11 +101,18 @@ function familyCategory() {
   });
 }
 
-function listLink() {
+function listLink(isadmin) {
   $.getJSON( '/link', function(data) {
+    if (isadmin)
+      $('#link-title').append('<a id="link-add" href="javascript:addLink();"><i class="icon-plus-sign" style="margin-top:0px;margin-left:10px;"></i></a>');
     var content = '';
     $.each(data, function(){
-      content += '<li><a onclick="javascript:_gaq.push([\'_trackEvent\',\'outbound-blogroll\',\'' + this.url + '\']);" target="_blank" href="' + this.url + '">' + this.name + '</a></li>';
+      content += '<li><a onclick="javascript:_gaq.push([\'_trackEvent\',\'outbound-blogroll\',\'' + this.url + '\']);" target="_blank" href="' + this.url + '">' + this.name + '</a>';
+      if (isadmin) {
+        content += '<a href="javascript:editLink();"><i class="icon-edit" style="margin-top:0px;margin-left:10px;"></i></a>';
+        content += '<a href="javascript:deleteLink();"><i class="icon-remove-sign" style="margin-top:0px;margin-left:5px"></i></a>';
+      }
+      content += '</li>';
     });
     $('#yad_link').html(content);
   });
@@ -209,7 +236,7 @@ function splitTime(publish_time) {
 function makeContents(data, auth, family) {
   var content = '';
   var family_id = -1;
-	var member_id = -1;
+  var member_id = -1;
   if (family.id != undefined)
     family_id = family.id;
   if (family.member_id != undefined)
@@ -235,9 +262,9 @@ function makeContents(data, auth, family) {
     content += '<h3 class="storytitle"><a href="javascript:readArticle(' + this.id + ')" rel="bookmark">' + this.title + '</a>';
     if (member_id == 1 || this.family_id == family_id) {
       content += '<div id="storyop" style="float:right;font-size=9px;">';
-			content += '<a href="javascript:editPost(' + this.id + ');"><i class="icon-edit"></i></a>';
-			content += '<a href="javascript:deletePost(' + this.id + ');"><i class="icon-remove"></i></a>';
-			content += '</div>';
+      content += '<a href="javascript:editPost(' + this.id + ');"><i class="icon-edit"></i></a>';
+      content += '<a href="javascript:deletePost(' + this.id + ');"><i class="icon-trash"></i></a>';
+      content += '</div>';
     }
     content += '</h3>';
 
@@ -394,11 +421,19 @@ function about(anchor) {
 }
 
 function init() {
-  listFamily();
-  listCategory();
-  listRecentArticle();
-  listRecentComment();
-  listLink();
-	pageForArticle();
+  $.getJSON('/family/member/current', function(family) {
+    $('#family-add').remove();
+    $('#category-add').remove();
+    $('#link-add').remove();
+    var isadmin = false;
+    if (family != null && family.id == 1)
+      isadmin = true;
+    listFamily(isadmin);
+    listCategory(family);
+    listRecentArticle();
+    listRecentComment();
+    listLink(isadmin);
+    pageForArticle();
+  });
 }
 

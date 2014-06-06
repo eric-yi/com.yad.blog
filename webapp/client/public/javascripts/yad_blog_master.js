@@ -53,7 +53,8 @@ function login() {
         $('#_message').html('');
         closeLoginBox();
         refresh();
-				init();
+        init();
+        showToolbar();
       } else {
         var msg = message.msg;
         if (msg == -1)
@@ -75,7 +76,7 @@ function logout() {
     $.getJSON('/master/logout', function() {
       refresh();
       $('#tool-container').hide();
-			init();
+      init();
       showLoginBox();
     });
   }
@@ -189,120 +190,125 @@ function editMember() {
 }
 
 function showPostContent(family, categories, article) {
-	var content = '<form id="article_add_form" class="postform">';
- 	content += '<fieldset class="textbox">';
- 	content += '<label>';
- 	content += '<span>分 类：</span>';
-	content += '<select id="root_cat" onchange="javascript:loadChildCategory(this.value);">';
-	$.each(categories, function() {
-		content += '<option value="' + this.id + '">' + this.name + '</option>';
-	});
-	content += '</select>';
-	content += '<select id="child_cat">';
-	content += '</select>';
- 	content += '</label>';
- 	content += '<label>';
- 	content += '<span>标 题：</span>';
- 	content += '<input id="title" name="title" value="" type="text">';
- 	content += '</label>';
- 	content += '<label>';
- 	content += '<span>内 容：</span>';
- 	content += '<textarea id="post-editor" name="post-editor">';
- 	content += '</textarea>';
- 	content += '</label>';
- 	content += '<p align="right">';
- 	content += '<input type="hidden" id="family_id" name="family_id" value="' + family.id +  '" />';
- 	content += '<input type="hidden" id="category_id" name="category_id" value="" />';
- 	content += '<button type="button">保 存</button>';
- 	content += '<button type="button" onclick="javascript:publishArticle();">发 布</button>';
- 	content += '</p>';
- 	content += '</fieldset>';
+  var content = '<form id="article_form" class="postform">';
+  content += '<fieldset class="textbox">';
+  content += '<label>';
+  content += '<span>分 类：</span>';
+  content += '<select id="root_cat" onchange="javascript:loadChildCategory(this.value);">';
+  $.each(categories, function() {
+    content += '<option value="' + this.id + '">' + this.name + '</option>';
+  });
+  content += '</select>';
+  content += '<select id="child_cat">';
+  content += '</select>';
+  content += '</label>';
+  content += '<label>';
+  content += '<span>标 题：</span>';
+  content += '<input id="title" name="title" value="" type="text">';
+  content += '</label>';
+  content += '<label>';
+  content += '<span>内 容：</span>';
+  content += '<textarea id="post-editor" name="post-editor">';
+  content += '</textarea>';
+  content += '</label>';
+  content += '<p align="right">';
+  content += '<input type="hidden" id="family_id" name="family_id" value="' + family.id +  '" />';
+  content += '<input type="hidden" id="category_id" name="category_id" value="" />';
+  if (article == null) {
+    content += '<button type="button">保 存</button>';
+    content += '<button type="button" onclick="javascript:publishArticle();">发 布</button>';
+  } else {
+    content += '<button type="button" onclick="javascript:cancelEditArticle();">取 消</button>';
+    content += '<button type="button" onclick="javascript:editArticle(' + article.id + ');">确 认</button>';
+  }
+  content += '</p>';
+  content += '</fieldset>';
 
- 	content += '</form>';
-	content += '<script>loadChildCategory($("#root_cat").val(), null)</script>';
- 	$('#content').html(content);
- 	$('#post-editor').ckeditor();
-	resetPostValue(article);
+  content += '</form>';
+  content += '<script>loadChildCategory($("#root_cat").val(), null)</script>';
+  $('#content').html(content);
+  $('#post-editor').ckeditor();
+  resetPostValue(article);
 }
 
 function resetPostValue(article) {
-	if (article != null) {
-		$('#title').val(article.title);
-		if (article.category_parent_id != 0) {
-			$('#root_cat').val(article.category_parent_id);
-			loadChildCategory(article.category_parent_id, article.category_id);
-		} else {
-			$('#root_cat').val(article.category_id);
-		}
-
-		$.get('/article/id/'+article.id+'/body', function(body) {
-			CKEDITOR.instances['post-editor'].setData(body);
-		});
-	}
+  if (article != null) {
+    $('#title').val(article.title);
+    if (article.category_parent_id != null) {
+      $('#root_cat').val(article.category_parent_id);
+      loadChildCategory(article.category_parent_id, article.category_id);
+    } else {
+      $('#root_cat').val(article.category_id);
+    }
+    $.get('/article/id/'+article.id+'/body', function(body) {
+      CKEDITOR.instances['post-editor'].setData(body);
+    });
+  }
 }
 
 function enterPost() {
   familyCall(function(isLogin, family) {
     if (isLogin) {
-			$.getJSON('/category/family/'+family.id+'/root', function(roots) {
-				showPostContent(family, roots, null);
-			});
-		}
-	});
+      $.getJSON('/category/family/'+family.id+'/root', function(roots) {
+        showPostContent(family, roots, null);
+      });
+    }
+  });
 }
 
 function loadChildCategory(root_id, child_id) {
-	$.getJSON('/category/'+root_id+'/children', function(categories) {
-		var content = '<option value="-1">根</optioni>';
-		$.each(categories, function() {
-			content += '<option value="' + this.id + '">' + this.name + '</option>';
-		});
-		$('#child_cat').html(content);
-		if (child_id != null)
-			$('#child_cat').val(child_id);
-	});
+  if (root_id == null)  return false;
+  $.getJSON('/category/'+root_id+'/children', function(categories) {
+    var content = '<option value="-1">根</optioni>';
+    $.each(categories, function() {
+      content += '<option value="' + this.id + '">' + this.name + '</option>';
+    });
+    $('#child_cat').html(content);
+    if (child_id != null)
+      $('#child_cat').val(child_id);
+  });
 }
 
 function publishArticle() {
-	familyCall(function(isLogin, family) {
+  familyCall(function(isLogin, family) {
     if (isLogin) {
-			if ($('#title').val() == '') {
-				alert('标题不能为空');
-				return false;
-			}
-			var editor = $('#post-editor');
-			if (editor.val() == '') {
-				alert('内容不能为空');
-				return false;
-			}
-			editor.val(CKEDITOR.instances['post-editor'].getData());
-			var root_cat = $('#root_cat').val();
-			var child_cat = $('#child_cat').val();
-			$('#category_id').val(root_cat);
-			if (child_cat != -1) {
-				$('#category_id').val(child_cat);
-			}
-			$.ajax({
-				url: '/article/add',
-				type: 'POST',
-				data: $('#article_add_form').serialize(),
-				success: function(message) {
-      		var message = $.parseJSON(message);
-					if (message.success == 'true') {
-						alert('发布完成');
-					} else {
-				 		alert('Error: ' + message.msg);
-						return false;
-					}
-				},
-				error: function(message) {
-					alert('Server Error:' + message);
-				}
-			});
-		} else {
-			alert('进家后，才能发布');
-		}
-	});
+      if ($('#title').val() == '') {
+        alert('标题不能为空');
+        return false;
+      }
+      var editor = $('#post-editor');
+      if (editor.val() == '') {
+        alert('内容不能为空');
+        return false;
+      }
+      editor.val(CKEDITOR.instances['post-editor'].getData());
+      var root_cat = $('#root_cat').val();
+      var child_cat = $('#child_cat').val();
+      $('#category_id').val(root_cat);
+      if (child_cat != -1) {
+        $('#category_id').val(child_cat);
+      }
+      $.ajax({
+        url: '/article/add',
+        type: 'POST',
+        data: $('#article_form').serialize(),
+        success: function(message) {
+          var message = $.parseJSON(message);
+          if (message.success == 'true') {
+            alert('发布完成');
+          } else {
+            alert('Error: ' + message.msg);
+            return false;
+          }
+        },
+        error: function(message) {
+          alert('Server Error:' + message);
+        }
+      });
+    } else {
+      alert('进家后，才能发布');
+    }
+  });
 }
 
 function openPost() {
@@ -332,41 +338,83 @@ function closePost() {
 }
 
 function editPost(id) {
-	familyCall(function(isLogin, family) {
+  familyCall(function(isLogin, family) {
     if (isLogin) {
-			$.getJSON('/category/family/'+family.id+'/root', function(roots) {
-				$.getJSON('/article/id/'+id+'/parameter', function(article) {
-					showPostContent(family, roots, article);
-				});
-			});
-		}
-	});
+      $.getJSON('/category/family/'+family.id+'/root', function(roots) {
+        $.getJSON('/article/id/'+id+'/parameter', function(article) {
+          showPostContent(family, roots, article);
+        });
+      });
+    }
+  });
+}
+
+function editArticle(id) {
+  familyCall(function(isLogin, family) {
+    if (isLogin) {
+      if ($('#title').val() == '') {
+        alert('标题不能为空');
+        return false;
+      }
+      var editor = $('#post-editor');
+      if (editor.val() == '') {
+        alert('内容不能为空');
+        return false;
+      }
+      editor.val(CKEDITOR.instances['post-editor'].getData());
+      var root_cat = $('#root_cat').val();
+      var child_cat = $('#child_cat').val();
+      $('#category_id').val(root_cat);
+      if (child_cat != -1) {
+        $('#category_id').val(child_cat);
+      }
+      $.ajax({
+        url: '/article/'+id+'/edit',
+        type: 'POST',
+        data: $('#article_form').serialize(),
+        success: function(message) {
+          var message = $.parseJSON(message);
+          if (message.success == 'true') {
+            alert('修改完成');
+          } else {
+            alert('Error: ' + message.msg);
+            return false;
+          }
+        },
+        error: function(message) {
+          alert('Server Error:' + message);
+        }
+      });
+    } else {
+      alert('进家后，才能修改');
+    }
+  });
 }
 
 function deletePost(id) {
-	familyCall(function(isLogin, family) {
+  familyCall(function(isLogin, family) {
     if (isLogin) {
-  		var a = confirm('删除吗？');
-			if (a) {
-				$.ajax({
-					url: '/article/'+id+'/delete',
-					type: 'GET',
-					success: function(message) {
-      			var message = $.parseJSON(message);
-						if (message.success == 'true') {
-							init();
-							alert('已删除');
-						} else {
-				 			alert('Error: ' + message.msg);
-							return false;
-						}
-					},
-					error: function(message) {
-						alert('Server Error:' + message);
-					}
-				});
+      var a = confirm('删除吗？');
+      if (a) {
+        $.ajax({
+          url: '/article/'+id+'/delete',
+          type: 'GET',
+          success: function(message) {
+            var message = $.parseJSON(message);
+            if (message.success == 'true') {
+              init();
+              alert('已删除');
+            } else {
+              alert('Error: ' + message.msg);
+              return false;
+            }
+          },
+          error: function(message) {
+            alert('Server Error:' + message);
+          }
+        });
 
-			}
+      }
     }
   });
 }
@@ -384,16 +432,24 @@ function refresh() {
 refresh();
 
 jQuery(document).ready(function($) {
-  $('#btn-options').toolbar({
-    content: '#toolbar-options',
-    position: 'left-top',
-    hideOnClick: true
-  });
+  showToolbar();
 });
 
+function showToolbar() {
+  familyCall(function(isLogin, family) {
+    if (isLogin) {
+      if (family.id == 1) {
+        var ahtml = '<a onclick="editAbout()"><i class="icon-home"></i></a>';
+        $('#toolbar-options').append(ahtml);
+      }
+
+      $('#btn-options').toolbar({
+        content: '#toolbar-options',
+        position: 'left-top',
+        hideOnClick: true
+      });
+    }
+  });
+}
+
 CKEDITOR.disableAutoInline = true;
-/*
-$(document).ready(function() {
-  $('#post-editor').ckeditor();
-});
-*/

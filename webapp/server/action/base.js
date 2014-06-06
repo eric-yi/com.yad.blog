@@ -401,9 +401,9 @@ exports.getRecentComments = function(req, res) {
 };
 
 function sendSuccessMsg(res) {
-	var message = new Message();
-	var data = message.toSuccessJson();
-	res.send(data);
+  var message = new Message();
+  var data = message.toSuccessJson();
+  res.send(data);
 }
 
 function handleArticleCondition(req, condition) {
@@ -430,7 +430,7 @@ function tipLogin(req, res, callback) {
 
 function requestLogin(req, res) {
   if (isLogin(req)) {
-		sendSuccessMsg(res);
+    sendSuccessMsg(res);
     return true;
   }
   return false;
