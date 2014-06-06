@@ -66,7 +66,7 @@ Service.prototype.getArticles = function(condition, callback) {
 };
 
 Service.prototype.getArticleParameter = function(id, callback) {
-  var sql = 'select a.*, c.name as category_name, c.path_name as category_path_name, c.parent_name as category_parent_name, c.parent_path_name as category_parent_path_name, f.name as family_name, r.reply_num as reply_num from yad_blog_article a, yad_blog_v_category c, yad_blog_master_family f, (select article_id, count(*) as reply_num from yad_blog_comment where article_id ="' + id + '") r where a.category_id = c.id and a.family_id = f.id and a.id = "' + id + '"';
+  var sql = 'select a.*, c.name as category_name, c.path_name as category_path_name, c.parent_id as category_parent_id, c.parent_name as category_parent_name, c.parent_path_name as category_parent_path_name, f.name as family_name, r.reply_num as reply_num from yad_blog_article a, yad_blog_v_category c, yad_blog_master_family f, (select article_id, count(*) as reply_num from yad_blog_comment where article_id ="' + id + '") r where a.category_id = c.id and a.family_id = f.id and a.id = "' + id + '"';
   this.dao.query(sql, function(results) {
     var result;
     if (results.length > 0) {

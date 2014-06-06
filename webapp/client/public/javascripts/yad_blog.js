@@ -235,8 +235,8 @@ function makeContents(data, auth, family) {
     content += '<h3 class="storytitle"><a href="javascript:readArticle(' + this.id + ')" rel="bookmark">' + this.title + '</a>';
     if (member_id == 1 || this.family_id == family_id) {
       content += '<div id="storyop" style="float:right;font-size=9px;">';
-			content += '<a onclick="editPost(' + this.id + ')"><i class="icon-edit"></i></a>';
-			content += '<a onclick="deletePost(' + this.id + ')"><i class="icon-remove"></i></a>';
+			content += '<a href="javascript:editPost(' + this.id + ');"><i class="icon-edit"></i></a>';
+			content += '<a href="javascript:deletePost(' + this.id + ');"><i class="icon-remove"></i></a>';
 			content += '</div>';
     }
     content += '</h3>';

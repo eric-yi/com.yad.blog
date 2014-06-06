@@ -352,11 +352,21 @@ exports.getArticlesByPage = function(condition, page, res) {
 exports.getArticleParameter = function(id, res) {
   service.getArticleParameter(id, function(parameter) {
     var json = '{';
-    json += '"article_notfound":"' + global.getBlog().article_notfound + '"'
+    json += '"id":"' + id + '"';
+    json += ', "article_notfound":"' + global.getBlog().article_notfound + '"'
     if (parameter) {
-      if (parameter.publish_time) {
+      if (parameter.title)
+        json += ', "title":"' + parameter.title + '"';
+      if (parameter.publish_time)
         json += ', "publish_time":"' + parameter.publish_time + '"';
-      }
+      if (parameter.category_id)
+        json += ', "category_id":"' + parameter.category_id + '"';
+      if (parameter.category_name)
+        json += ', "category_name":"' + parameter.category_name + '"';
+      if (parameter.category_parent_id)
+        json += ', "category_parent_id":"' + parameter.category_parent_id + '"';
+      if (parameter.category_parent_name)
+        json += ', "category_parent_name":"' + parameter.category_parent_name + '"';
     }
     json += '}';
     res.send(json);

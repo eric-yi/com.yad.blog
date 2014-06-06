@@ -188,67 +188,78 @@ function editMember() {
   });
 }
 
-function showPostContent(article) {
-  familyCall(function(isLogin, family) {
-    if (isLogin) {
-			$.getJSON('/category/family/'+family.id+'/root', function(roots) {
-      	var content = '<form id="article_add_form" class="postform">';
-      	content += '<fieldset class="textbox">';
-      	content += '<label>';
-      	content += '<span>分 类：</span>';
-				content += '<select id="root_cat" onchange="javascript:loadChildCategory(this.value);">';
-				$.each(roots, function() {
-					content += '<option value="' + this.id + '">' + this.name + '</option>';
-				});
-				content += '</select>';
-				content += '<select id="child_cat">'
-				content += '</select>';
-      	content += '</label>';
-      	content += '<label>';
-      	content += '<span>标 题：</span>';
-      	content += '<input id="title" name="title" value="" type="text">';
-      	content += '</label>';
-      	content += '<label>';
-      	content += '<span>内 容：</span>';
-      	content += '<textarea id="post-editor" name="post-editor">'
-      	content += '</textarea>';
-      	content += '</label>';
-      	content += '<p align="right">';
-      	content += '<input type="hidden" id="family_id" name="family_id" value="' + family.id +  '" />';
-      	content += '<input type="hidden" id="category_id" name="category_id" value="" />';
-      	content += '<button type="button">保 存</button>';
-      	content += '<button type="button" onclick="javascript:publishArticle();">发 布</button>';
-      	content += '</p>';
-      	content += '</fieldset>';
+function showPostContent(family, categories, article) {
+	var content = '<form id="article_add_form" class="postform">';
+ 	content += '<fieldset class="textbox">';
+ 	content += '<label>';
+ 	content += '<span>分 类：</span>';
+	content += '<select id="root_cat" onchange="javascript:loadChildCategory(this.value);">';
+	$.each(categories, function() {
+		content += '<option value="' + this.id + '">' + this.name + '</option>';
+	});
+	content += '</select>';
+	content += '<select id="child_cat">';
+	content += '</select>';
+ 	content += '</label>';
+ 	content += '<label>';
+ 	content += '<span>标 题：</span>';
+ 	content += '<input id="title" name="title" value="" type="text">';
+ 	content += '</label>';
+ 	content += '<label>';
+ 	content += '<span>内 容：</span>';
+ 	content += '<textarea id="post-editor" name="post-editor">';
+ 	content += '</textarea>';
+ 	content += '</label>';
+ 	content += '<p align="right">';
+ 	content += '<input type="hidden" id="family_id" name="family_id" value="' + family.id +  '" />';
+ 	content += '<input type="hidden" id="category_id" name="category_id" value="" />';
+ 	content += '<button type="button">保 存</button>';
+ 	content += '<button type="button" onclick="javascript:publishArticle();">发 布</button>';
+ 	content += '</p>';
+ 	content += '</fieldset>';
 
-      	content += '</form>';
-				content += '<script>loadChildCategory($("#root_cat").val())</script>';
-      	$('#content').html(content);
-      	$('#post-editor').ckeditor();
-				resetPostValue(article);
-			});
-    }
-  });
+ 	content += '</form>';
+	content += '<script>loadChildCategory($("#root_cat").val(), null)</script>';
+ 	$('#content').html(content);
+ 	$('#post-editor').ckeditor();
+	resetPostValue(article);
 }
 
 function resetPostValue(article) {
 	if (article != null) {
 		$('#title').val(article.title);
-		CKEDITOR.instances['post-editor'].setData(article.content)
+		if (article.category_parent_id != 0) {
+			$('#root_cat').val(article.category_parent_id);
+			loadChildCategory(article.category_parent_id, article.category_id);
+		} else {
+			$('#root_cat').val(article.category_id);
+		}
+
+		$.get('/article/id/'+article.id+'/body', function(body) {
+			CKEDITOR.instances['post-editor'].setData(body);
+		});
 	}
 }
 
 function enterPost() {
-	showPostContent(null);
+  familyCall(function(isLogin, family) {
+    if (isLogin) {
+			$.getJSON('/category/family/'+family.id+'/root', function(roots) {
+				showPostContent(family, roots, null);
+			});
+		}
+	});
 }
 
-function loadChildCategory(root_id) {
+function loadChildCategory(root_id, child_id) {
 	$.getJSON('/category/'+root_id+'/children', function(categories) {
 		var content = '<option value="-1">根</optioni>';
 		$.each(categories, function() {
 			content += '<option value="' + this.id + '">' + this.name + '</option>';
 		});
 		$('#child_cat').html(content);
+		if (child_id != null)
+			$('#child_cat').val(child_id);
 	});
 }
 
@@ -321,7 +332,15 @@ function closePost() {
 }
 
 function editPost(id) {
-
+	familyCall(function(isLogin, family) {
+    if (isLogin) {
+			$.getJSON('/category/family/'+family.id+'/root', function(roots) {
+				$.getJSON('/article/id/'+id+'/parameter', function(article) {
+					showPostContent(family, roots, article);
+				});
+			});
+		}
+	});
 }
 
 function deletePost(id) {
