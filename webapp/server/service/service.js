@@ -288,67 +288,69 @@ Service.prototype.getFamilyByLogin = function(username, password, callback) {
 };
 
 Service.prototype.addFamily = function(family, callback) {
-	var _dao = this.dao;
-	var sql = 'select * from yad_blog_master_family where username = ' + family.username + 'or name = ' + family.name;
-	_dao.query(sql, function(rs) {
-		if (rs.length > 0) {
-			callback(-1);
-		} else {
-			sql = 'insert into yad_blog_master_family(username, password, name, member_id, position, email, qq, weibo, weico) values('
-						+ family.username + ','
-						+ family.password + ','
-						+ family.name + ','
-						+ family.member_id + ','
-						+ family.position + ','
-						+ family.email + ','
-						+ family.qq + ','
-						+ family.weibo + ','
-						+ family.weico + ')';
-			_dao.insert(sql, function(result) {
-				callback(1);
-			});
-		}
-	});
+  var _dao = this.dao;
+  var sql = 'select * from yad_blog_master_family where username = ' + family.username + 'or name = ' + family.name;
+  if (family.member_id == 2 || family.member_id == 3)
+    sql += ' or member_id = ' + family.member_id;
+  _dao.query(sql, function(rs) {
+    if (rs.length > 0) {
+      callback(-11);
+    } else {
+      sql = 'insert into yad_blog_master_family(username, password, name, member_id, position, email, qq, weibo, weico) values('
+      + family.username + ','
+      + family.password + ','
+      + family.name + ','
+      + family.member_id + ','
+      + family.position + ','
+      + family.email + ','
+      + family.qq + ','
+      + family.weibo + ','
+      + family.weico + ')';
+      _dao.insert(sql, function(result) {
+        callback(1);
+      });
+    }
+  });
 };
 
 Service.prototype.deleteFamily = function(id, callback) {
-	var _dao = this.dao;
-	resouceInFamily(_dao, id, function(resource) {
-		var category_ids = resource.category_ids;
-		var articles = resource.articles;
-		if (articles.length > 0) {
-			callback(-1);
-		} else if (category_ids.length > 0) {
-			callback(-2);
-		} else {
-			sql = 'delete from yad_blog_master_family where id = ' + id;
-			_dao.delete(sql, function(result) {
-				callback(1);
-			});
-		}
-	});
+  var _dao = this.dao;
+  resourcesInFamily(_dao, id, function(resource) {
+    var category_ids = resource.category_ids;
+    var articles = resource.articles;
+    if (articles.length > 0) {
+      callback(-11);
+    } else if (category_ids.length > 0) {
+      callback(-12);
+    } else {
+      sql = 'delete from yad_blog_master_family where id = ' + id;
+      _dao.del(sql, function(result) {
+        callback(1);
+      });
+    }
+  });
 };
 
 Service.prototype.updateFamily = function(family, callback) {
-	var _dao = this.dao;
-	var sql = 'select * from yad_blog_master_family where name = ' + family.name;
-	_dao.query(sql, function(rs) {
-		if (rs.length > 0) {
-			callback(-1);
-		} else {
-  		sql = 'update yad_blog_master_family set' +
-            ' name = ' + family.name +
-            ', password = ' + family.password +
-            ', email = ' + family.email +
-            ', qq = ' + family.qq +
-            ', weibo = ' + family.weibo +
-            ', weico = ' + family.weico +
-            ' where id = ' + family.id;
-  		_dao.update(sql, function(result) {
-    		callback(result);
-  		});
-		}
-	});
+  var _dao = this.dao;
+  var sql = 'select * from yad_blog_master_family where name = ' + family.name;
+  _dao.query(sql, function(rs) {
+    if (rs.length > 0) {
+      callback(-1);
+    } else {
+      sql = 'update yad_blog_master_family set' +
+        ' name = ' + family.name +
+        ', password = ' + family.password +
+        ', email = ' + family.email +
+        ', qq = ' + family.qq +
+        ', weibo = ' + family.weibo +
+        ', weico = ' + family.weico +
+        ' where id = ' + family.id;
+      _dao.update(sql, function(result) {
+        callback(result);
+      });
+    }
+  });
 };
 
 Service.prototype.addArticle = function(article, callback) {
@@ -455,14 +457,14 @@ Service.prototype.updateCategory = function(category, callback) {
   });
 };
 
-function resourceInFamily(_dao, id, callback) {
+function resourcesInFamily(_dao, id, callback) {
   var sql = 'select category_id from yad_blog_category_family where family_id = ' + id;
   _dao.query(sql, function(category_ids) {
     sql = 'select * from yad_blog_article where family_id = ' + id;
     _dao.query(sql, function(articles) {
       callback({
         category_ids: category_ids,
-        articles:			articles
+        articles:     articles
       });
     });
   });

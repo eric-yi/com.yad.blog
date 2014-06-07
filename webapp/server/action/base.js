@@ -436,6 +436,25 @@ function requestLogin(req, res) {
   return false;
 }
 
+function isAdmin(req) {
+  if (isLogin(req)) {
+    if (req.session.family.id == 1)
+      return true;
+  }
+
+  return false;
+}
+
+function tipAdmin(req, res, callback) {
+  if (isAdmin(req)) {
+    callback();
+  } else {
+    var message = new Message();
+    message.msg = -2;
+    res.send(messsage.toJson());
+  }
+}
+
 exports.service = service;
 exports.getCategories = getCategories;
 exports.getCategoryInFamily = getCategoryInFamily;
@@ -452,3 +471,5 @@ exports.requestLogin = requestLogin;
 exports.tipLogin = tipLogin;
 exports.handleArticleCondition = handleArticleCondition;
 exports.sendSuccessMsg = sendSuccessMsg;
+exports.isAdmin = isAdmin;
+exports.tipAdmin = tipAdmin;

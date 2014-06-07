@@ -5,22 +5,9 @@ function showLogin() {
     if (family.id != null) {
       closeLoginBox();
     } else {
-      showLoginBox();
+      showBox({name:'login-box', focus:'username'});
     }
   });
-}
-
-function showLoginBox() {
-  $('#login-box').fadeIn(300);
-  var popMargTop = ($('#login-box').height() + 24) / 2;
-  var popMargLeft = ($('#login-box').width() + 24) / 2;
-  $('#login-box').css({
-    'margin-top' : -popMargTop,
-    'margin-left' : -popMargLeft
-  });
-  $('body').append('<div id="mask"></div>');
-  $('#mask').fadeIn(300);
-  $('#username').focus();
 }
 
 function closeLoginBox() {
@@ -104,7 +91,7 @@ function openMember() {
   familyCall(function(isLogin, family) {
     if (isLogin) {
       resetMember(family);
-      showMember();
+      showBox({name:'member-box', focus:'family-name'});
     }
   });
 }
@@ -133,24 +120,8 @@ function resetMember(_member) {
     $('#family_weico').val('');
 }
 
-function showMember() {
-  $('#member-box').fadeIn(300);
-  var popMargTop = ($('#member-box').height() + 24) / 2;
-  var popMargLeft = ($('#member-box').width() + 24) / 2;
-  $('#member-box').css({
-    'margin-top' : -popMargTop,
-    'margin-left' : -popMargLeft
-  });
-  $('body').append('<div id="mask"></div>');
-  $('#mask').fadeIn(300);
-  $('#family_name').focus();
-}
-
 function closeMember() {
-  $('#family_message').html('');
-  $('#member-box').fadeOut(300 , function() {
-    $('#mask').remove();
-  });
+  closeBox({name:'member-box', message:'family_message'});
 }
 
 function editMember() {
@@ -314,27 +285,13 @@ function publishArticle() {
 function openPost() {
   familyCall(function(isLogin, family) {
     if (isLogin) {
-      showPost();
+      showBox({name:'post-box'});
     }
   });
 }
 
-function showPost() {
-  $('#post-box').fadeIn(300);
-  var popMargTop = ($('#post-box').height() + 24) / 2;
-  var popMargLeft = ($('#post-box').width() + 24) / 2;
-  $('#post-box').css({
-    'margin-top' : -popMargTop,
-    'margin-left' : -popMargLeft
-  });
-  $('body').append('<div id="mask"></div>');
-  $('#mask').fadeIn(300);
-}
-
 function closePost() {
-  $('#post-box').fadeOut(300 , function() {
-    $('#mask').remove();
-  });
+  closeBox({name:'post-box'});
 }
 
 function editPost(id) {
@@ -419,6 +376,92 @@ function deletePost(id) {
   });
 }
 
+function showAddFamily() {
+  familyCall(function(isLogin, family) {
+    if (isLogin) {
+      showBox({name:'family-box', focus:'a_family_name', title_name:'family_title', title_value:'添加家庭成员'});
+    }
+  });
+}
+
+function closeFamily() {
+  closeBox({name:'family-box', message:'a_family_message'});
+}
+
+function addFamily() {
+  var a = confirm('确认添加吗？');
+  if (!a) {
+    return false;
+  }
+  if ($('#a_family_name').val() == ''&& $('#a_family_name').val() == '') {
+    $('#a_family_message').html('名字不能为空');
+    return false;
+  }
+
+  if ($('#a_family_username').val() == ''&& $('#a_family_username').val() == '') {
+    $('#a_family_message').html('登陆名不能为空');
+    return false;
+  }
+  if ($('#a_family_password').val() != '' && $('#a_family_password').val() != $('#a_family_repassword').val()) {
+    $('#a_family_message').html('钥匙不符合要求');
+    return false;
+  }
+  $.ajax({
+    url: '/family/add',
+    type: 'POST',
+    data: $('#familyform').serialize(),
+    success: function(message) {
+      var message = $.parseJSON(message);
+      if (message.success == 'true') {
+        listFamily(true);
+        alert('成功添加');
+      } else {
+        var msg = message.msg;
+        if (msg == -2)
+          $('#a_family_message').html('不是家庭管理员');
+        if (msg == -11)
+          $('#a_family_message').html('家庭成员已存在');
+        return false;
+      }
+    },
+    error: function(message) {
+      $('#a_family_message').html(message);
+    }
+  });
+}
+
+function deleteFamily(id) {
+  familyCall(function(isLogin, family) {
+    if (isLogin) {
+      var a = confirm('删除吗？');
+      if (a) {
+        $.ajax({
+          url: '/family/'+id+'/delete',
+          type: 'GET',
+          success: function(message) {
+            var message = $.parseJSON(message);
+            if (message.success == 'true') {
+              listFamily(true);
+              alert('已删除');
+            } else {
+              var msg_info = '不能删除';
+              if (message.msg == 11)
+                msg_info += '存在管理的文章';
+              if (message.msg == 12)
+                msg_info += '存在管理的目录';
+              alert('Error: ' + msg_info);
+              return false;
+            }
+          },
+          error: function(message) {
+            alert('Server Error:' + message);
+          }
+        });
+      }
+    }
+  });
+}
+
 function refresh() {
   familyCall(function(isLogin, family) {
     if (isLogin) {
@@ -436,10 +479,11 @@ jQuery(document).ready(function($) {
 });
 
 function showToolbar() {
+  $('#tb-about').remove();
   familyCall(function(isLogin, family) {
     if (isLogin) {
       if (family.id == 1) {
-        var ahtml = '<a onclick="editAbout()"><i class="icon-home"></i></a>';
+        var ahtml = '<a id="tb-about" onclick="editAbout()"><i class="icon-home"></i></a>';
         $('#toolbar-options').append(ahtml);
       }
 
@@ -453,3 +497,36 @@ function showToolbar() {
 }
 
 CKEDITOR.disableAutoInline = true;
+
+function showBox(box) {
+  var box_name = box.name;
+  var focus_name = box.focus;
+  var title_name = box.title_name;
+  var title_value = box.title_value;
+  if (title_name != null && title_value != null)
+    $('#'+title_name).html(title_value);
+  var box_dia = $('#' + box_name);
+  box_dia.fadeIn(300);
+  var popMargTop = (box_dia.height() + 24) / 2;
+  var popMargLeft = (box_dia.width() + 24) / 2;
+  box_dia.css({
+    'margin-top' : -popMargTop,
+    'margin-left' : -popMargLeft
+  });
+  $('body').append('<div id="mask"></div>');
+  $('#mask').fadeIn(300);
+  if (focus_name != null)
+    $('#'+focus_name).focus();
+}
+
+function closeBox(box) {
+  var box_name = box.name;
+  var message_name = box.message;
+  var box_dia = $('#' + box_name);
+  if (message_name != null)
+    $('#'+message_name).html('');
+  box_dia.fadeOut(300 , function() {
+    $('#mask').remove();
+  });
+}
+

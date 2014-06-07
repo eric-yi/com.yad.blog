@@ -7,6 +7,7 @@
 var month2chs = new Array('一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二');
 
 function listCategory(family) {
+  $('#category-add').remove();
   $.getJSON( '/category/list', function(data) {
     var isadmin = false;
     if (family != null) {
@@ -47,15 +48,16 @@ function listCategory(family) {
 }
 
 function listFamily(isadmin) {
+  $('#family-add').remove();
   $.getJSON( '/family', function(data) {
     if (isadmin)
-      $('#family-title').append('<a id="family-add" href="javascript:addFamily();"><i class="icon-plus-sign" style="margin-top:0px;margin-left:10px;"></i></a>');
+      $('#family-title').append('<a id="family-add" href="javascript:showAddFamily();"><i class="icon-plus-sign" style="margin-top:0px;margin-left:10px;"></i></a>');
     var content = '';
     $.each(data, function(){
       content += '<li><a href="javascript:familyForArticle(' + this.id + ')">' + this.name + '</a>';
       if (isadmin) {
         content += '<a href="javascript:editFamily();"><i class="icon-edit" style="margin-top:0px;margin-left:10px;"></i></a>';
-        content += '<a href="javascript:deleteFamily();"><i class="icon-remove-sign" style="margin-top:0px;margin-left:5px"></i></a>';
+        content += '<a href="javascript:deleteFamily(' + this.id + ');"><i class="icon-remove-sign" style="margin-top:0px;margin-left:5px"></i></a>';
       }
       content += '</li>';
     });
@@ -102,6 +104,7 @@ function familyCategory() {
 }
 
 function listLink(isadmin) {
+  $('#link-add').remove();
   $.getJSON( '/link', function(data) {
     if (isadmin)
       $('#link-title').append('<a id="link-add" href="javascript:addLink();"><i class="icon-plus-sign" style="margin-top:0px;margin-left:10px;"></i></a>');
@@ -422,9 +425,6 @@ function about(anchor) {
 
 function init() {
   $.getJSON('/family/member/current', function(family) {
-    $('#family-add').remove();
-    $('#category-add').remove();
-    $('#link-add').remove();
     var isadmin = false;
     if (family != null && family.id == 1)
       isadmin = true;

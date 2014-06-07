@@ -61,13 +61,59 @@
   </form>
 </div>
 
-<!--
-<div id="post-box" class="login-popup">
-  <a href="javascript:closePost();" class="close"><img src="/images/close_pop.png" class="btn_close" title="Close Window" alt="Close" /></a>
-  <textarea cols="100" id="post-editor" name="post-editor" rows="30">
-  </textarea>
+<div id="family-box" class="login-popup">
+  <a href="javascript:closeFamily();" class="close"><img src="/images/close_pop.png" class="btn_close" title="Close Window" alt="Close" /></a>
+  <h3 id="family_title" style="font-size:16px;color: #999;"></h3>
+  <form id="familyform" class="signin">
+    <fieldset class="textbox">
+      <label>
+        <span style="width:50px;">名字:</span>
+        <input id="a_family_name" name="a_family_name" value="" type="text">
+      </label>
+      <label>
+        <span style="width:50px;">称号:</span>
+        <select id="a_family_member_id" name="a_family_member_id">
+          <option value="2">爸 爸</option>
+          <option value="3">妈 妈</option>
+          <option value="4">女 儿</option>
+          <option value="5">儿 子</option>
+        </select>
+      </label>
+      <label id="family_username_label">
+        <span style="width:50px;">登陆名:</span>
+        <input id="a_family_username" name="a_family_username" value="" type="text">
+      </label>
+      <label>
+        <span>钥匙:</span>
+        <input id="a_family_password" name="a_family_password" value="" type="password">
+      </label>
+      <label>
+        <span>重复钥匙:</span>
+        <input id="a_family_repassword" name="a_family_repassword" value="" type="password">
+      </label>
+      <label>
+        <span style="width:150px;">Email:</span>
+        <input id="a_family_email" name="a_family_email" value="" type="text">
+      </label>
+      <label>
+        <span>QQ:</span>
+        <input id="a_family_qq" name="a_family_qq" value="" type="text">
+      </label>
+      <label>
+        <span>微博:</span>
+        <input id="a_family_weibo" name="a_family_weibo" value="" type="text">
+      </label>
+      <label>
+        <span>微信:</span>
+        <input id="a_family_weico" name="a_family_weico" value="" type="text">
+      </label>
+      <p align="right">
+      <button type="button" onclick="addFamily()">确 定</button>
+      </p>
+      <span id="a_family_message" style="color:red;text-align:center;"></span>
+    </fieldset>
+  </form>
 </div>
--->
 
 <script>
   showLogin();
