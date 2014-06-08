@@ -115,6 +115,28 @@
   </form>
 </div>
 
+<div id="link-box" class="login-popup">
+  <a href="javascript:closeLink();" class="close"><img src="/images/close_pop.png" class="btn_close" title="Close Window" alt="Close" /></a>
+  <h3 id="link_title" style="font-size:16px;color: #999;"></h3>
+  <form id="linkform" class="signin">
+    <fieldset class="textbox">
+      <label>
+        <span style="width:50px;">名称:</span>
+        <input id="a_link_name" name="a_link_name" value="" type="text">
+      </label>
+      <label>
+        <span style="width:50px;">地址:</span>
+        <input id="a_link_url" name="a_link_url" value="" type="text">
+      </label>
+      <p align="right">
+      <button type="button" onclick="addLink()">确 定</button>
+      </p>
+      <span id="a_link_message" style="color:red;text-align:center;"></span>
+    </fieldset>
+  </form>
+</div>
+
+
 <script>
   showLogin();
 </script>

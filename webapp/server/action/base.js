@@ -406,6 +406,20 @@ function sendSuccessMsg(res) {
   res.send(data);
 }
 
+function sendFailMsg(res, msg) {
+  var message = new Message();
+  message.msg = msg;
+  res.send(message);
+}
+
+function sendMessage(res, msg) {
+  if (msg == 1) {
+    sendSuccessMsg(res);
+  } else {
+    sendFailMsg(res, msg);
+  }
+}
+
 function handleArticleCondition(req, condition) {
   if (isLogin(req)) {
     //condition.family_id = req.session.family.id;
@@ -471,5 +485,7 @@ exports.requestLogin = requestLogin;
 exports.tipLogin = tipLogin;
 exports.handleArticleCondition = handleArticleCondition;
 exports.sendSuccessMsg = sendSuccessMsg;
+exports.sendFailMsg = sendFailMsg;
+exports.sendMessage = sendMessage;
 exports.isAdmin = isAdmin;
 exports.tipAdmin = tipAdmin;

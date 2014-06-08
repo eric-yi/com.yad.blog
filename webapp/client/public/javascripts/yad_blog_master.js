@@ -462,6 +462,82 @@ function deleteFamily(id) {
   });
 }
 
+function showAddLink() {
+  familyCall(function(isLogin, family) {
+    if (isLogin) {
+      showBox({name:'link-box', focus:'a_link_name', title_name:'link_title', title_value:'添加友情链接'});
+    }
+  });
+}
+
+function closeLink() {
+  closeBox({name:'link-box', message:'a_link_message'});
+}
+
+function addLink() {
+  var a = confirm('确认添加吗？');
+  if (!a) {
+    return false;
+  }
+  if ($('#a_link_name').val() == '' && $('#a_link_name').val() == '') {
+    $('#a_link_message').html('名称不能为空');
+    return false;
+  }
+
+  if ($('#a_link_url').val() == '' && $('#a_link_url').val() == '') {
+    $('#a_link_message').html('地址不能为空');
+    return false;
+  }
+  $.ajax({
+    url: '/link/add',
+    type: 'POST',
+    data: $('#linkform').serialize(),
+    success: function(message) {
+      var message = $.parseJSON(message);
+      if (message.success == 'true') {
+        listLink(true);
+        alert('成功添加');
+      } else {
+        var msg = message.msg;
+        if (msg == -11)
+          $('#a_link_message').html('友情链接已存在');
+        return false;
+      }
+    },
+    error: function(message) {
+      $('#a_link_message').html(message);
+    }
+  });
+}
+
+function deleteLink(id) {
+  familyCall(function(isLogin, family) {
+    if (isLogin) {
+      var a = confirm('删除吗？');
+      if (a) {
+        $.ajax({
+          url: '/link/'+id+'/delete',
+          type: 'GET',
+          success: function(message) {
+            var message = $.parseJSON(message);
+            if (message.success == 'true') {
+              listLink(true);
+              alert('已删除');
+            } else {
+              var msg_info = '不能删除';
+              alert('Error: ' + msg_info);
+              return false;
+            }
+          },
+          error: function(message) {
+            alert('Server Error:' + message);
+          }
+        });
+      }
+    }
+  });
+}
+
 function refresh() {
   familyCall(function(isLogin, family) {
     if (isLogin) {

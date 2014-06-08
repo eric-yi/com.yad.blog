@@ -168,6 +168,16 @@ exports.genLink = function(row) {
   return link;
 };
 
+exports.copyLink = function(_link) {
+  Link = require('./link');
+  var link = new Link();
+  if (_link.id != null)    link.id = _link.id;
+  if (_link.name != null)  link.name = _link.name;
+  if (_link.url != null)   link.url = _link.url;
+
+  return link;
+};
+
 exports.genComment = function(row) {
   Comment = require('./comment');
   var comment = new Comment();

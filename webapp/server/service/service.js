@@ -252,6 +252,28 @@ Service.prototype.getLinks = function(link, callback) {
   });
 };
 
+Service.prototype.addLink = function(link, callback) {
+  var _dao = this.dao;
+  var sql = 'select * from yad_blog_link where name = ' + link.name + ' or url = ' + link.url;
+  _dao.query(sql, function(results) {
+    if (results.length > 0) {
+      callback(-11);
+    } else {
+      sql = 'insert into yad_blog_link(name, url) values(' + link.name + ', ' + link.url + ')';
+      _dao.insert(sql, function(result) {
+        callback(1);
+      });
+    }
+  });
+}
+
+Service.prototype.deleteLink = function(id, callback) {
+  var sql = 'delete from yad_blog_link where id = ' + id;
+  this.dao.del(sql, function(result) {
+    callback(1);
+  });
+}
+
 Service.prototype.addComment = function(comment, callback) {
   var sql = 'insert into yad_blog_comment(target_type, target_id, family_id, article_id, name, email, content, reply_time) values('
             + comment.target_type + ', '

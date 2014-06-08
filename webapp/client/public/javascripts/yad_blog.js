@@ -107,13 +107,12 @@ function listLink(isadmin) {
   $('#link-add').remove();
   $.getJSON( '/link', function(data) {
     if (isadmin)
-      $('#link-title').append('<a id="link-add" href="javascript:addLink();"><i class="icon-plus-sign" style="margin-top:0px;margin-left:10px;"></i></a>');
+      $('#link-title').append('<a id="link-add" href="javascript:showAddLink();"><i class="icon-plus-sign" style="margin-top:0px;margin-left:10px;"></i></a>');
     var content = '';
     $.each(data, function(){
       content += '<li><a onclick="javascript:_gaq.push([\'_trackEvent\',\'outbound-blogroll\',\'' + this.url + '\']);" target="_blank" href="' + this.url + '">' + this.name + '</a>';
       if (isadmin) {
-        content += '<a href="javascript:editLink();"><i class="icon-edit" style="margin-top:0px;margin-left:10px;"></i></a>';
-        content += '<a href="javascript:deleteLink();"><i class="icon-remove-sign" style="margin-top:0px;margin-left:5px"></i></a>';
+        content += '<a href="javascript:deleteLink(' + this.id + ');"><i class="icon-remove-sign" style="margin-top:0px;margin-left:5px"></i></a>';
       }
       content += '</li>';
     });
