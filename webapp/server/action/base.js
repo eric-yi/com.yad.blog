@@ -409,7 +409,7 @@ function sendSuccessMsg(res) {
 function sendFailMsg(res, msg) {
   var message = new Message();
   message.msg = msg;
-  res.send(message);
+  res.send(message.toJson());
 }
 
 function sendMessage(res, msg) {

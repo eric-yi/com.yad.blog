@@ -9,56 +9,57 @@ var month2chs = new Array('一', '二', '三', '四', '五', '六', '七', '八'
 function listCategory(family) {
   $('#category-add').remove();
   $.getJSON( '/category/list', function(data) {
-		if (family.id == null) {
-			makeCategoryContent(data, false, []);
-		} else {
-			if (family.id == 1) {
-				makeCategoryContent(data, true, []);
-			} else {
-				$.getJSON('/category/family/'+family.id, function(auths) {
-					makeCategoryContent(data, false, auths);
-				});
-			}
-		}
-	});
+    if (family.id == null) {
+      makeCategoryContent(data, false, []);
+    } else {
+      if (family.id == 1) {
+        $('#category-title').append('<a id="category-add" href="javascript:showAddCategory(0);"><i class="icon-plus-sign" style="margin-top:0px;margin-left:10px;"></i></a>');
+        makeCategoryContent(data, true, []);
+      } else {
+        $.getJSON('/category/family/'+family.id, function(auths) {
+          makeCategoryContent(data, false, auths);
+        });
+      }
+    }
+  });
 }
 
 function hasCategoryAuth(category_id, auths) {
-	var ret = false;
-	for (var n = 0; n < auths.length; n++) {
-		if (Number(auths[n].id) == Number(category_id)) {
-			ret = true;
-		}
-	}
+  var ret = false;
+  for (var n = 0; n < auths.length; n++) {
+    if (Number(auths[n].id) == Number(category_id)) {
+      ret = true;
+    }
+  }
 
-	return ret;
+  return ret;
 }
 
 function makeCategoryContent(categories, isadmin, cat_auths) {
-	var content = '';
- 	var n = 0;
- 	var top_path;
-	var has_auth = false;
+  var content = '';
+  var n = 0;
+  var top_path;
+  var has_auth = false;
   $.each(categories, function() {
-		has_auth = hasCategoryAuth(this.id, cat_auths);	
-		if (this.parent_id == 0) {
-    	top_path = this.path_name;
+    has_auth = hasCategoryAuth(this.id, cat_auths);	
+    if (this.parent_id == 0) {
+      top_path = this.path_name;
       if (n != 0)
         content += '</ul></li>';
       content += '<li class="cat-item">';
       content += '<a href="javascript:categoryForArticle(\'' + top_path + '\')">' + this.name + '</a>';
       if (isadmin || has_auth) {
-        content += '<a href="javascript:editFamily();"><i class="icon-plus-sign" style="margin-top:0px;margin-left:10px;"></i></a>';
-        content += '<a href="javascript:editFamily();"><i class="icon-edit" style="margin-top:0px;margin-left:5px;"></i></a>';
-        content += '<a href="javascript:deleteFamily();"><i class="icon-remove-sign" style="margin-top:0px;margin-left:5px"></i></a>';
+        content += '<a href="javascript:showAddCategory(' + this.id + ');"><i class="icon-plus-sign" style="margin-top:0px;margin-left:10px;"></i></a>';
+        content += '<a href="javascript:editCategory(' + this + ');"><i class="icon-edit" style="margin-top:0px;margin-left:5px;"></i></a>';
+        content += '<a href="javascript:deleteCategory(' + this.id + ');"><i class="icon-remove-sign" style="margin-top:0px;margin-left:5px"></i></a>';
       }
       content += '<ul class="children">';
     } else {
       content += '<li class="cat-item">';
       content += '<a href="javascript:categoryForArticle(\'' + top_path + '\', \'' + this.path_name + '\')">' + this.name + '</a>';
       if (isadmin || has_auth) {
-        content += '<a href="javascript:editFamily();"><i class="icon-edit" style="margin-top:0px;margin-left:10px;"></i></a>';
-        content += '<a href="javascript:deleteFamily();"><i class="icon-remove-sign" style="margin-top:0px;margin-left:5px"></i></a>';
+        content += '<a href="javascript:editCategory(' + this + ');"><i class="icon-edit" style="margin-top:0px;margin-left:5px;"></i></a>';
+        content += '<a href="javascript:deleteCategory(' + this.id + ');"><i class="icon-remove-sign" style="margin-top:0px;margin-left:5px"></i></a>';
       }
       content += '</li>';
     }
@@ -66,7 +67,7 @@ function makeCategoryContent(categories, isadmin, cat_auths) {
       content += '</ul></li>';
     n++;
   });
-	$('#yad_category').html(content);
+  $('#yad_category').html(content);
 }
 
 function listFamily(isadmin) {

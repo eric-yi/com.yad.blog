@@ -445,10 +445,93 @@ function deleteFamily(id) {
               alert('已删除');
             } else {
               var msg_info = '不能删除';
-              if (message.msg == 11)
+              if (message.msg == -11)
                 msg_info += '存在管理的文章';
-              if (message.msg == 12)
+              if (message.msg == -12)
                 msg_info += '存在管理的目录';
+              alert('Error: ' + msg_info);
+              return false;
+            }
+          },
+          error: function(message) {
+            alert('Server Error:' + message);
+          }
+        });
+      }
+    }
+  });
+}
+
+function showAddCategory(id) {
+  familyCall(function(isLogin, family) {
+    if (isLogin) {
+      $('#a_category_id').val(id);
+      showBox({name:'add-category-box', focus:'a_category_name', title_name:'a_category_title', title_value:'添加分类目录'});
+    }
+  });
+}
+
+function closeAddCategory() {
+  closeBox({name:'add-category-box', message:'a_category_message'});
+}
+
+function addCategory() {
+  familyCall(function(isLogin, family) {
+    var a = confirm('确认添加吗？');
+    if (!a) {
+      return false;
+    }
+    if ($('#a_category_name').val() == '' && $('#a_category_name').val() == '') {
+      $('#a_category_message').html('名称不能为空');
+      return false;
+    }
+
+    if ($('#a_category_path').val() == '' && $('#a_category_path').val() == '') {
+      $('#a_category_message').html('路径不能为空');
+      return false;
+    }
+    $.ajax({
+      url: '/category/add',
+      type: 'POST',
+      data: $('#addcategoryform').serialize(),
+      success: function(message) {
+        var message = $.parseJSON(message);
+        if (message.success == 'true') {
+          listCategory(family);
+          alert('成功添加');
+        } else {
+          var msg = message.msg;
+          if (msg == -11)
+            $('#a_category_message').html('分类目录已存在');
+          return false;
+        }
+      },
+      error: function(message) {
+        $('#a_category_message').html(message);
+      }
+    });
+  });
+}
+
+function deleteCategory(id) {
+  familyCall(function(isLogin, family) {
+    if (isLogin) {
+      var a = confirm('删除吗？');
+      if (a) {
+        $.ajax({
+          url: '/category/'+id+'/delete',
+          type: 'GET',
+          success: function(message) {
+            var message = $.parseJSON(message);
+            if (message.success == 'true') {
+              listCategory(family);
+              alert('已删除');
+            } else {
+              var msg_info = '不能删除';
+              if (Number(message.msg) == -11)
+                msg_info += ', 存在管理的文章';
+              if (Number(message.msg) == -12)
+                msg_info += ', 存在管理的目录';
               alert('Error: ' + msg_info);
               return false;
             }

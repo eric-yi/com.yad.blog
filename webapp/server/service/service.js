@@ -426,17 +426,19 @@ Service.prototype.updateArticle = function(article, callback) {
 
 Service.prototype.addCategory = function(category, callback) {
   var _dao = this.dao;
-  var sql = 'select * from yad_blog_category where name = ' + category.name + ' and parent_id = ' + category.parent_id;
+  var sql = 'select * from yad_blog_category where name = ' + category.name + ' or path_name = ' + category.path_name + 'and parent_id = ' + category.parent_id;
   _dao.query(sql, function(rs) {
     if (rs.length > 0) {
-      callback(-1);
+      callback(-11);
     } else {
+      if (!category.position)
+        category.position = 20;
       sql = 'insert into yad_blog_category(name, parent_id, position, path_name) values('
       + category.name + ', '
       + category.parent_id + ', '
       + category.position + ', '
       + category.path_name + ') ';
-      this.dao.insert(sql, function(result) {
+      _dao.insert(sql, function(result) {
         callback(1);
       });
     }
@@ -445,32 +447,16 @@ Service.prototype.addCategory = function(category, callback) {
 
 Service.prototype.deleteCategory = function(id, callback) {
   var _dao = this.dao;
-
-  resourceInCategory(_dao, id, function(resource) {
+  resourcesInCategory(_dao, id, function(resource) {
     var article_ids = resource.article_ids;
     var category_ids = resource.category_ids;
     if (article_ids.length > 0) {
-      callback(-1);
-    } else if (category_ids > 0) {
-      callback(-2);
+      callback(-11);
+    } else if (category_ids.length > 1) {
+      callback(-12);
     } else {
-      /*
-         var ids;
-         var first = true;
-         for (var n in category_ids) {
-         if (!first)
-         ids += ',';
-         else
-         first = false;
-         ids += category_ids[n];
-         }
-         var sql = 'delete from yad_blog_article where id in (' + id + ')';
-         _dao.update(sql, function(result) {
-         callback(1);
-         });
-         */
       var sql = 'delete from yad_blog_category where id = ' + id;
-      _dao.update(sql, function(result) {
+      _dao.del(sql, function(result) {
         callback(1);
       });
     }
@@ -506,8 +492,8 @@ function resourcesInCategory(_dao, id, callback) {
   _dao.query(sql, function(results) {
     var ids = id;
     var cat_idList = [];
-    idList.push(id);
-    for (var n in reuslts) {
+    cat_idList.push(id);
+    for (var n in results) {
       var cat_id = results[n].id;
       ids += ',' + cat_id;
       cat_idList.push(cat_id);
@@ -520,7 +506,7 @@ function resourcesInCategory(_dao, id, callback) {
       }
       callback({
         category_ids:     cat_idList,
-        article_ids:      art_idList
+        article_ids:      ar_idList
       });
     });
   });

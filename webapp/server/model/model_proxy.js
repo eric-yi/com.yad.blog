@@ -123,12 +123,13 @@ exports.genCategory = function(row) {
   return article;
 };
 
-exports.copyCategory = function(_catetory) {
+exports.copyCategory = function(_category) {
   Category = require('./category');
   var category = new Category();
   if (_category.id != null)        category.id = _category.id;
   if (_category.name != null)      category.name = _category.name;
   if (_category.parent_id != null) category.parent_id = _category.parent_id;
+  if (_category.path_name != null) category.path_name = _category.path_name;
 
   return category;
 }
