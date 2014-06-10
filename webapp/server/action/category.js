@@ -49,6 +49,14 @@ router.post('/:id/edit', function(req, res) {
   });
 });
 
+router.get('/family/:id', function(req, res) {
+	var id = req.params.id;
+	Base.service.getCategoriesInFamily(id, function(categories) {
+    var json = ModelProxy.toJson(categories);
+    res.send(json);
+	});
+});
+
 router.get('/family/:id/root', function(req, res) {
 	var id = req.params.id;
 	Base.service.getRootCategoriesInFamily(id, function(categories) {

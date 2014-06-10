@@ -64,7 +64,7 @@ function logout() {
       refresh();
       $('#tool-container').hide();
       init();
-      showLoginBox();
+      showLogin();
     });
   }
 }

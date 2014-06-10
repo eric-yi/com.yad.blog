@@ -170,6 +170,15 @@ Service.prototype.getSecondCategories = function(parent_id, callback) {
 	});
 };
 
+
+Service.prototype.getCategoriesInFamily = function(family_id, callback) {
+	var sql = 'select c.* from yad_blog_category_family cf , yad_blog_category c where cf.family_id = ' + family_id + ' and (cf.category_id = c.id or cf.category_id = c.parent_id)';
+	this.dao.query(sql, function(results) {
+		var category_list = convertCategory(results);
+		callback(category_list);
+	});
+};
+
 Service.prototype.getCategoryInFamily = function(condition, callback) {
   var sql = 'select * from yad_blog_category';
   var _dao = this.dao;
@@ -233,7 +242,6 @@ Service.prototype.getCategoryInFamily = function(condition, callback) {
       });
     });
   });
-
 };
 
 Service.prototype.getLinks = function(link, callback) {
