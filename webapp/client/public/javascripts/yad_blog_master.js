@@ -621,6 +621,75 @@ function deleteLink(id) {
   });
 }
 
+function adminAbout() {
+	$('#storyop').html('');
+  familyCall(function(isLogin, family) {
+    if (isLogin && family.id == 1) {
+    	var ahtml = '<a href="javascript:showEditAbout();"><i class="icon-edit"></i></a>';
+      $('#storyop').append(ahtml);
+    }
+  });
+}
+
+var aboutContent = '';
+function showEditAbout() {
+  familyCall(function(isLogin, family) {
+    if (isLogin && family.id == 1) {
+  		$.get('/about/content', function(data) {
+				aboutContent = data;
+  			var content = '<textarea id="about-editor" name="about-editor">';
+  			content += '</textarea>';
+  			content += '<p align="right">';
+				content += '<button type="button" onclick="javascript:setAboutContent();">重 置</button>';
+				content += '<button type="button" onclick="javascript:editAbout();">确 认</button>';
+				content += '</p>';
+
+  			$('#content').html(content);
+  			$('#about-editor').ckeditor();
+				setAboutContent(data);
+			});
+    }
+  });
+}
+
+function setAboutContent(data) {
+	if (!data)
+		data = aboutContent;
+	CKEDITOR.instances['about-editor'].setData(data);
+}
+
+function editAbout() {
+  familyCall(function(isLogin, family) {
+    if (isLogin && family.id == 1) {
+      var editor = $('#about-editor');
+      if (editor.val() == '') {
+        alert('内容不能为空');
+        return false;
+      }
+      var a_data = CKEDITOR.instances['about-editor'].getData();
+      $.ajax({
+        url: '/about/edit',
+        type: 'POST',
+        data: {content:a_data},
+        success: function(message) {
+          var message = $.parseJSON(message);
+          if (message.success == 'true') {
+            alert('修改完成');
+          } else {
+            alert('Error: ' + message.msg);
+            return false;
+          }
+        },
+        error: function(message) {
+          alert('Server Error:' + message);
+        }
+      });
+    } else {
+      alert('进家后，才能修改');
+    }
+  });
+}
+
 function refresh() {
   familyCall(function(isLogin, family) {
     if (isLogin) {

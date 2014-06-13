@@ -489,3 +489,4 @@ exports.sendFailMsg = sendFailMsg;
 exports.sendMessage = sendMessage;
 exports.isAdmin = isAdmin;
 exports.tipAdmin = tipAdmin;
+exports.getAboutContent = getAboutContent;

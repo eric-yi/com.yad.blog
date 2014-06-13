@@ -37,7 +37,7 @@ exports.writeContent = function(filename, content) {
   if (!Fs.existsSync(filename))
     throw new Error(filename + ' not found');
 
-  write(filname, content);
+  write(filename, content);
 };
 
 exports.write = write;

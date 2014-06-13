@@ -473,6 +473,11 @@ Service.prototype.updateCategory = function(category, callback) {
   });
 };
 
+Service.prototype.updateAbout = function(content) {
+	var filename = global.getServer().view + '/' + global.getBlog().about_content + '.' + global.getBlog().article_suffix;
+	file_util.writeContent(filename, content);	
+};
+
 function resourcesInFamily(_dao, id, callback) {
   var sql = 'select category_id from yad_blog_category_family where family_id = ' + id;
   _dao.query(sql, function(category_ids) {

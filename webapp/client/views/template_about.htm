@@ -11,6 +11,8 @@
 <div id="post-<%yad= id %>" class="post">
 <h3 id="storytitle" class="storytitle">
 <a href="javascript:readArticle(<%yad= id %>)" rel="bookmark"><%yad= storytitle %>
+<div id="storyop" style="float:right;font-size=9px;">
+</div>
 </a>
 </h3>
 <div id="storycontent" class="storycontent">
@@ -115,3 +117,5 @@ if (comment_list && comment_list.length > 0) {
 
 <div class="navlink">
 </div><!-- end navlink -->
+
+<script>adminAbout()</script>
