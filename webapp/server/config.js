@@ -10,14 +10,14 @@ Server = function() {
   var port = 9426;
   var cached = false;
   var view;
-	var session_expired = 30 * 60 * 1000;
+  var session_expired = 30 * 60 * 1000;
 
   return {
     host: this.host,
     port: this.port,
     cached: this.cached,
     view: this.view,
-		session_expired: this.session_expired
+    session_expired: this.session_expired
   };
 };
 
@@ -63,6 +63,7 @@ Blog = function() {
   var template_article = 'template_article';
   var template_about = 'template_about';
   var about_content = 'about_content';
+  var recent_feed = 10;
 
   return {
     article_path:               this.article_path,
@@ -85,7 +86,8 @@ Blog = function() {
     template_nofound:           this.template_notfound,
     template_article:           this.template_article,
     template_about:             this.template_about,
-    about_content:              this.about_content
+    about_content:              this.about_content,
+    recent_feed:                this.recent_feed
   };
 };
 
@@ -126,7 +128,7 @@ Config.prototype.init = function(path) {
   if (cached_str.toUpperCase() == 'ON')
     cached = true;
   this.server.cached = cached;
-	this.server.session_expired = get(this.props, 'server', 'session.expired') * 60 * 1000;
+  this.server.session_expired = get(this.props, 'server', 'session.expired') * 60 * 1000;
 
   this.database.host = get(this.props, 'database', 'host');
   this.database.port = get(this.props, 'database', 'port');
@@ -160,6 +162,7 @@ Config.prototype.init = function(path) {
   this.blog.template_article = get(this.props, 'blog', 'template.article');
   this.blog.template_about = get(this.props, 'blog', 'template.about');
   this.blog.about_content = get(this.props, 'blog', 'about.content');
+  this.blog.recent_feed = get(this.props, 'blog', 'recent.feed');
 };
 
 Config.prototype.server = this.server;

@@ -12,6 +12,7 @@ var Routes = function(app) {
   var comment = require('./comment');
   var about = require('./about');
   var master = require('./master');
+  var feed = require('./feed');
 
   app.use('/', index);
   app.use('/category', category);
@@ -21,6 +22,7 @@ var Routes = function(app) {
   app.use('/comment', comment);
   app.use('/about', about);
   app.use('/master', master);
+  app.use('/feed', feed);
 };
 
 module.exports = function(app) {

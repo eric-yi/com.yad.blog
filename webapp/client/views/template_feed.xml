@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0"
+  xmlns:content="http://purl.org/rss/1.0/modules/content/"
+  xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+  xmlns:dc="http://purl.org/dc/elements/1.1/"
+  xmlns:atom="http://www.w3.org/2005/Atom"
+  xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+  xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+  >
+
+<channel>
+  <title><%yad= title %></title>
+  <atom:link href="<%yad= link %>" rel="self" type="application/rss+xml" />
+  <link><%yad= index_link %></link>
+  <description><%yad= description %></description>
+  <lastBuildDate><%yad= lastBuildDate %></lastBuildDate>
+  <language>zh-CN</language>
+  <sy:updatePeriod>hourly</sy:updatePeriod>
+  <sy:updateFrequency>1</sy:updateFrequency>
+  <generator><%yad= generator %></generator>
+<%yad
+for (var n in item_list) {
+  var item = item_list[n];
+%>
+  <item>
+    <title><%yad= item.title %></title>
+    <link><%yad= item.link %></link>
+    <comments><%yad= item.comments %></comments>
+    <pubDate><%yad= item.pubdate %></pubDate>
+    <dc:creator><![CDATA[<%yad= item.creator %>]]></dc:creator>
+    <category><![CDATA[<%yad= item.category %>]]></category>
+    <guid isPermaLink="false"><%yad= item.guid %></guid>
+    <description><![CDATA[<%yad= item.description %>]]]></description>
+    <content:encoded><![CDATA[<%yad= item.content %>
+      ]]></content:encoded>
+    <wfw:commentRss><%yad= item.commentRss %></wfw:commentRss>
+    <slash:comments><%yad= item.slash %></slash:comments>
+  </item>
+<%yad
+}
+%>

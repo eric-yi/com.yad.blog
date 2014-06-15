@@ -183,6 +183,26 @@ exports.getAbout = function(res) {
   });
 };
 
+exports.getFeed = function() {
+  var feed_tag = require('../common/feed_tag');
+  var blog = global.getBlog();
+  feed_tag.title = blog.title;
+  feed_tag.link = 'blog.yadfamily.com';
+  feed_tag.index_link = 'blog.yadfamily.com';
+  feed_tag.description = blog.subtitle;
+  feed_tag.lastBuildDate = 
+  feed_tag.generator = 'yad blog';
+
+  var page = genPage();
+  page.size = golbal.getBlog().recent_feed;
+  condition.page = page;
+  getArticles(condition, function(dataset) {
+    var json = ModelProxy.toArticlePageJson(dataset);
+    var feed_tag = require('../common/feed_tag');
+  });
+
+};
+
 exports.getArticleContentById = function(id, res) {
   service.getArticleParameter(id, function(parameter) {
     var template_html = getArticleTemplate();

@@ -14,7 +14,7 @@ exports.apply = function(html, params) {
   params.open = '<%yad';
   params.close = '%>';
   params.escape = escape;
-  return ejs.render(html, params);	
+  return ejs.render(html, params);
 };
 
 Article = function(args) {
