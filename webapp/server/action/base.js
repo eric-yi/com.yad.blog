@@ -134,6 +134,12 @@ getAboutContent = function() {
   return getViewHtml(global.getBlog().about_content);
 };
 
+getFeedContent = function() {
+  var filename = global.getServer().view + '/' + global.getBlog().template_feed + '.xml' ;
+  var content = service.getArticleContent(filename);
+  return content;
+};
+
 function getViewHtml(name) {
   var filename = global.getServer().view + '/' + name + '.' + global.getBlog().article_suffix;
   var content = service.getArticleContent(filename);
@@ -183,24 +189,51 @@ exports.getAbout = function(res) {
   });
 };
 
-exports.getFeed = function() {
+exports.getFeed = function(callback) {
   var feed_tag = require('../common/feed_tag');
+	var rss = new feed_tag.Rss();
   var blog = global.getBlog();
-  feed_tag.title = blog.title;
-  feed_tag.link = 'blog.yadfamily.com';
-  feed_tag.index_link = 'blog.yadfamily.com';
-  feed_tag.description = blog.subtitle;
-  feed_tag.lastBuildDate = 
-  feed_tag.generator = 'yad blog';
+	var server = global.getServer();
+  rss.title = blog.title;
+  rss.link = 'blog.yadfamily.com';
+  rss.index_link = server.url;
+  rss.description = blog.subtitle;
+ 	rss.lastBuildDate = '2014-';
+  rss.generator = 'yad blog';
 
-  var page = genPage();
-  page.size = golbal.getBlog().recent_feed;
+	var condition = {};
+  var page = Model.genPage();
+	page.sql = true;
+	page.num = 0;
+	page.size = blog.recent_feed;
   condition.page = page;
-  getArticles(condition, function(dataset) {
-    var json = ModelProxy.toArticlePageJson(dataset);
-    var feed_tag = require('../common/feed_tag');
+  service.getArticles(condition, function(dataset) {
+		var items = [];
+		for (var n in dataset.dataset) {
+			var data = dataset.dataset[n];
+			var item = new feed_tag.Rss_Item();
+			item.title = data.article.title;
+			item.link = '';
+			item.comments = '';
+			item.creator = data.writer;
+			var category_name = '';
+			if (data.category.parent_name)
+				category_name = data.category.parent_name + '-';
+			category_name += data.category.name;
+			item.category = category_name;
+			item.guid =	'';
+			item.description = '';
+			item.content = getArticleById(data.article.id);
+			item.commentRss = '';
+			item.slash = '';
+			items.push(item);
+		}
+		rss.items = items;
+		var content = getFeedContent();
+  	var html = tag.apply(content, rss.toList());
+		
+		callback(html);
   });
-
 };
 
 exports.getArticleContentById = function(id, res) {

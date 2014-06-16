@@ -19,8 +19,8 @@
   <sy:updateFrequency>1</sy:updateFrequency>
   <generator><%yad= generator %></generator>
 <%yad
-for (var n in item_list) {
-  var item = item_list[n];
+for (var n in items) {
+  var item = items[n];
 %>
   <item>
     <title><%yad= item.title %></title>
@@ -30,7 +30,7 @@ for (var n in item_list) {
     <dc:creator><![CDATA[<%yad= item.creator %>]]></dc:creator>
     <category><![CDATA[<%yad= item.category %>]]></category>
     <guid isPermaLink="false"><%yad= item.guid %></guid>
-    <description><![CDATA[<%yad= item.description %>]]]></description>
+    <description><![CDATA[<%yad= item.description %>]]></description>
     <content:encoded><![CDATA[<%yad= item.content %>
       ]]></content:encoded>
     <wfw:commentRss><%yad= item.commentRss %></wfw:commentRss>
@@ -39,3 +39,5 @@ for (var n in item_list) {
 <%yad
 }
 %>
+
+</channel>

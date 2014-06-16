@@ -24,12 +24,13 @@ Rss = function(args) {
   if (args && args.link)                this.link = args.link;
   var index_link = '';
   if (args && args.index_link)          this.index_link = args.index_link;
-  var day = '';
+  var description = '';
   if (args && args.description)         this.description = args.description;
   var lastBuildDate = '';
   if (args && args.lastBuildDate)       this.lastBuildDate = args.lastBuildDate;
   var generator = '';
   if (args && args.generator)           this.generator = args.generator;
+	var items;
 
   return {
     title:                              this.title,
@@ -38,6 +39,7 @@ Rss = function(args) {
     description:                        this.description,
     lastBuildDate:                      this.lastBuildDate,
     generator:                          this.generator,
+		items:															this.imtes,
 
     toList: function() {
       return {
@@ -46,7 +48,8 @@ Rss = function(args) {
         index_link:                     this.index_link,
         description:                    this.description,
         lastBuildDate:                  this.lastBuildDate,
-        generator:                      this.generator
+        generator:                      this.generator,
+				items:													this.items
       };
     }
   };
@@ -70,7 +73,7 @@ Item = function(args) {
   var description = '';
   if (args && args.description)         this.description = args.description;
   var content = '';
-  if (args && args.content)             this.content = args.content;
+  if (args && args.content)         		this.content = args.content;
   var commentRss = '';
   if (args && args.commentRss)          this.commentRss = args.commentRss;
   var slash = '';
@@ -85,7 +88,7 @@ Item = function(args) {
     category:                           this.category,
     guid:                               this.guid,
     description:                        this.description,
-    content:                            this.contents,
+    content:                        		this.content,
     commentRss:                         this.commentRss,
     slash:                              this.slash,
 
@@ -100,7 +103,7 @@ Item = function(args) {
         category:                       this.category,
         guid:                           this.guid,
         description:                    this.description,
-        contents:                       this.contents,
+        content:                    		this.content,
         commentRss:                     this.commentRss,
         slash:                          this.slash
       };

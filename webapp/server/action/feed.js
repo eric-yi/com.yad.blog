@@ -9,7 +9,9 @@ var router = express.Router();
 Base = require('./base');
 
 router.get('/', function(req, res) {
-  Base.getAbout(res);
+  Base.getFeed(function(html) {
+		res.send(html);
+	});
 });
 
 
