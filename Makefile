@@ -18,6 +18,7 @@ install:
 	$(NPM) install body-parser
 	$(NPM) install express-session
 	$(NPM) install MD5
+	$(NPM) install -g node-gyp 
 	mv node_modules $(server)
 
 env :

@@ -12,6 +12,7 @@ Server = function() {
   var view;
   var session_expired = 30 * 60 * 1000;
 	var url;
+	var protocol = 'http';
 
   return {
     host: this.host,
@@ -19,7 +20,8 @@ Server = function() {
     cached: this.cached,
     view: this.view,
     session_expired: this.session_expired,
-		url: this.url
+		url: this.url,
+		protocol: this.protocol
   };
 };
 
@@ -134,6 +136,8 @@ Config.prototype.init = function(path) {
   this.server.cached = cached;
   this.server.session_expired = get(this.props, 'server', 'session.expired') * 60 * 1000;
   this.server.url = get(this.props, 'server', 'url');
+  var protocol = get(this.props, 'server', 'protocol');
+  this.server.protocol = protocol + '://';
 
   this.database.host = get(this.props, 'database', 'host');
   this.database.port = get(this.props, 'database', 'port');

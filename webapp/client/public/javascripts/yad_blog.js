@@ -459,3 +459,11 @@ function init() {
   });
 }
 
+function feed_init() {
+	listFamily(false);
+  listCategory();
+  listRecentArticle();
+  listRecentComment();
+  listLink(false);
+}
+

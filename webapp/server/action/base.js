@@ -195,7 +195,7 @@ exports.getFeed = function(callback) {
   var blog = global.getBlog();
 	var server = global.getServer();
   rss.title = blog.title;
-  rss.link = 'blog.yadfamily.com';
+  rss.link = server.url + ':' + server.port;
   rss.index_link = server.url;
   rss.description = blog.subtitle;
  	rss.lastBuildDate = '2014-';
@@ -213,7 +213,7 @@ exports.getFeed = function(callback) {
 			var data = dataset.dataset[n];
 			var item = new feed_tag.Rss_Item();
 			item.title = data.article.title;
-			item.link = '';
+			item.link = server.protocol + rss.link + '/feed/id/' + data.article.id;
 			item.comments = '';
 			item.creator = data.writer;
 			var category_name = '';
@@ -290,6 +290,68 @@ exports.getArticleContentById = function(id, res) {
       });
     } else {
       sendArticle(res, template_html, args);
+    }
+  });
+};
+
+function callArticleContentById(id, callback) {
+  service.getArticleParameter(id, function(parameter) {
+    var template_html = getArticleTemplate();
+    var year = '';
+    var month = '';
+    var day = '';
+    var auth = '';
+    var storytitle = '';
+    var root_category = '';
+    var root_category_path = '';
+    var cur_category = '';
+    var cur_category_path = '';
+    var reply_num = 0;
+    if (parameter) {
+      if (parameter.publish_time) {
+        var d = date_util.split(parameter.publish_time)
+        year = d.year;
+        month = d.month;
+        day = d.day;
+      }
+      if (parameter.family_id)                  auth_id = parameter.family_id;
+      if (parameter.family_name)                auth = parameter.family_name;
+      if (parameter.title)                      storytitle = parameter.title;
+      if (parameter.category_name)              cur_category = parameter.category_name;
+      if (parameter.category_path_name)         cur_category_path = parameter.category_path_name;
+      if (parameter.category_parent_name)       root_category = parameter.category_parent_name;
+      if (parameter.category_parent_path_name)  root_category_path = parameter.category_parent_path_name;
+      if (parameter.reply_num)                  reply_num = parameter.reply_num;
+    }
+    var storycontent = getArticleById(id);
+    var args = {
+      id:                   id,
+      year:                 year,
+      month:                month,
+      day:                  day,
+      storytitle:           storytitle,
+      storycontent:         storycontent,
+      auth_id:              auth_id,
+      auth:                 auth,
+      cur_category:         cur_category,
+      cur_category_path:    cur_category_path,
+      root_category:        root_category,
+      root_category_path:   root_category_path,
+      reply_num:            reply_num
+    };
+
+    if (reply_num != 0) {
+      service.getCommentForArticleId(id, function(comments) {
+        var comment_list = sortComments(comments);
+        args.comment_list = comment_list;
+  			var tag_article = new tag.Article(args);
+  			var html = tag.apply(template_html, tag_article.toList());;
+        callback(html);
+      });
+    } else {
+  		var tag_article = new tag.Article(args);
+  		var html = tag.apply(template_html, tag_article.toList());;
+      callback(html);
     }
   });
 };
@@ -543,3 +605,4 @@ exports.sendMessage = sendMessage;
 exports.isAdmin = isAdmin;
 exports.tipAdmin = tipAdmin;
 exports.getAboutContent = getAboutContent;
+exports.callArticleContentById = callArticleContentById;
