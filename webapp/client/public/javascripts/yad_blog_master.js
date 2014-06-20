@@ -185,6 +185,7 @@ function showPostContent(family, categories, article) {
   content += '<p align="right">';
   content += '<input type="hidden" id="family_id" name="family_id" value="' + family.id +  '" />';
   content += '<input type="hidden" id="category_id" name="category_id" value="" />';
+  content += '<input type="hidden" id="summary" name="summary" value="" />';
   if (article == null) {
     content += '<button type="button">保 存</button>';
     content += '<button type="button" onclick="javascript:publishArticle();">发 布</button>';
@@ -240,6 +241,19 @@ function loadChildCategory(root_id, child_id) {
   });
 }
 
+function selectSummary(editor) {
+  var data='';
+  var mySelection = editor.getSelection();
+  if (CKEDITOR.env.ie) {
+    mySelection.unlock(true);
+    data = mySelection.getNative().createRange().text;
+  } else {
+    data = mySelection.getNative();
+  }
+
+  return data;
+}
+
 function publishArticle() {
   familyCall(function(isLogin, family) {
     if (isLogin) {
@@ -250,6 +264,12 @@ function publishArticle() {
       var editor = $('#post-editor');
       if (editor.val() == '') {
         alert('内容不能为空');
+        return false;
+      }
+      var summary = selectSummary(CKEDITOR.instances['post-editor']);
+      $('#summary').val(summary);
+      if ($('#summary').val() == '') {
+        alert('必须选择概要部分');
         return false;
       }
       editor.val(CKEDITOR.instances['post-editor'].getData());

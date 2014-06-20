@@ -386,17 +386,19 @@ Service.prototype.updateFamily = function(family, callback) {
 Service.prototype.addArticle = function(article, callback) {
   var _dao = this.dao;
   var sql = 'insert into yad_blog_article(family_id, category_id, title, path_name, publish_time) values('
-  + article.family_id + ','
-  + article.category_id + ','
-  + article.title + ','
-  + '-1' + ', "'
-  + date_util.formatTime(article.publish_time) + '")';
+      + article.family_id + ','
+      + article.category_id + ','
+      + article.title + ','
+      + '-1' + ', "'
+      + date_util.formatTime(article.publish_time) + '")';
   _dao.insertReturnId(sql, function(id) {
     article.path_name = id;
     sql = 'update yad_blog_article set path_name = ' + article.path_name + ' where id = ' + id;
     _dao.update(sql, function(result) {
       var filename = global.getBlog().article_path + '/' + article.path_name + '.' + global.getBlog().article_suffix;
       file_util.write(filename, article.content);
+      filename = global.getBlog().article_path + '/' + article.path_name + '_summary.' + global.getBlog().article_suffix;
+      file_util.write(filename, article.summary);
       callback(1);
     });
   });

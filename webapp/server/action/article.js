@@ -96,6 +96,7 @@ router.post('/add', function(req, res) {
     var category_id = req.body.category_id;
     var title = req.body.title;
     var content = req.body['post-editor'];
+    var summary = req.body.summary;
     var publish_time = new Date();
 
     var article = ModelProxy.copyArticle({
@@ -103,6 +104,7 @@ router.post('/add', function(req, res) {
       category_id:  string_util.formToSql(category_id, '"'),
       title:        string_util.formToSql(title, '"'),
       content:      content,
+      summary:      summary,
       publish_time: publish_time
     });
     Base.service.addArticle(article, function(result) {

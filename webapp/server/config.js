@@ -11,8 +11,8 @@ Server = function() {
   var cached = false;
   var view;
   var session_expired = 30 * 60 * 1000;
-	var url;
-	var protocol = 'http';
+  var url;
+  var protocol = 'http';
 
   return {
     host: this.host,
@@ -20,8 +20,8 @@ Server = function() {
     cached: this.cached,
     view: this.view,
     session_expired: this.session_expired,
-		url: this.url,
-		protocol: this.protocol
+    url: this.url,
+    protocol: this.protocol
   };
 };
 
@@ -68,7 +68,8 @@ Blog = function() {
   var template_about = 'template_about';
   var about_content = 'about_content';
   var recent_feed = 10;
-	var template_feed = 'template_feed';
+  var template_feed = 'template_feed';
+  var summary_min = 20;
 
   return {
     article_path:               this.article_path,
@@ -93,7 +94,8 @@ Blog = function() {
     template_about:             this.template_about,
     about_content:              this.about_content,
     recent_feed:                this.recent_feed,
-    template_feed:              this.template_feed
+    template_feed:              this.template_feed,
+    summary_min:                this.summary_min
   };
 };
 
@@ -173,6 +175,7 @@ Config.prototype.init = function(path) {
   this.blog.about_content = get(this.props, 'blog', 'about.content');
   this.blog.recent_feed = get(this.props, 'blog', 'recent.feed');
   this.blog.template_feed = get(this.props, 'blog', 'template.feed');
+  this.blog.summary_min = get(this.props, 'blog', 'summary.min');
 };
 
 Config.prototype.server = this.server;

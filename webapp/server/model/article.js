@@ -13,6 +13,7 @@ module.exports = function() {
   var publish_time;
   var summary;
   var content;
+  var summary;
 
   return {
     id:           this.id,
@@ -23,6 +24,7 @@ module.exports = function() {
     publish_time: this.publish_time,
     summary:      this.summary,
     content:      this.content,
+    summary:      this.summary,
     status:       this.status,
 
     toJson: function() {

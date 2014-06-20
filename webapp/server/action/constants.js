@@ -19,7 +19,8 @@ exports.parameters = {
   recent_post_preview:    global.getBlog().recent_post_preview,
   recent_comment_name:    global.getBlog().recent_comment_name,
   recent_comment_preview: global.getBlog().recent_comment_preview,
-  link_name:              global.getBlog().link_name
+  link_name:              global.getBlog().link_name,
+  summary_min:            global.getBlog().summary_min
 };
 
 exports.parameters_json =
@@ -35,7 +36,8 @@ exports.parameters_json =
   '"recent_post_preview":"' + global.getBlog().recent_post_preview + '", ' +
   '"recent_comment_name":"' + global.getBlog().recent_comment_name + '", ' +
   '"recent_comment_preview":"' + global.getBlog().recent_comment_preview + '", ' +
-  '"link_name":"' + global.getBlog().link_name + '"' +
+  '"link_name":"' + global.getBlog().link_name + '", ' +
+  '"summary_min":"' + global.getBlog().summary_min + '"' +
   '}';
 
 exports.page_size = global.getBlog().page_size;

@@ -109,6 +109,7 @@ exports.copyArticle = function(_article) {
   if (_article.publish_time != null)article.publish_time = _article.publish_time;
   if (_article.status != null)      article.status = _article.status;
   if (_article.content != null)     article.content = _article.content;
+  if (_article.summary != null)     article.summary = _article.summary;
 
   return article;
 };
