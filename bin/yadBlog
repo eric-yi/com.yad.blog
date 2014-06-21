@@ -4,37 +4,37 @@
 # yi_xiaobin@163.com
 
 HOME=$(cd ../"$(dirname "$0")"; pwd)
-echo $HOME
-WEBAPP=$HOME/webapp
 
 start() {
-	node $WEBAPP/main.js	
+  cd $HOME/bin && nohup npm start > /dev/null 2>&1 &
+  echo "yad blog is running."
 }
 
 stop() {
-	echo ""
+  kill -9 `ps -ef|grep node|awk '{print $2}'` > /dev/null 2>&1
+  echo "yad blog stopped."
 }
 
 restart() {
-	stop
-	start
+  stop
+  start
 }
 
 case "$1" in
-	start)
-		start
-		;;
+  start)
+    start
+    ;;
 
-	stop)
-		stop
-		;;
+  stop)
+    stop
+    ;;
 
-	restart)
-		restart
-		;;
-	
-	*)
+  restart)
+    restart
+    ;;
 
-		;;
+  *)
+
+    ;;
 esac
 

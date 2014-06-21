@@ -363,10 +363,10 @@ Service.prototype.deleteFamily = function(id, callback) {
 
 Service.prototype.updateFamily = function(family, callback) {
   var _dao = this.dao;
-  var sql = 'select * from yad_blog_master_family where name = ' + family.name;
+  var sql = 'select * from yad_blog_master_family where name = ' + family.name + ' and id != ' + family.id;
   _dao.query(sql, function(rs) {
     if (rs.length > 0) {
-      callback(-1);
+      callback(-11);
     } else {
       sql = 'update yad_blog_master_family set' +
         ' name = ' + family.name +

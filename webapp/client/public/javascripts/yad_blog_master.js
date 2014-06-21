@@ -149,7 +149,7 @@ function editMember() {
         fetchMember();
       } else {
         var msg = message.msg;
-        if (msg == -1)
+        if (msg == -11)
           $('#family_message').html('修改失败');
         return false;
       }

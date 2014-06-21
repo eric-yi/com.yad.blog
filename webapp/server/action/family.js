@@ -46,8 +46,8 @@ router.post('/add', function(req, res) {
 
 router.post('/:id/edit', function(req, res) {
   Base.tipAdmin(req, res, function() {
-    var id = req.params.id;
     var family = formToMember(req);
+    family.id = req.params.id;
     var message = new Message();
     message.success = false;
     Base.service.updateFamily(family, function(result) {
@@ -85,7 +85,6 @@ function formToMember(req) {
   var weibo = string_util.formToSql(req.body.family_weibo, '\'');
   var weico = string_util.formToSql(req.body.family_weico, '\'');
   var family = ModelProxy.copyFamily({
-    id: id,
     name: name,
     password: password,
     email: email,
