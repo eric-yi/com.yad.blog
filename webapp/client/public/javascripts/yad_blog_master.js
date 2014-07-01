@@ -533,6 +533,38 @@ function addCategory() {
   });
 }
 
+function showEditCategory(id, name) {
+  familyCall(function(isLogin, family) {
+    if (isLogin) {
+      $.getJSON('/category/'+id+'/families', function(auths) {
+        $.getJSON('/family', function(families) {
+          $('#e_category_id').val(id);
+          showBox({name:'edit-category-box', focus:'e_category_name', title_name:'e_category_title', title_value:'编辑分类目录'});
+          $('#e_category_name').val(name);
+          var members_html = '';
+          $.each(families, function() {
+            var checked = false;
+            for (var n = 0; n < auths.length; n++) {
+              if (Number(auths[n].id) == Number(this.id)) {
+                checked = true;
+                break;
+              }
+            }
+            members_html += '<label><input type="checkbox" name="e_category_family" value="' + this.id + '"';
+            if (checked) members_html += ' checked';
+            members_html += ' />' + this.name + '</label>';
+          });
+          $('#e_category_members').html(members_html);
+        });
+      });
+    }
+  });
+}
+
+function closeEditCategory() {
+  closeBox({name:'edit-category-box', message:'e_category_message'});
+}
+
 function deleteCategory(id) {
   familyCall(function(isLogin, family) {
     if (isLogin) {
@@ -642,10 +674,10 @@ function deleteLink(id) {
 }
 
 function adminAbout() {
-	$('#storyop').html('');
+  $('#storyop').html('');
   familyCall(function(isLogin, family) {
     if (isLogin && family.id == 1) {
-    	var ahtml = '<a href="javascript:showEditAbout();"><i class="icon-edit"></i></a>';
+      var ahtml = '<a href="javascript:showEditAbout();"><i class="icon-edit"></i></a>';
       $('#storyop').append(ahtml);
     }
   });
@@ -655,27 +687,27 @@ var aboutContent = '';
 function showEditAbout() {
   familyCall(function(isLogin, family) {
     if (isLogin && family.id == 1) {
-  		$.get('/about/content', function(data) {
-				aboutContent = data;
-  			var content = '<textarea id="about-editor" name="about-editor">';
-  			content += '</textarea>';
-  			content += '<p align="right">';
-				content += '<button type="button" onclick="javascript:setAboutContent();">重 置</button>';
-				content += '<button type="button" onclick="javascript:editAbout();">确 认</button>';
-				content += '</p>';
+      $.get('/about/content', function(data) {
+        aboutContent = data;
+        var content = '<textarea id="about-editor" name="about-editor">';
+        content += '</textarea>';
+        content += '<p align="right">';
+        content += '<button type="button" onclick="javascript:setAboutContent();">重 置</button>';
+        content += '<button type="button" onclick="javascript:editAbout();">确 认</button>';
+        content += '</p>';
 
-  			$('#content').html(content);
-  			$('#about-editor').ckeditor();
-				setAboutContent(data);
-			});
+        $('#content').html(content);
+        $('#about-editor').ckeditor();
+        setAboutContent(data);
+      });
     }
   });
 }
 
 function setAboutContent(data) {
-	if (!data)
-		data = aboutContent;
-	CKEDITOR.instances['about-editor'].setData(data);
+  if (!data)
+    data = aboutContent;
+  CKEDITOR.instances['about-editor'].setData(data);
 }
 
 function editAbout() {

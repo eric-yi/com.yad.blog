@@ -50,7 +50,7 @@ function makeCategoryContent(categories, isadmin, cat_auths) {
       content += '<a href="javascript:categoryForArticle(\'' + top_path + '\')">' + this.name + '</a>';
       if (isadmin || has_auth) {
         content += '<a href="javascript:showAddCategory(' + this.id + ');"><i class="icon-plus-sign" style="margin-top:0px;margin-left:10px;"></i></a>';
-        content += '<a href="javascript:editCategory(' + this + ');"><i class="icon-edit" style="margin-top:0px;margin-left:5px;"></i></a>';
+        content += '<a href="javascript:showEditCategory(\'' + this.id + '\', \'' + this.name + '\');"><i class="icon-edit" style="margin-top:0px;margin-left:5px;"></i></a>';
         content += '<a href="javascript:deleteCategory(' + this.id + ');"><i class="icon-remove-sign" style="margin-top:0px;margin-left:5px"></i></a>';
       }
       content += '<ul class="children">';
@@ -58,7 +58,7 @@ function makeCategoryContent(categories, isadmin, cat_auths) {
       content += '<li class="cat-item">';
       content += '<a href="javascript:categoryForArticle(\'' + top_path + '\', \'' + this.path_name + '\')">' + this.name + '</a>';
       if (isadmin || has_auth) {
-        content += '<a href="javascript:editCategory(' + this + ');"><i class="icon-edit" style="margin-top:0px;margin-left:5px;"></i></a>';
+        content += '<a href="javascript:showEditCategory(\'' + this.id + '\', \'' + this.name + '\');"><i class="icon-edit" style="margin-top:0px;margin-left:5px;"></i></a>';
         content += '<a href="javascript:deleteCategory(' + this.id + ');"><i class="icon-remove-sign" style="margin-top:0px;margin-left:5px"></i></a>';
       }
       content += '</li>';

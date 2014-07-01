@@ -158,6 +158,28 @@
   </form>
 </div>
 
+<div id="edit-category-box" class="login-popup">
+  <a href="javascript:closeEditCategory();" class="close"><img src="/images/close_pop.png" class="btn_close" title="Close Window" alt="Close" /></a>
+  <h3 id="e_category_title" style="font-size:16px;color: #999;"></h3>
+  <form id="editcategoryform" class="signin">
+    <fieldset class="textbox">
+      <label>
+        <span style="width:50px;">名 称:</span>
+        <input id="e_category_name" name="e_category_name" value="" type="text">
+      </label>
+      <label>
+        <span style="width:100px;">所 属 成 员:</span>
+        <span id="e_category_members"></span>
+      </label>
+      <p align="right">
+      <input type="hidden" id="e_category_id" name="a_category_id" value="" />
+      <button type="button" onclick="editCategory()">确 定</button>
+      </p>
+      <span id="e_category_message" style="color:red;text-align:center;"></span>
+    </fieldset>
+  </form>
+</div>
+
 <script>
   showLogin();
 </script>

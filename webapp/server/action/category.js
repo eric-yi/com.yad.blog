@@ -24,6 +24,13 @@ router.get('/list', function(req, res) {
   });
 });
 
+router.get('/:id/families', function(req, res) {
+  Base.service.getFamiliesInCategory(req.params.id, function(families) {
+    var json = ModelProxy.toFamilyJson(families);
+    res.send(json);
+  });
+});
+
 router.get('/:id/delete', function(req, res) {
   Base.tipLogin(req, res, function() {
     var id = req.params.id;
