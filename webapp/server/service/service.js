@@ -478,7 +478,7 @@ Service.prototype.deleteCategory = function(id, callback) {
   });
 };
 
-Service.prototype.updateCategory = function(category, callback) {
+Service.prototype.updateSimpleCategory = function(category, callback) {
   var sql = 'update yad_blog_category set' +
     ' name = ' + category.name +
     ', parent_id = ' + category.parent_id +
@@ -487,6 +487,46 @@ Service.prototype.updateCategory = function(category, callback) {
     callback(1);
   });
 };
+
+Service.prototype.updateCategory = function(params, callback) {
+  var _dao = this.dao;
+  var category = params.category;
+  var family_ids = params.family_ids;
+  var sql = 'select * from yad_blog_category where name = ' + category.name + ' and id != ' + category.id;
+  _dao.query(sql, function(r1) {
+    if (r1.length > 0) {
+      callback(-11);
+    } else {
+      sql = 'update yad_blog_category set' + ' name = ' + category.name + ' where id = ' + category.id;
+      _dao.update(sql, function(r2) {
+        sql = 'delete from yad_blog_category_family where category_id = ' + category.id;
+        _dao.del(sql, function(r3) {
+          if (family_ids)
+            saveCategoryFamilies(_dao, category.id, family_ids, 0, callback);
+        });
+      });
+    }
+  });
+};
+
+function saveCategoryFamilies(_dao, category_id, family_ids, index, callback) {
+  if (index < family_ids.length) {
+    var family_id = family_ids[index];
+    var sql = 'select * from yad_blog_category_family where category_id = ' + category_id + ' and family_id = ' + family_id;
+    _dao.query(sql, function(r1) {
+      if (r1.length == 0) {
+        sql = 'insert into yad_blog_category_family(category_id, family_id) values(' + category_id + ', ' + family_id + ')';
+        _dao.insert(sql, function(r2) {
+          saveCategoryFamilies(_dao, category_id, family_ids, ++index, callback);
+        });
+      } else {
+        saveCategoryFamilies(_dao, category_id, family_ids, ++index, callback);
+      }
+    });
+  } else {
+    callback(1);
+  }
+}
 
 Service.prototype.updateAbout = function(content) {
   var filename = global.getServer().view + '/' + global.getBlog().about_content + '.' + global.getBlog().article_suffix;

@@ -460,7 +460,7 @@ function init() {
 }
 
 function feed_init() {
-	listFamily(false);
+  listFamily(false);
   listCategory();
   listRecentArticle();
   listRecentComment();

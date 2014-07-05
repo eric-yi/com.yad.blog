@@ -59,15 +59,16 @@ router.post('/add', function(req, res) {
 
 router.post('/:id/edit', function(req, res) {
   Base.tipLogin(req, res, function() {
+    console.log(req.body);
     var id = req.params.id;
-    var parent_id = string_util.formToSql(req.body.a_category_id, '"');
-    var name = string_util.formToSql(req.body.a_category_name, '"');
-
+    var name = string_util.formToSql(req.body.e_category_name, '"');
+    var family_ids = req.body.e_category_family;
     var category = ModelProxy.copyCategory({
-      name:       name,
-      parent_id:  parent_id
+      id:         id,
+      name:       name
     });
-    Base.service.updateCatetory(category, function(result) {
+    var params = {category: category, family_ids: family_ids};
+    Base.service.updateCategory(params, function(result) {
       Base.sendMessage(res, result);
     });
   });

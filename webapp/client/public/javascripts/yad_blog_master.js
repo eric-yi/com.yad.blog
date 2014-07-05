@@ -565,6 +565,41 @@ function closeEditCategory() {
   closeBox({name:'edit-category-box', message:'e_category_message'});
 }
 
+function editCategory() {
+  familyCall(function(isLogin, family) {
+    var a = confirm('确认修改吗？');
+    if (!a) {
+      return false;
+    }
+    var category_id = $('#e_category_id').val();
+    if ($('#e_category_name').val() == '' && $('#e_category_name').val() == '') {
+      $('#e_category_message').html('名称不能为空');
+      return false;
+    }
+    $.ajax({
+      url: '/category/'+category_id+'/edit',
+      type: 'POST',
+      data: $('#editcategoryform').serialize(),
+      success: function(message) {
+        var message = $.parseJSON(message);
+        if (message.success == 'true') {
+          listCategory(family);
+          init();
+          alert('修改完成');
+        } else {
+          var msg = message.msg;
+          if (msg == -11)
+            $('#e_category_message').html('名称已存在');
+          return false;
+        }
+      },
+      error: function(message) {
+        $('#e_category_message').html(message);
+      }
+    });
+  });
+}
+
 function deleteCategory(id) {
   familyCall(function(isLogin, family) {
     if (isLogin) {
