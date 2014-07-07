@@ -13,6 +13,8 @@ Server = function() {
   var session_expired = 30 * 60 * 1000;
   var url;
   var protocol = 'http';
+  var upload_path = 'uploads';
+  var image_upload_path = 'image_uploads';
 
   return {
     host: this.host,
@@ -21,7 +23,9 @@ Server = function() {
     view: this.view,
     session_expired: this.session_expired,
     url: this.url,
-    protocol: this.protocol
+    protocol: this.protocol,
+    upload_path: this.upload_path,
+    image_upload_path: this.image_upload_path
   };
 };
 
@@ -140,6 +144,9 @@ Config.prototype.init = function(path) {
   this.server.url = get(this.props, 'server', 'url');
   var protocol = get(this.props, 'server', 'protocol');
   this.server.protocol = protocol + '://';
+  var upload_path = Path.join(__dirname, '..', get(this.props, 'server', 'upload.path'));
+  this.server.upload_path = upload_path;
+  this.server.image_upload_path = get(this.props, 'server', 'image.upload.path');
 
   this.database.host = get(this.props, 'database', 'host');
   this.database.port = get(this.props, 'database', 'port');

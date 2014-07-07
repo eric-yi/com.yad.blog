@@ -13,6 +13,7 @@ var Routes = function(app) {
   var about = require('./about');
   var master = require('./master');
   var feed = require('./feed');
+  var image = require('./image');
 
   app.use('/', index);
   app.use('/category', category);
@@ -23,6 +24,7 @@ var Routes = function(app) {
   app.use('/about', about);
   app.use('/master', master);
   app.use('/feed', feed);
+  app.use('/image', image);
 };
 
 module.exports = function(app) {

@@ -199,7 +199,10 @@ function showPostContent(family, categories, article) {
   content += '</form>';
   content += '<script>loadChildCategory($("#root_cat").val(), null)</script>';
   $('#content').html(content);
-  $('#post-editor').ckeditor();
+  $('#post-editor').ckeditor({
+    filebrowserBrowseUrl: '/image',
+    filebrowserImageUploadUrl: '/image/upload'
+  });
   resetPostValue(article);
 }
 

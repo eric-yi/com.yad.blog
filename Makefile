@@ -19,6 +19,9 @@ install:
 	$(NPM) install express-session
 	$(NPM) install MD5
 	$(NPM) install -g node-gyp 
+	$(NPM) install multipart
+	$(NPM) install posix
+	$(NPM) install connect-busboy 
 	mv node_modules $(server)
 
 env :

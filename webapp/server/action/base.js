@@ -4,6 +4,12 @@
  * Eric Yi on 2014-05-14
  * yi_xiaobin@163.com
  */
+var multipart = require('multipart');
+var sys = require('sys');
+var events = require('events');
+var posix = require('posix');
+var fs = require('fs');
+
 Global= require('../global');
 var global = Global.getGlobal();
 
@@ -191,48 +197,48 @@ exports.getAbout = function(res) {
 
 exports.getFeed = function(callback) {
   var feed_tag = require('../common/feed_tag');
-	var rss = new feed_tag.Rss();
+  var rss = new feed_tag.Rss();
   var blog = global.getBlog();
-	var server = global.getServer();
+  var server = global.getServer();
   rss.title = blog.title;
   rss.link = server.url + ':' + server.port;
   rss.index_link = server.url;
   rss.description = blog.subtitle;
- 	rss.lastBuildDate = '2014-';
+  rss.lastBuildDate = '2014-';
   rss.generator = 'yad blog';
 
-	var condition = {};
+  var condition = {};
   var page = Model.genPage();
-	page.sql = true;
-	page.num = 0;
-	page.size = blog.recent_feed;
+  page.sql = true;
+  page.num = 0;
+  page.size = blog.recent_feed;
   condition.page = page;
   service.getArticles(condition, function(dataset) {
-		var items = [];
-		for (var n in dataset.dataset) {
-			var data = dataset.dataset[n];
-			var item = new feed_tag.Rss_Item();
-			item.title = data.article.title;
-			item.link = server.protocol + rss.link + '/feed/id/' + data.article.id;
-			item.comments = '';
-			item.creator = data.writer;
-			var category_name = '';
-			if (data.category.parent_name)
-				category_name = data.category.parent_name + '-';
-			category_name += data.category.name;
-			item.category = category_name;
-			item.guid =	'';
-			item.description = '';
-			item.content = getArticleById(data.article.id);
-			item.commentRss = '';
-			item.slash = '';
-			items.push(item);
-		}
-		rss.items = items;
-		var content = getFeedContent();
-  	var html = tag.apply(content, rss.toList());
-		
-		callback(html);
+    var items = [];
+    for (var n in dataset.dataset) {
+      var data = dataset.dataset[n];
+      var item = new feed_tag.Rss_Item();
+      item.title = data.article.title;
+      item.link = server.protocol + rss.link + '/feed/id/' + data.article.id;
+      item.comments = '';
+      item.creator = data.writer;
+      var category_name = '';
+      if (data.category.parent_name)
+        category_name = data.category.parent_name + '-';
+      category_name += data.category.name;
+      item.category = category_name;
+      item.guid =	'';
+      item.description = '';
+      item.content = getArticleById(data.article.id);
+      item.commentRss = '';
+      item.slash = '';
+      items.push(item);
+    }
+    rss.items = items;
+    var content = getFeedContent();
+    var html = tag.apply(content, rss.toList());
+
+    callback(html);
   });
 };
 
@@ -344,13 +350,13 @@ function callArticleContentById(id, callback) {
       service.getCommentForArticleId(id, function(comments) {
         var comment_list = sortComments(comments);
         args.comment_list = comment_list;
-  			var tag_article = new tag.Article(args);
-  			var html = tag.apply(template_html, tag_article.toList());;
+        var tag_article = new tag.Article(args);
+        var html = tag.apply(template_html, tag_article.toList());;
         callback(html);
       });
     } else {
-  		var tag_article = new tag.Article(args);
-  		var html = tag.apply(template_html, tag_article.toList());;
+      var tag_article = new tag.Article(args);
+      var html = tag.apply(template_html, tag_article.toList());;
       callback(html);
     }
   });
@@ -584,6 +590,113 @@ function tipAdmin(req, res, callback) {
   }
 }
 
+function busboyUpload(req, res) {
+  var fstream;
+  req.pipe(req.busboy);
+  req.busboy.on('file', function (fieldname, file, filename) {
+    console.log("Uploading: " + filename);
+    fstream = fs.createWriteStream(global.getServer().image_upload_path+ '/' + filename);
+    file.pipe(fstream);
+    fstream.on('close', function () {
+      res.redirect('back');
+    });
+  });
+}
+
+function streamUpload(req, res) {
+  console.log('upload image');
+  console.log(req);
+  // Request body is binary
+  req.setBodyEncoding('binary');
+
+  // Handle request as multipart
+  var stream = new multipart.Stream(req);
+  console.log(stream);
+
+  // Create promise that will be used to emit event on file close
+  var closePromise = new events.Promise();
+
+  // Add handler for a request part received
+  stream.addListener('part', function(part) {
+    sys.debug('Received part, name = ' + part.name + ', filename = ' + part.filename);
+    console.log('Received part, name = ' + part.name + ', filename = ' + part.filename);
+
+    var openPromise = null;
+
+    // Add handler for a request part body chunk received
+    part.addListener('body', function(chunk) {
+      // Calculate upload progress
+      var progress = (stream.bytesReceived / stream.bytesTotal * 100).toFixed(2);
+      var mb = (stream.bytesTotal / 1024 / 1024).toFixed(1);
+
+      sys.debug('Uploading ' + mb + 'mb (' + progress + '%)');
+
+      // Ask to open/create file (if not asked before)
+      if (openPromise == null) {
+        sys.debug('Opening file');
+        openPromise = posix.open('./uploads/' + part.filename, process.O_CREAT | process.O_WRONLY, 0600);
+      }
+
+      // Add callback to execute after file is opened
+      // If file is already open it is executed immediately
+      openPromise.addCallback(function(fileDescriptor) {
+        // Write chunk to file
+        write_chunk(req, fileDescriptor, chunk, 
+                    (stream.bytesReceived == stream.bytesTotal), closePromise);
+      });
+    }); 
+  });
+
+  // Add handler for the request being completed
+  stream.addListener('complete', function() {
+    sys.debug('Request complete');
+
+    // Wait until file is closed
+    closePromise.addCallback(function() {
+      // Render response
+      res.sendHeader(200, {'Content-Type': 'text/plain'});
+      res.sendBody('Thanks for playing!');
+      res.finish();
+
+      sys.puts('\n=> Done');
+    });
+  });
+}
+
+/*
+ * Write chunk of uploaded file
+ */
+function write_chunk(request, fileDescriptor, chunk, isLast, closePromise) {
+  // Pause receiving request data (until current chunk is written)
+  request.pause();
+  // Write chunk to file
+  sys.debug('Writing chunk');
+  posix.write(fileDescriptor, chunk).addCallback(function() {
+    sys.debug('Wrote chunk');
+    // Resume receiving request data
+    request.resume();
+    // Close file if completed
+    if (isLast) {
+      sys.debug('Closing file');
+      posix.close(fileDescriptor).addCallback(function() {
+        sys.debug('Closed file');
+
+        // Emit file close promise
+        closePromise.emitSuccess();
+      });
+    }
+  });
+}
+
+function writeHtml(res, html) {
+  res.writeHead(200, {'Content-Type': 'text/plain'});
+  res.write('<html>');
+  res.write(html);
+  res.write('</html>');
+  res.end();
+}
+
+
 exports.service = service;
 exports.getCategories = getCategories;
 exports.getCategoryInFamily = getCategoryInFamily;
@@ -606,3 +719,5 @@ exports.isAdmin = isAdmin;
 exports.tipAdmin = tipAdmin;
 exports.getAboutContent = getAboutContent;
 exports.callArticleContentById = callArticleContentById;
+exports.imageUpload = busboyUpload;
+exports.writeHtml = writeHtml;
