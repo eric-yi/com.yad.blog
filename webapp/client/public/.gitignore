@@ -8,5 +8,4 @@ ehthumbs.db
 Thumbs.db
 .log
 .swp
-/articles
-/upload
+/image_upload
