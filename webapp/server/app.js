@@ -3,13 +3,14 @@
 var express = require('express');
 var path = require('path');
 var favicon = require('static-favicon');
-var logger = require('morgan');
+var expressWinston = require('express-winston');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var busboy = require('connect-busboy');
 var global = require('./global').getGlobal();
 var FileUtil = require('./common/file_util');
+var logger = require('./common/logger_util').getLogger();
 
 var app = express();
 
@@ -19,7 +20,8 @@ app.set('view engine', 'ejs');
 app.engine('htm', require('ejs').renderFile);
 
 app.use(favicon());
-app.use(logger('dev'));
+app.use(expressWinston.logger(logger.expressLogger()));
+app.use(expressWinston.errorLogger(logger.expressLogger()));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(cookieParser());

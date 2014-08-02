@@ -32,6 +32,10 @@ Global.prototype.getDatabase = function() {
   return this.config.database;
 };
 
+Global.prototype.getLog = function() {
+	return this.config.log;
+};
+
 var global = new Global();
 exports.getGlobal = function() {
   return global;

@@ -47,6 +47,20 @@ var Database = function() {
   };
 };
 
+var Log = function() {
+	var dir_path = 'logs';
+	var common_log = 'yad.log';
+	var error_log = 'error.log';
+	var level = 'info';
+
+	return {
+		dir_path:		this.dir_path,
+		common_log: this.common_log,
+		error_log:	this.error_log,
+		level:			this.level
+	};
+};
+
 Blog = function() {
   var article_path = 'articles';
   var article_suffix = 'htm';
@@ -108,6 +122,7 @@ Config = function() {
   this.server = new Server();
   this.database = new Database();
   this.blog = new Blog();
+	this.log = new Log();
   this.x = 1;
 };
 
@@ -133,6 +148,8 @@ Config.prototype.init = function(path) {
     }
   }
 
+  Path = require('path');
+
   this.server.host = get(this.props, 'server', 'host');
   this.server.port = get(this.props, 'server', 'port');
   var cached = false;
@@ -155,7 +172,6 @@ Config.prototype.init = function(path) {
   this.database.name = get(this.props, 'database', 'name');
   this.database.max_connections = get(this.props, 'database', 'max_connection');
 
-  Path = require('path');
   var article_path = Path.join(__dirname, '..', get(this.props, 'blog', 'article.path'));
   this.blog.article_path = article_path;
   this.blog.article_suffix = get(this.props, 'blog', 'article.suffix');
@@ -183,11 +199,18 @@ Config.prototype.init = function(path) {
   this.blog.recent_feed = get(this.props, 'blog', 'recent.feed');
   this.blog.template_feed = get(this.props, 'blog', 'template.feed');
   this.blog.summary_min = get(this.props, 'blog', 'summary.min');
+
+  var log_path = Path.join(__dirname, '../..', get(this.props, 'log', 'dir.path'));
+	this.log.dir_path =	log_path;
+	this.log.common_log = log_path + '/' + get(this.props, 'log', 'common.log');
+	this.log.error_log = log_path + '/' + get(this.props, 'log', 'error.log');
+	this.log.level = get(this.props, 'log', 'level');
 };
 
 Config.prototype.server = this.server;
 Config.prototype.database = this.database;
 Config.prototype.blog = this.blog;
+Config.prototype.log = this.log;
 
 get = function(props, a, e) {
   if (a == null || e == null) return null;

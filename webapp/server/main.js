@@ -4,6 +4,7 @@ var debug = require('debug')('http');
 var config_path;
 var server;
 var blog;
+var log;
 
 function arg_opt() {
   var arguments = process.argv.splice(2);
@@ -23,6 +24,10 @@ function init() {
   server = global.getServer();
   blog = global.getBlog();
   FileUtil.mkdir(blog.article_path);
+	log = global.getLog();
+	FileUtil.mkdir(log.dir_path);
+	var logger = require('./common/logger_util').getLogger();
+	logger.init(log);
 }
 
 function start() {

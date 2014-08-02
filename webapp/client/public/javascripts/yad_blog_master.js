@@ -735,7 +735,10 @@ function showEditAbout() {
         content += '</p>';
 
         $('#content').html(content);
-        $('#about-editor').ckeditor();
+				$('#about-editor').ckeditor({
+			    filebrowserBrowseUrl: '/image',
+			    filebrowserImageUploadUrl: '/image/upload'
+			  });
         setAboutContent(data);
       });
     }

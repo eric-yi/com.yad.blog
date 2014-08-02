@@ -22,6 +22,8 @@ install:
 	$(NPM) install multipart
 	$(NPM) install posix
 	$(NPM) install connect-busboy 
+	$(NPM) install winston
+	$(NPM) install express-winston
 	mv node_modules $(server)
 
 env :

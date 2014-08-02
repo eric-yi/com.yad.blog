@@ -8,4 +8,5 @@ ehthumbs.db
 Thumbs.db
 .log
 *.swp
+/logs
 npm-debug.log
