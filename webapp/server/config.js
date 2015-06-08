@@ -48,17 +48,17 @@ var Database = function() {
 };
 
 var Log = function() {
-	var dir_path = 'logs';
-	var common_log = 'yad.log';
-	var error_log = 'error.log';
-	var level = 'info';
+  var dir_path = 'logs';
+  var common_log = 'yad.log';
+  var error_log = 'error.log';
+  var level = 'info';
 
-	return {
-		dir_path:		this.dir_path,
-		common_log: this.common_log,
-		error_log:	this.error_log,
-		level:			this.level
-	};
+  return {
+    dir_path: this.dir_path,
+    common_log: this.common_log,
+    error_log: this.error_log,
+    level: this.level
+  };
 };
 
 Blog = function() {
@@ -201,10 +201,10 @@ Config.prototype.init = function(path) {
   this.blog.summary_min = get(this.props, 'blog', 'summary.min');
 
   var log_path = Path.join(__dirname, '../..', get(this.props, 'log', 'dir.path'));
-	this.log.dir_path =	log_path;
-	this.log.common_log = log_path + '/' + get(this.props, 'log', 'common.log');
-	this.log.error_log = log_path + '/' + get(this.props, 'log', 'error.log');
-	this.log.level = get(this.props, 'log', 'level');
+  this.log.dir_path =	log_path;
+  this.log.common_log = log_path + '/' + get(this.props, 'log', 'common.log');
+  this.log.error_log = log_path + '/' + get(this.props, 'log', 'error.log');
+  this.log.level = get(this.props, 'log', 'level');
 };
 
 Config.prototype.server = this.server;

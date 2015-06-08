@@ -1,9 +1,9 @@
 # eric yi on 2014-05-06
 # yi_xiaobin@163.com
 
-NPM		=npm
-server		=./webapp/server
-node_modules	=$(server)/node_modules
+NPM=npm
+server=./webapp/server
+node_modules=$(server)/node_modules
 
 .PHONY : clean
 

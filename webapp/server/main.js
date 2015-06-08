@@ -32,7 +32,7 @@ function init() {
 
 function start() {
   App = require('./app');
-	server.view = App.get('views');
+  server.view = App.get('views');
   var webServer = App.listen(server.port, function() {
     debug('Express server listening on port ' + webServer.address().port);
   });
