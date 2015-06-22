@@ -1,0 +1,48 @@
+<div id="sidebar">
+  <div id="search">
+    <div id="search">
+      <ul>
+        <li style="margin-top:0px;">
+        <div>
+          <form id="searchform" method="post" action="/search">
+            <input type="text" name="s" id="s" size="11" />
+            <input type="image" src="/images/lens.png" title="search" alt="S" style="margin:0 0 -5px 3px;" />
+          </form>
+        </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <ul>
+    <li id="family-list" class="widget widget_links">
+    <h3><%= family_name %></h3>
+    <ul id="yad_family" class="xoxo blogroll">
+    </ul>
+    </li>
+
+    <li id="categories-list" class="widget widget_categories">
+    <h3><%= category_name %></h3>
+    <ul id="yad_category">
+    </ul>
+    </li>
+
+    <li id="recent-posts-list" class="widget widget_recent_entries">
+    <h3><%= recent_post_name %></h3>
+    <ul id="yad_article_recent">
+    </ul>
+    </li>
+
+    <li id="recent-comments-list" class="widget widget_recent_comments">
+    <h3><%= recent_comment_name %></h3>
+    <ul id="recentcomments">
+    </ul>
+    </li>	
+
+    <li id="link-list" class="widget widget_links">
+    <h3><%= link_name %></h3>
+    <ul id="yad_link" class="xoxo blogroll">
+    </ul>
+    </li>
+  </ul>
+</div>

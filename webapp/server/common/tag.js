@@ -14,6 +14,7 @@ exports.apply = function(html, params) {
   params.open = '<%yad';
   params.close = '%>';
   params.escape = escape;
+//  return ejs.render(html, params, {delimiter: '%'});
   return ejs.render(html, params);
 };
 

@@ -14,6 +14,8 @@ var Routes = function(app) {
   var master = require('./master');
   var feed = require('./feed');
   var image = require('./image');
+  var album = require('./album');
+  var gallery = require('./gallery');
 
   app.use('/', index);
   app.use('/category', category);
@@ -25,6 +27,8 @@ var Routes = function(app) {
   app.use('/master', master);
   app.use('/feed', feed);
   app.use('/image', image);
+  app.use('/album', album);
+  app.use('/gallery', gallery);
 };
 
 module.exports = function(app) {

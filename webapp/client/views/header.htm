@@ -9,15 +9,51 @@
 <style type="text/css">
 @import url("/stylesheets/style.css");
 </style>
+<link type="text/css" rel="stylesheet" href="/stylesheets/lightGallery.css" />
+<style>
+ul{
+  list-style: none outside none;
+  padding-left: 0;
+}
+.gallery li {
+  display: block;
+  float: left;
+  height: 100px;
+  margin-bottom: 6px;
+  margin-right: 6px;
+  width: 100px;
+}
+.gallery li a {
+  height: 100px;
+  width: 100px;
+}
+.gallery li a img {
+  max-width: 100px;
+}
+</style>
+
 <script type='text/javascript' src="/javascripts/jquery.min.js"></script>
+<script src="/javascripts/lightGallery.js"></script>
+<script>
+$(document).ready(function() {
+  $("#light-gallery").lightGallery({
+    loop: true,
+    auto: true,
+    showThumbByDefault: false
+  });
+});
+</script>
+
 <script type='text/javascript' src="/javascripts/yad_blog.js"></script>
 </head>
 <body>
 <div id="rap">
   <div id="headmenu">
     <ul>
-      <li class="page_item page-item-355"><a href="javascript:about();">About</a></li>
-      <li><a href="/" title="Home">Home</a></li>
+      <li class="page_item page-item-355"><a href="javascript:about();">关于</a></li>
+      <li class="page_item page-item-355"><a href="javascript:album();">相册</a></li>
+      <li class="page_item page-item-355"><a href="javascript:gallery();">苗苗画廊</a></li>
+      <li><a href="/" title="Home">首页</a></li>
     </ul>
   </div>
 

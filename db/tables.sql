@@ -68,10 +68,32 @@ CREATE TABLE IF NOT EXISTS yad_blog_master_family (
   username varchar(50) not null,
   password varchar(50) not null,
   name varchar(50) not null,
-  member_id int(3) not null,      -- 1,admin 2:dad 3:mom 4:daughter 5:son
+  member_id int(3) not null,      -- 1:admin 2:dad 3:mom 4:daughter 5:son
   position int(3) default null,
   email varchar(100) default null,
   qq varchar(50) default null,
   weibo varchar(50) default null,
   weico varchar(50) default null
 ) character set utf8 COMMENT='';
+
+CREATE TABLE IF NOT EXISTS yad_blog_album (
+  id int(11) not null auto_increment primary key,
+  family_id int(11) not null,
+  name varchar(50) not null,
+  place varchar(100),
+  info varchar(200),
+  publish_time datetime not null,
+  open smallint(2) default 0    -- 0:family only 1:public
+) character set utf8 COMMENT='';
+
+
+CREATE TABLE IF NOT EXISTS yad_blog_gallery (
+  id int(11) not null auto_increment primary key,
+  family_id int(11) not null,
+  path varchar(200),
+  place varchar(100),
+  info varchar(200),
+  publish_time datetime not null,
+  open smallint(2) default 0    -- 0:family only 1:public
+) character set utf8 COMMENT='';
+

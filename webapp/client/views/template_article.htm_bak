@@ -23,7 +23,7 @@
 </div><!-- end storycontent -->
 
 <div id="meta" class="meta">
-Written by <a href="javascript:familyForArticle(<%yad= auth_id %>)"><%yad= auth %></a> in: <a href="javascript:categoryForArticle(<%yad if (root_category != '') {%>'<%yad= root_category_path %>', '<%yad= cur_category_path %>')" 	title="查看<%yad= cur_category %><%yad} else {%>'<%yad= cur_category_path %>')" 	title="查看<%yad= cur_category %><%yad}%>中的全部文章" rel="category tag"><%yad= cur_category %></a>
+Written by <a href="javascript:familyForArticle(<%yad= auth_id %>)"><%yad= auth %></a> in: <a href="javascript:categoryForArticle(<%yadif (root_category != '') {%>'<%yad= root_category_path %>', '<%yad= cur_category_path %>')" title="查看<%yad= cur_category %><%yad} else {%>'<%yad= cur_category_path %>')" title="查看<%yad= cur_category %><%yad}%>中的全部文章" rel="category tag"><%yad= cur_category %></a>
 <%yad
 if (root_category != '') {
 %>

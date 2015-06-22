@@ -221,12 +221,58 @@ function resetPostValue(article) {
   }
 }
 
+function showAlbum(family, album) {
+  var content = '<form id="album_form" class="postform">';
+  var pub_date = new Date();
+  var year = pub_date.getFullYear();
+    var month = pub_date.getMonth();
+    var day = pub_date.getDate();
+    content += '<div class="datecomrap">';
+    content += '<div class="date">';
+    content += month2chs[month] + '<br />';
+    content += '<span style="font-size:2em; font-weight:bold;">' + day + '</span><br />';
+    content += year;
+    content += '</div>';
+    content += '</div>';
+
+content += '<div class="storywrap">';
+    content += '<div class="post" id="' + 1 + '">';
+    content += '<h3 class="storytitle">家庭相册';
+    if (album) {
+      content += '<div id="storyop" style="float:right;font-size=9px;">';
+      content += '<a href="javascript:editPost(' + 1 + ');"><i class="icon-edit"></i></a>';
+      content += '<a href="javascript:deletePost(' + 2 + ');"><i class="icon-trash"></i></a>';
+      content += '</div>';
+    }
+    content += '</h3>';
+
+    content += '<div class="storycontent">';
+    var summary = '';
+    content += summary;
+    content += '</div>';
+    content += '<div class="meta">';
+    content += '</div>';
+    content += '</div>';
+    content += '</div>';
+  
+  content += '</form>';
+  $('#content').html(content);
+}
+
 function enterPost() {
   familyCall(function(isLogin, family) {
     if (isLogin) {
       $.getJSON('/category/family/'+family.id+'/root', function(roots) {
         showPostContent(family, roots, null);
       });
+    }
+  });
+}
+
+function enterAlbum() {
+  familyCall(function(isLogin, family) {
+    if (isLogin) {
+      showAlbum(family, null);
     }
   });
 }
@@ -735,10 +781,10 @@ function showEditAbout() {
         content += '</p>';
 
         $('#content').html(content);
-				$('#about-editor').ckeditor({
-			    filebrowserBrowseUrl: '/image',
-			    filebrowserImageUploadUrl: '/image/upload'
-			  });
+        $('#about-editor').ckeditor({
+          filebrowserBrowseUrl: '/image',
+          filebrowserImageUploadUrl: '/image/upload'
+        });
         setAboutContent(data);
       });
     }

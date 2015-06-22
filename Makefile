@@ -9,7 +9,7 @@ node_modules=$(server)/node_modules
 
 install:
 	$(NPM) install express
-	$(NPM) install ejs
+	$(NPM) install ejs@1.0.0
 	$(NPM) install mysql
 	$(NPM) install debug
 	$(NPM) install static-favicon

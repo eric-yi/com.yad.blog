@@ -5,21 +5,21 @@
  */
 
 Factory = function() {
-	this.dao;
+  this.dao;
 };
 
 Factory.prototype.createDao = function(type) {
-	if (type == 'mysql') {
-		MysqlDao = require('./mysql_dao');
-		this.dao = MysqlDao.getDao();	
-	}
+  if (type == 'mysql') {
+    MysqlDao = require('./mysql_dao');
+    this.dao = MysqlDao.getDao();	
+  }
 };
 
 Factory.prototype.getDao = function() {
-	return this.dao;
+  return this.dao;
 };
 
 var factory = new Factory();
 exports.getFactory = function() {
-	return factory;
+  return factory;
 }

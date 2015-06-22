@@ -15,6 +15,7 @@ exports.parameters = {
   email:                  global.getBlog().email,
   family_name:            global.getBlog().family_name,
   category_name:          global.getBlog().category_name,
+  gallery_name:           global.getBlog().gallery_name,
   recent_post_name:       global.getBlog().recent_post_name,
   recent_post_preview:    global.getBlog().recent_post_preview,
   recent_comment_name:    global.getBlog().recent_comment_name,
@@ -32,6 +33,7 @@ exports.parameters_json =
   '"email":"' + global.getBlog().email + '",' +
   '"family_name":"' + global.getBlog().family_name + '", ' +
   '"category_name":"' + global.getBlog().category_name + '", ' +
+  '"gallery_name":"' + global.getBlog().gallery_name + '", ' +
   '"recent_post_name":"' + global.getBlog().recent_post_name + '", ' +
   '"recent_post_preview":"' + global.getBlog().recent_post_preview + '", ' +
   '"recent_comment_name":"' + global.getBlog().recent_comment_name + '", ' +

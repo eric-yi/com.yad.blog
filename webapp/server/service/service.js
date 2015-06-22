@@ -14,6 +14,8 @@ var cache = Cache.getCache();
 file_util = require('../common/file_util');
 string_util = require('../common/string_util');
 date_util = require('../common/date_util');
+logger_util = require('../common/logger_util');
+var logger = logger_util.getLogger();
 
 Service = function() {
   this.dao;
@@ -633,6 +635,75 @@ function fetchComment(results, id, target_type, comments) {
       fetchComment(results, comment.id, 2, comments);
     }
   }
+}
+
+Service.prototype.getAlbums = function(condition, callback) {
+  logger.debug('enter to getAlbums in Service');
+  var _dao = this.dao;
+  var sql = "select * from yad_blog_album";
+  sql += ' order by publish_time desc';
+  var container = new Container(condition=condition, sql=sql, callback=callback);
+  logger.debug('condition.page = ' + condition.page + ', condition.page.sql = ' + condition.page.sql);
+  if (condition.page && condition.page.sql) {
+    _dao.total(sql, function(total) {
+      logger.debug('enter to total of getAlbums');
+      condition.page.total = total;
+      handlePage(condition.page);
+      sql += ' limit ' + condition.page.start + ', ' + condition.page.end;
+      container.sql = sql;
+      fetchAlbums(_dao, container);
+   });
+  } else {
+    fetchAlbums(_dao, container);
+  }
+};
+
+function fetchAlbums(_dao, container) {
+  logger.debug('sql = ' + container.sql);
+  if (!cacheQuery(container)) {
+    _dao.query(container.sql, function(results) {
+      var list = [];
+      for (var index in results) {
+        var result = results[index];
+        logger.debug('result = ' + result);
+        var album = ModelProxy.genAlbum(result);
+        list.push({album: album});
+      }
+      logger.debug('list = ' + list);
+      putCache(container.sql, list);
+      var dataset = paging(container.condition.page, list);
+      if (container.condition.page) {
+        dataset = {dataset: dataset, page: container.condition.page};
+      }
+      logger.debug('container callback: ' + container.callback);
+      container.callback(dataset);
+    });
+  }
+}
+
+Service.prototype.getGallery = function(condition, callback) {
+  logger.debug('enter to getGallery in Service');
+  var _dao = this.dao;
+  var sql = "select * from yad_blog_gallery";
+  sql += ' order by publish_time desc';
+  var container = new Container(condition=condition, sql=sql, callback=callback);
+  fetchGallery(_dao, container);
+};
+
+function fetchGallery(_dao, container) {
+  logger.debug('sql = ' + container.sql);
+  _dao.query(container.sql, function(results) {
+    var list = [];
+    for (var index in results) {
+      var result = results[index];
+      logger.debug('result = ' + result);
+      var gallery = ModelProxy.genGallery(result);
+      list.push({gallery: gallery});
+    }
+    logger.debug('list = ' + list);
+    logger.debug('callback = ' + container.callback);
+    container.callback(list);
+  });
 }
 
 function handlePage(page) {

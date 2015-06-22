@@ -4,6 +4,10 @@
  * yi_xiaobin@163.com
  */
 // common function
+
+logger_util = require('../common/logger_util');
+var logger = logger_util.getLogger();
+
 exports.toArray = function(models) {
   var arr = [];
   for (var n in models) {
@@ -277,3 +281,89 @@ exports.genInfo = function(row) {
 
   return info;
 };
+
+exports.genAlbum = function(row) {
+  Album = require('./album');
+  var album = new Album();
+  logger.debug('album id = ' + row['id']);
+  if (row['id'] != null)          album.id = row['id'];
+  if (row['family_id'] != null)   album.family_id = row['family_id'];
+  if (row['name'] != null)        album.name = row['name'];
+  if (row['place'] != null)       album.place = row['place'];
+  if (row['info'] != null)        album.info = row['info'];
+  if (row['publish_time'] != null)album.publish_time = row['publish_time'];
+  if (row['open'] != null)        album.open = row['open'];
+
+  logger.debug('album = ' + album);
+  return album;
+};
+
+exports.toAlbumJson = function(models) {
+  return genAlbumJson(models)
+};
+
+exports.toAlbumPageJson = function(model) {
+  var dataset = genAlbumJson(model.dataset);
+  var page = model.page.toJson();
+  return '{"dataset":' + dataset + ',"page":' + page + '}';
+};
+
+
+function genAlbumJson(models) {
+  var json = '[';
+  var isFirst = true;
+  for (var n in models) {
+    var model = models[n];
+    var album = model.album;
+    if (!isFirst)           json += ', ';
+    json += album.toJson();
+    if (isFirst)            isFirst = false;
+  }
+  json += ']';
+  logger.debug('json: ' + json);
+  return json;
+};
+
+exports.genGallery = function(row) {
+  Gallery = require('./gallery');
+  var gallery = new Gallery();
+  logger.debug('gallery id = ' + row['id']);
+  if (row['id'] != null)          gallery.id = row['id'];
+  if (row['path'] != null)        gallery.path = row['path'];
+  if (row['family_id'] != null)   gallery.family_id = row['family_id'];
+  if (row['place'] != null)       gallery.place = row['place'];
+  if (row['info'] != null)        gallery.info = row['info'];
+  if (row['publish_time'] != null)gallery.publish_time = row['publish_time'];
+  if (row['open'] != null)        gallery.open = row['open'];
+
+  logger.debug('gallery = ' + gallery);
+  return gallery;
+};
+
+exports.toGalleryJson = function(models) {
+  return genGalleryJson(models)
+};
+
+exports.toGalleryPageJson = function(model) {
+  var dataset = genGalleryJson(model.dataset);
+  var page = model.page.toJson();
+  return '{"dataset":' + dataset + ',"page":' + page + '}';
+};
+
+
+function genGalleryJson(models) {
+  var json = '[';
+  var isFirst = true;
+  for (var n in models) {
+    var model = models[n];
+    var gallery = model.gallery;
+    if (!isFirst)           json += ', ';
+    json += gallery.toJson();
+    if (isFirst)            isFirst = false;
+  }
+  json += ']';
+  logger.debug('json: ' + json);
+  return json;
+};
+
+

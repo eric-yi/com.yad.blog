@@ -7,45 +7,46 @@
 var winston = require('winston');
 
 Logger = function() {
-	var _logger;
-	var _config;
+  var _logger;
+  var _config;
 }
 
 Logger.prototype.init = function(opt) {
-	this._config = {
-		exitOnError: false,
-  	transports: [
-			new (winston.transports.Console)({ level: opt.level }),
-			new (winston.transports.File)({ filename: opt.common_log, level: opt.level })
-		],
-		exceptionHandlers: [
+  this._config = {
+    exitOnError: false,
+    transports: [
+      new (winston.transports.Console)({ level: opt.level }),
+      new (winston.transports.File)({ filename: opt.common_log, level: opt.level })
+    ],
+    exceptionHandlers: [
       new winston.transports.File({ filename: opt.error_log })
     ]
-	};
-	this._logger = new (winston.Logger)(this._config);
+  };
+  this._logger = new (winston.Logger)(this._config);
 };
 
 Logger.prototype.expressLogger = function() {
-	return this._config;
+  return this._config;
 }
 
 Logger.prototype.info = function(msg) {
-	this._logger.info(msg);
+  this._logger.info(msg);
 }
 
 Logger.prototype.debug = function(msg) {
-	this._logger.debug(msg);
+  this._logger.debug(msg);
 }
 
 Logger.prototype.warn = function(msg) {
-	this._logger.warn(msg);
+  this._logger.warn(msg);
 }
 
 Logger.prototype.error = function(msg) {
-	this._logger.error(msg);
+  this._logger.error(msg);
 }
 
 var logger = new Logger();
 exports.getLogger = function() {
-		return logger;
+  return logger;
 };
+

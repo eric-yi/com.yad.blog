@@ -33,7 +33,7 @@ Global.prototype.getDatabase = function() {
 };
 
 Global.prototype.getLog = function() {
-	return this.config.log;
+  return this.config.log;
 };
 
 var global = new Global();

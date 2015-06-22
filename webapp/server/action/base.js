@@ -13,6 +13,9 @@ var fs = require('fs');
 Global= require('../global');
 var global = Global.getGlobal();
 
+logger_util = require('../common/logger_util');
+var logger = logger_util.getLogger();
+
 DaoFactory = require('../dao/dao_factory');
 var dao_factory = DaoFactory.getFactory();
 dao_factory.createDao('mysql');
@@ -696,6 +699,34 @@ function writeHtml(res, html) {
   res.end();
 }
 
+getAlbums = function(condition, callback) {
+  service.getAlbums(condition, function(list) {
+    callback(list);
+  });
+};
+
+exports.getAlbumsByPage = function(condition, page, res) {
+  condition.page = page;
+  getAlbums(condition, function(dataset) {
+    var json = ModelProxy.toAlbumPageJson(dataset);
+    res.send(json);
+  });
+};
+
+exports.listGallery = function(condition, res) {
+  getGallery(condition, function(dataset) {
+    logger.debug('listGallery');
+    var json = ModelProxy.toGalleryJson(dataset);
+    logger.debug('listGallery json');
+    res.send(json);
+  });
+};
+
+getGallery = function(condition, callback) {
+  service.getGallery(condition, function(list) {
+    callback(list);
+  });
+};
 
 exports.service = service;
 exports.getCategories = getCategories;
@@ -721,3 +752,5 @@ exports.getAboutContent = getAboutContent;
 exports.callArticleContentById = callArticleContentById;
 exports.imageUpload = busboyUpload;
 exports.writeHtml = writeHtml;
+exports.logger = logger;
+

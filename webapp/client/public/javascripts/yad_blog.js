@@ -70,6 +70,119 @@ function makeCategoryContent(categories, isadmin, cat_auths) {
   $('#yad_category').html(content);
 }
 
+function listAlbum(family) {
+  $('#album-add').remove();
+  $.getJSON( '/album/list', function(data) {
+    if (family.id == null) {
+      makeAlbumContents(data, false, []);
+    } else {
+      if (family.id == 1) {
+        $('#album-title').append('<a id="album-add" href="javascript:showAddAlbum(0);"><i class="icon-plus-sign" style="margin-top:0px;margin-left:10px;"></i></a>');
+        makeAlbumContent(data, true, []);
+      } else {
+        $.getJSON('/album/family/'+family.id, function(auths) {
+          makeAlbumContent(data, false, auths);
+        });
+      }
+    }
+  });
+}
+
+function pageForAlbum(page_num) {
+  $.getJSON('/parameters', function(parameters) {
+    var auth = parameters.auth;
+    $.getJSON('/family/member/current', function(family) {
+      if (!page_num) page_num = 0;
+      $.getJSON('/album/page/'+page_num, function(data) {
+        var content = makeAlbumContentsInPage(data, page_num, auth, family, null);
+        $('#content').html(content);
+      });
+    });
+  });
+}
+
+function makeAlbumContentsInPage(data, page_num, auth, family, fid) {
+  var content = makeAlbumContents(data.dataset, auth, family);
+  var page = data.page;
+  var hasPrev = (page.num != 0) ? true : false;
+  var position = page.num * page.size + parseInt(page.current);
+  var hasNext = (position < page.total) ? true : false;
+  if (hasPrev || hasNext) {
+    content += '<div class="navlink">'
+    var page_num;
+    if (hasPrev) {
+      page_num = parseInt(page.num) - 1;
+      if (fid) {
+        content += '<a href="javascript:familyForArticle(' + fid + ', ' + page_num + ')">« ' + page.prev + '</a>';
+      } else {
+        content += '<a href="javascript:pageForArticle(' + page_num + ')">« ' + page.prev + '</a>';
+      }
+    }
+    if (hasPrev && hasNext)
+      content += ' — ';
+    if (hasNext) {
+      page_num = parseInt(page.num) + 1;
+      if (fid) {
+        content += '<a href="javascript:familyForArticle('+ fid + ', ' + page_num + ')">' + page.next + ' »</a>';
+      } else {
+        content += '<a href="javascript:pageForAlbum('+ page_num + ')">' + page.next + ' »</a>';
+      }
+    }
+    content += '</div>';
+  }
+
+  return content;
+}
+
+
+function makeAlbumContents(data, auth, family) {
+  var content = '';
+  var family_id = -1;
+  var member_id = -1;
+  if (family.id != undefined)
+    family_id = family.id;
+  if (family.member_id != undefined)
+    member_id = family.member_id;
+  $.each(data, function() {
+    var pub_date = new Date(Date.parse(this.publish_time));
+    var year = pub_date.getFullYear();
+    var month = pub_date.getMonth();
+    var day = pub_date.getDate();
+    content += '<div class="datecomrap">';
+    content += '<div class="date">';
+    content += month2chs[month] + '<br />';
+    content += '<span style="font-size:2em; font-weight:bold;">' + day + '</span><br />';
+    content += year;
+    content += '</div>';
+    content += '</div>';
+
+    content += '<div class="storywrap">';
+    content += '<div class="post" id="' + this.id + '">';
+    content += '<h3 class="storytitle"><a href="javascript:readArticle(' + this.id + ')" rel="bookmark">' + this.title + '</a>';
+    if (member_id == 1 || this.family_id == family_id) {
+      content += '<div id="storyop" style="float:right;font-size=9px;">';
+      content += '<a href="javascript:editPost(' + this.id + ');"><i class="icon-edit"></i></a>';
+      content += '<a href="javascript:deletePost(' + this.id + ');"><i class="icon-trash"></i></a>';
+      content += '</div>';
+    }
+    content += '</h3>';
+
+    content += '<div class="storycontent">';
+    var summary = '';
+    if (this.summary)
+      summary = summaryToHtml(this.summary);
+    content += summary;
+    content += '</div>';
+    content += '<div class="meta">';
+    content += 'Publish by <a href="javascript:familyForArticle(' + this.family_id + ')">'  + this.writer + '</a>';
+    content += '</div>';
+    content += '</div>';
+    content += '</div>';
+  });
+
+  return content;
+}
+
 function listFamily(isadmin) {
   $('#family-add').remove();
   $.getJSON( '/family', function(data) {
@@ -310,6 +423,59 @@ function makeContents(data, auth, family) {
   return content;
 }
 
+function makeAlbums(data, auth, family) {
+  var content = '';
+  var family_id = -1;
+  var member_id = -1;
+  if (family.id != undefined)
+    family_id = family.id;
+  if (family.member_id != undefined)
+    member_id = family.member_id;
+  $.each(data, function() {
+    var pub_date = new Date(Date.parse(this.publish_time));
+    var year = pub_date.getFullYear();
+    var month = pub_date.getMonth();
+    var day = pub_date.getDate();
+    content += '<div class="datecomrap">';
+    content += '<div class="date">';
+    content += month2chs[month] + '<br />';
+    content += '<span style="font-size:2em; font-weight:bold;">' + day + '</span><br />';
+    content += year;
+    content += '</div>';
+    content += '<div class="commy">';
+    content += '<a href="javascript:readArticle(\'' + this.id + '\', \'comments\')" class="comments-link"  title="' + this.title + '">' + this.reply_num + '</a> ';
+    content += '</div>';
+    content += '</div>';
+
+    content += '<div class="storywrap">';
+    content += '<div class="post" id="' + this.id + '">';
+    content += '<h3 class="storytitle"><a href="javascript:readArticle(' + this.id + ')" rel="bookmark">' + this.title + '</a>';
+    if (member_id == 1 || this.family_id == family_id) {
+      content += '<div id="storyop" style="float:right;font-size=9px;">';
+      content += '<a href="javascript:editPost(' + this.id + ');"><i class="icon-edit"></i></a>';
+      content += '<a href="javascript:deletePost(' + this.id + ');"><i class="icon-trash"></i></a>';
+      content += '</div>';
+    }
+    content += '</h3>';
+
+    content += '<div class="storycontent">';
+    var summary = '';
+    if (this.summary)
+      summary = summaryToHtml(this.summary);
+    content += summary;
+    content += '</div>';
+    content += '<div class="meta">';
+    content += 'Written by <a href="javascript:familyForArticle(' + this.family_id + ')">'  + this.writer + '</a> in: <a href="javascript:categoryForArticle(\'' + this.category_parent_path_name + '\', \'' + this.category_path_name + '\')" rel="category tag">' + this.category_name + '</a>,';
+    content += '<a href="javascript:categoryForArticle(\'' + this.category_parent_path_name + '\')" rel="category tag">' + this.category_parent_name + '</a> | <br />';
+    content += '</div>';
+    content += '</div>';
+    content += '</div>';
+  });
+
+  return content;
+}
+
+
 function summaryToHtml(summary){
   return String(summary)
   .replace(/&amp;/g, '&')
@@ -442,7 +608,81 @@ function about(anchor) {
   } else {
     location.hash = '#';
   }
+}
 
+function album(anchor) {
+  pageForAlbum(0);
+  if (anchor) {
+    setAnchorById(anchor);
+  } else {
+    location.hash = '#';
+  }
+}
+
+function gallery(anchor) {
+  listGallery();
+  if (anchor) {
+    setAnchorById(anchor);
+  } else {
+    location.hash = '#';
+  }
+}
+
+function listGallery() {
+  $.getJSON('/parameters', function(parameters) {
+    var auth = parameters.auth;
+    $.getJSON('/family/member/current', function(family) {
+      $.getJSON('/gallery/list', function(data) {
+        var content = makeGalleryContents(data, auth, family);
+        $('#content').html(content);
+      });
+    });
+  });
+}
+
+function makeGalleryContents(data, auth, family) {
+  var content = '';
+  var family_id = -1;
+  var member_id = -1;
+  if (family.id != undefined)
+    family_id = family.id;
+  if (family.member_id != undefined)
+    member_id = family.member_id;
+
+  content += '<div class="storywrap">';
+  content += '<div class="post" id="gallery_id">';
+  content += '<h3 class="storytitle">苗苗画廊';
+  if (member_id == 1 || this.family_id == family_id) {
+    content += '<div id="storyop" style="float:right;font-size=9px;">';
+    content += '<a href="javascript:addGallery();"><i class="icon-plus-sign"></i></a>';
+    content += '</div>';
+  }
+  content += '</h3>';
+
+  content += '<ul id="light-gallery" class="gallery">';
+  $.each(data, function() {
+    content += '<li data-src="/gallery/' + this.path + '">';
+    content += '<img src="/gallery/_thumb_' + this.path + '" />';
+    content += '</li>';
+  });
+  content += '</ul>';
+
+  content += '<div class="storycontent">';
+  content += '</div>';
+  content += '</div>';
+  content += '</div>';
+
+  content += '<script>' +
+  '$(document).ready(function() {' +
+  '$("#light-gallery").lightGallery({' +
+    'loop: true,' +
+    'auto: true,' +
+    'showThumbByDefault: false' +
+  '});' +
+'});' +
+'</script>';
+
+  return content;
 }
 
 function init() {
@@ -452,6 +692,7 @@ function init() {
       isadmin = true;
     listFamily(isadmin);
     listCategory(family);
+    //listAlbum(family);
     listRecentArticle();
     listRecentComment();
     listLink(isadmin);
@@ -462,6 +703,7 @@ function init() {
 function feed_init() {
   listFamily(false);
   listCategory();
+  //listAlbum();
   listRecentArticle();
   listRecentComment();
   listLink(false);

@@ -1,0 +1,51 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta charset="utf-8">
+<title>YAD Family Bloy Grallery</title>
+<link type="text/css" rel="stylesheet" href="/stylesheets/lightGallery.css" />
+<style>
+ul{
+			list-style: none outside none;
+		    padding-left: 0;
+		}
+		.gallery li {
+			display: block;
+			float: left;
+			height: 100px;
+			margin-bottom: 6px;
+			margin-right: 6px;
+			width: 100px;
+		}
+		.gallery li a {
+			height: 100px;
+			width: 100px;
+		}
+		.gallery li a img {
+			max-width: 100px;
+		}
+    </style>
+<script type="text/javascript" src="/javascripts/jquery.min.js"></script>
+<script src="/javascripts/lightGallery.js"></script>
+<script>
+$(document).ready(function() {
+  $("#light-gallery").lightGallery({
+    loop: true,
+    auto: true,
+    showThumbByDefault: false
+  });
+});
+</script>
+</head>
+<body>
+<ul id="light-gallery" class="gallery">
+  <li data-src="/album/img1.jpg">
+    <img src="/album/thumb1.jpg" />
+  </li>
+  <li data-src="/album/img2.jpg">
+    <img src="/album/thumb2.jpg" />
+  </li>
+</ul>
+</body>
+</html>
+
