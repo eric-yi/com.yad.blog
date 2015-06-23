@@ -70,6 +70,7 @@ function makeCategoryContent(categories, isadmin, cat_auths) {
   $('#yad_category').html(content);
 }
 
+/*
 function listAlbum(family) {
   $('#album-add').remove();
   $.getJSON( '/album/list', function(data) {
@@ -86,6 +87,103 @@ function listAlbum(family) {
       }
     }
   });
+}
+*/
+
+function showAlbum(haskey, id, name, path) {
+  if (haskey) {
+    showBox({name:'album-box', focus:'passkey'});
+    $('#album_id').val(id);
+    $('#album_name').val(name);
+    $('#album_path').val(path);
+  } else {
+    listAlbum(name, path);
+  }
+}
+
+function closeAlbum() {
+  closeBox({name:'album-box', message:'album_message'});
+}
+
+function enterAlbum() {
+  if ($('#passkey').val() == '') {
+    $('#_message').html('咒语不能为空');
+    return false;
+  }
+  $.ajax({
+    url: '/album/open',
+    type: 'POST',
+    data: $('#albumform').serialize(),
+    success: function(message) {
+      var message = $.parseJSON(message);
+      if (message.success == 'true') {
+        $('#_message').html('');
+        closeAlbum();
+        var album_name = $('#album_name').val();
+        var album_path = $('#album_path').val();
+        listAlbum(album_name, album_path);
+      } else {
+        $('#_message').html('咒语错了');
+        return false;
+      }
+    },
+    error: function(message) {
+      $('#_message').html(message);
+    }
+  });
+
+}
+
+function listAlbum(name, path) {
+  $.getJSON('/parameters', function(parameters) {
+    var auth = parameters.auth;
+    $.getJSON('/family/member/current', function(family) {
+      $.getJSON('/album/path/'+path, function(data) {
+        var content = makeAlbumContent(name, data, auth, family);
+        $('#content').html(content);
+      });
+    });
+  });
+}
+
+function makeAlbumContent(name, data, auth, family) {
+  var content = '';
+  var family_id = -1;
+  var member_id = -1;
+  if (family.id != undefined)
+    family_id = family.id;
+  if (family.member_id != undefined)
+    member_id = family.member_id;
+
+  content += '<div class="storywrap">';
+  content += '<div class="post" id="album_id">';
+  content += '<h3 class="storytitle">' + name;
+  content += '</h3>';
+
+  content += '<ul id="light-album" class="album">';
+  $.each(data, function() {
+    content += '<li data-src="' + this.img + '">';
+    content += '<img src="' + this.thumb + '" />';
+    content += '</li>';
+  });
+  content += '</ul>';
+
+  content += '<div class="storycontent">';
+  content += '</div>';
+  content += '</div>';
+  content += '</div>';
+
+  content += '<script>' +
+  '$(document).ready(function() {' +
+  '$("#light-album").lightGallery({' +
+    'loop: true,' +
+    'auto: true,' +
+    'showThumbByDefault: false' +
+  '});' +
+'});' +
+'</script>';
+
+  return content;
 }
 
 function pageForAlbum(page_num) {
@@ -158,7 +256,7 @@ function makeAlbumContents(data, auth, family) {
 
     content += '<div class="storywrap">';
     content += '<div class="post" id="' + this.id + '">';
-    content += '<h3 class="storytitle"><a href="javascript:readArticle(' + this.id + ')" rel="bookmark">' + this.title + '</a>';
+    content += '<h3 class="storytitle"><a href="javascript:showAlbum(' + this.haskey + ', \'' + this.id + '\', \'' + this.name + '\', \'' + this.path + '\');">' + this.name + '</a>';
     if (member_id == 1 || this.family_id == family_id) {
       content += '<div id="storyop" style="float:right;font-size=9px;">';
       content += '<a href="javascript:editPost(' + this.id + ');"><i class="icon-edit"></i></a>';
@@ -172,12 +270,24 @@ function makeAlbumContents(data, auth, family) {
     if (this.summary)
       summary = summaryToHtml(this.summary);
     content += summary;
+
+    content += makeAlbumThumb(this.thumbs);
+
     content += '</div>';
     content += '<div class="meta">';
-    content += 'Publish by <a href="javascript:familyForArticle(' + this.family_id + ')">'  + this.writer + '</a>';
+    content += 'Publish by <a href="javascript:familyForAlbum(' + this.family_id + ')">'  + this.writer + '</a>';
     content += '</div>';
     content += '</div>';
     content += '</div>';
+  });
+
+  return content;
+}
+
+function makeAlbumThumb(thumbs) {
+  var content = '';
+  $.each(thumbs, function() {
+     content += '<img src="' + this.thumb + '" />';
   });
 
   return content;
@@ -692,7 +802,6 @@ function init() {
       isadmin = true;
     listFamily(isadmin);
     listCategory(family);
-    //listAlbum(family);
     listRecentArticle();
     listRecentComment();
     listLink(isadmin);
@@ -703,9 +812,40 @@ function init() {
 function feed_init() {
   listFamily(false);
   listCategory();
-  //listAlbum();
   listRecentArticle();
   listRecentComment();
   listLink(false);
+}
+
+function showBox(box) {
+  var box_name = box.name;
+  var focus_name = box.focus;
+  var title_name = box.title_name;
+  var title_value = box.title_value;
+  if (title_name != null && title_value != null)
+    $('#'+title_name).html(title_value);
+  var box_dia = $('#' + box_name);
+  box_dia.fadeIn(300);
+  var popMargTop = (box_dia.height() + 24) / 2;
+  var popMargLeft = (box_dia.width() + 24) / 2;
+  box_dia.css({
+    'margin-top' : -popMargTop,
+    'margin-left' : -popMargLeft
+  });
+  $('body').append('<div id="mask"></div>');
+  $('#mask').fadeIn(300);
+  if (focus_name != null)
+    $('#'+focus_name).focus();
+}
+
+function closeBox(box) {
+  var box_name = box.name;
+  var message_name = box.message;
+  var box_dia = $('#' + box_name);
+  if (message_name != null)
+    $('#'+message_name).html('');
+  box_dia.fadeOut(300 , function() {
+    $('#mask').remove();
+  });
 }
 

@@ -79,13 +79,14 @@ CREATE TABLE IF NOT EXISTS yad_blog_master_family (
 CREATE TABLE IF NOT EXISTS yad_blog_album (
   id int(11) not null auto_increment primary key,
   family_id int(11) not null,
+  path varchar(200),
   name varchar(50) not null,
   place varchar(100),
   info varchar(200),
   publish_time datetime not null,
-  open smallint(2) default 0    -- 0:family only 1:public
+  open smallint(2) default 0,   -- 0:family only 1:public
+  passkey varchar(50) default null
 ) character set utf8 COMMENT='';
-
 
 CREATE TABLE IF NOT EXISTS yad_blog_gallery (
   id int(11) not null auto_increment primary key,

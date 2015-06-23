@@ -86,9 +86,10 @@ values
   (8, 2, 7, 2, 'r1', 'test@mail.com', 'r1ss', '2014-05-04 12:00:00');
 
 insert into yad_blog_album
-  (family_id, name, place, info, publish_time)
+  (family_id, path, name, place, info, publish_time, open, passkey)
 values
-  (1, 'album1', 'Shanghai', 'test for album', '2015-06-15');
+  (1, 'album1', 'album1', 'Shanghai', 'test for album', '2015-06-15', 1, '1234'),
+  (2, 'album2', 'album2', 'Shanghai', 'test for album', '2015-06-15', 1, null);
 
 insert into yad_blog_gallery
   (family_id, path, place, info, publish_time)

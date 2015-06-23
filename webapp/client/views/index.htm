@@ -2,4 +2,22 @@
 
 <%- include content.htm %>
 
+<div id="album-box" class="login-popup">
+  <a href="javascript:closeAlbum();" class="close"><img src="/images/close_pop.png" class="btn_close" title="Close Window" alt="Close" /></a>
+  <form id="albumform" class="signin">
+    <fieldset class="textbox">
+      <label class="password">
+        <span>通关咒语</span>
+        <input id="passkey" name="passkey" value="" type="password" placeholder="咒语">
+      </label>
+      <input type="hidden" id="album_id" name="album_id" value="" />
+      <input type="hidden" id="album_name" name="album_name" value="" />
+      <input type="hidden" id="album_path" name="album_path" value="" />
+      <button class="submit button" type="button" onclick="enterAlbum()">芝麻开门</button>
+      <span id="_message" style="color:red;text-align:center;"></span>
+    </fieldset>
+  </form>
+</div>
+
+
 <%- include footer.htm %>

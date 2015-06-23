@@ -288,11 +288,14 @@ exports.genAlbum = function(row) {
   logger.debug('album id = ' + row['id']);
   if (row['id'] != null)          album.id = row['id'];
   if (row['family_id'] != null)   album.family_id = row['family_id'];
+  if (row['path'] != null)        album.path = row['path'];
   if (row['name'] != null)        album.name = row['name'];
   if (row['place'] != null)       album.place = row['place'];
   if (row['info'] != null)        album.info = row['info'];
   if (row['publish_time'] != null)album.publish_time = row['publish_time'];
   if (row['open'] != null)        album.open = row['open'];
+  album.haskey = false;
+  if (row['passkey'] != null)     album.haskey = true;
 
   logger.debug('album = ' + album);
   return album;
@@ -303,6 +306,7 @@ exports.toAlbumJson = function(models) {
 };
 
 exports.toAlbumPageJson = function(model) {
+  logger.debug('toAlbumPageJson');
   var dataset = genAlbumJson(model.dataset);
   var page = model.page.toJson();
   return '{"dataset":' + dataset + ',"page":' + page + '}';
@@ -312,13 +316,15 @@ exports.toAlbumPageJson = function(model) {
 function genAlbumJson(models) {
   var json = '[';
   var isFirst = true;
-  for (var n in models) {
-    var model = models[n];
+  logger.debug('alubm models: ' + models);
+  models.forEach(function(model) {
     var album = model.album;
+    var writer = model.writer;
+    logger.debug('alubm writer: ' + writer);
     if (!isFirst)           json += ', ';
-    json += album.toJson();
+    json += album.toComplexJson(writer);
     if (isFirst)            isFirst = false;
-  }
+  });
   json += ']';
   logger.debug('json: ' + json);
   return json;

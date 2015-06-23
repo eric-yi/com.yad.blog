@@ -18,15 +18,15 @@ use $DB_NAME;
 source $CUR_DIR/tables.sql;
 source $CUR_DIR/init.sql;
 source $CUR_DIR/views.sql;
-exit;
+exit
 EOF`
   echo sql
 }
 
 db_clear() {
   sql=`mysql -h$DB_HOST -u$DB_ROOT_USERNAME -p$DB_ROOT_PASSWORD << EOF
-drop database $DB_NAME;"
-exit;
+drop database $DB_NAME;
+exit
 EOF`
   echo sql
 }
@@ -34,7 +34,7 @@ EOF`
 db_createdb() {
   sql=`mysql -h$DB_HOST -u$DB_ROOT_USERNAME -p$DB_ROOT_PASSWORD << EOF
 create database $DB_NAME;"
-exit;
+exit
 EOF`
   echo sql
 }
@@ -45,7 +45,7 @@ create user $DB_USERNAME identified by '$DB_PASSWORD';
 grant all privileges on yad_blog.*  to '$DB_USERNAME'@'localhost' identified by '$DB_PASSWORD';
 grant all privileges on yad_blog.*  to '$DB_USERNAME'@'$DB_HOST' identified by '$DB_PASSWORD';
 grant all privileges on yad_blog.*  to '$DB_USERNAME'@'%' identified by '$DB_PASSWORD';
-exit;
+exit
 EOF`
   echo sql
 }
@@ -54,7 +54,7 @@ db_test() {
   sql=`mysql -h$DB_HOST -u$DB_USERNAME -p$DB_PASSWORD << EOF
 use $DB_NAME;
 source $CUR_DIR/test.sql;
-exit;
+exit
 EOF`
   echo sql
 }

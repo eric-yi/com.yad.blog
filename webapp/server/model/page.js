@@ -11,9 +11,9 @@ module.exports = function() {
   var current;
   var prev;
   var next;
-	var start;
-	var end;
-	var sql = false;
+  var start;
+  var end;
+  var sql = false;
 
   return {
     total:		this.total,
@@ -22,9 +22,9 @@ module.exports = function() {
     current:	this.current,
     prev:			this.prev,
     next:			this.next,
-		start:		this.start,
-		end:			this.end,
-		sql:			this.sql,
+    start:		this.start,
+    end:			this.end,
+    sql:			this.sql,
 
     toJson: function() {
       return '{"total":"' + this.total +

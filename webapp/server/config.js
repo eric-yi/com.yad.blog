@@ -165,6 +165,13 @@ Config.prototype.init = function(path) {
   var upload_path = Path.join(__dirname, '..', get(this.props, 'server', 'upload.path'));
   this.server.upload_path = upload_path;
   this.server.image_upload_path = get(this.props, 'server', 'image.upload.path');
+  var public_path = Path.join(__dirname, '../client/public');
+  this.server.album = get(this.props, 'server', 'album.path');
+  var album_path = Path.join(public_path, this.server.album);
+  this.server.album_path = album_path;
+  this.server.gallery = get(this.props, 'server', 'gallery.path');
+  var gallery_path = Path.join(public_path, this.server.gallery);
+  this.server.gallery_path = gallery_path;
 
   this.database.host = get(this.props, 'database', 'host');
   this.database.port = get(this.props, 'database', 'port');

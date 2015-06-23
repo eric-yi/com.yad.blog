@@ -12,7 +12,7 @@ DB_NAME="yad_blog"
 rm -rf $GALLERY_DIR/_thumb_*
 sql=`mysql -h$DB_HOST -u$DB_USERNAME -p$DB_PASSWORD $DB_NAME << EOF
 delete * from yad_blog_gallery;
-exit;
+exit
 EOF`
 echo $sql
 

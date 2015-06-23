@@ -31,6 +31,7 @@ Model = require('../model/model_proxy');
 
 tag = require('../common/tag');
 date_util = require('../common/date_util');
+file_util = require('../common/file_util');
 Tree = require('../common/tree');
 
 Message = function() {
@@ -144,7 +145,7 @@ getAboutContent = function() {
 };
 
 getFeedContent = function() {
-  var filename = global.getServer().view + '/' + global.getBlog().template_feed + '.xml' ;
+  var filename = global.getServer().view + '/' + global.getBlog().template_feed + '.xml';
   var content = service.getArticleContent(filename);
   return content;
 };
@@ -699,6 +700,21 @@ function writeHtml(res, html) {
   res.end();
 }
 
+exports.listGallery = function(condition, res) {
+  getGallery(condition, function(dataset) {
+    logger.debug('listGallery');
+    var json = ModelProxy.toGalleryJson(dataset);
+    logger.debug('listGallery json');
+    res.send(json);
+  });
+};
+
+getGallery = function(condition, callback) {
+  service.getGallery(condition, function(list) {
+    callback(list);
+  });
+};
+
 getAlbums = function(condition, callback) {
   service.getAlbums(condition, function(list) {
     callback(list);
@@ -713,18 +729,53 @@ exports.getAlbumsByPage = function(condition, page, res) {
   });
 };
 
-exports.listGallery = function(condition, res) {
-  getGallery(condition, function(dataset) {
-    logger.debug('listGallery');
-    var json = ModelProxy.toGalleryJson(dataset);
-    logger.debug('listGallery json');
-    res.send(json);
+exports.listAlbum = function(path, res) {
+  var album_path = global.getServer().album_path;
+  logger.debug('album_path:' + album_path);
+  logger.debug('path:' + path);
+  var files = file_util.listFiles(album_path+'/'+path);
+  logger.debug("files: " + files);
+  var json = '[';
+  var first = true;
+  files.forEach(function(file) {
+    if (!first) json += ', ';
+    json += '{';
+    json += '"img":"/album/' + path + '/' + file + '",';
+    json += '"thumb":"/album/' + path + '/thumb/' + '_thumb_' + file + '"';
+    json += '}';
+    if (first) first = false;
   });
+  json += ']';
+  logger.debug('json: ' + json);
+  res.send(json);
 };
 
-getGallery = function(condition, callback) {
-  service.getGallery(condition, function(list) {
-    callback(list);
+exports.getAlbumThumb = function(path, num, res) {
+  var album_path = global.getServer().album_path;
+  var files = file_util.listFiles(album_path+'/'+path+'/thumb');
+  var json = '[';
+  var first = true;
+  for (var n in files) {
+    if (n >= num)
+      break;
+    var file = files[n];
+    if (!first) json += ', ';
+    json += '{';
+    json += '"thumb":"/album/' + path + '/thumb/' + '_thumb_' + file + '"';
+    json += '}';
+    if (first) first = false;
+  }
+  json += ']';
+  res.send(json);
+};
+
+exports.openAlbum = function(id, passkey, res) {
+  service.getAlbum(id, passkey, function(album) {
+    if (album) {
+      sendSuccessMsg(res);
+    } else {
+      sendFailMsg(res);
+    }
   });
 };
 

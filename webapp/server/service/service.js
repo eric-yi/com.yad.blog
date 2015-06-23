@@ -640,8 +640,8 @@ function fetchComment(results, id, target_type, comments) {
 Service.prototype.getAlbums = function(condition, callback) {
   logger.debug('enter to getAlbums in Service');
   var _dao = this.dao;
-  var sql = "select * from yad_blog_album";
-  sql += ' order by publish_time desc';
+  var sql = "select a.*, f.name as writer from yad_blog_album a, yad_blog_master_family f where a.family_id = f.id";
+  sql += ' order by a.publish_time desc';
   var container = new Container(condition=condition, sql=sql, callback=callback);
   logger.debug('condition.page = ' + condition.page + ', condition.page.sql = ' + condition.page.sql);
   if (condition.page && condition.page.sql) {
@@ -660,6 +660,9 @@ Service.prototype.getAlbums = function(condition, callback) {
 
 function fetchAlbums(_dao, container) {
   logger.debug('sql = ' + container.sql);
+  var album_name = global.getServer().album;
+  var album_path = global.getServer().album_path;
+  var thumb_num = container.condition.thumb_num;
   if (!cacheQuery(container)) {
     _dao.query(container.sql, function(results) {
       var list = [];
@@ -667,7 +670,18 @@ function fetchAlbums(_dao, container) {
         var result = results[index];
         logger.debug('result = ' + result);
         var album = ModelProxy.genAlbum(result);
-        list.push({album: album});
+        var writer = result['writer'];
+        var thumbs = [];
+        var files = file_util.listFiles(album_path+'/'+album.path+'/thumb');
+        for (var n in files) {
+          if (n >= thumb_num)
+            break;
+          var file = files[n];
+          thumbs.push('/' + album_name + '/' + album.path + '/thumb/' + file);
+        }
+        logger.debug('thumbs: ' + thumbs);
+        album.thumbs = thumbs;
+        list.push({album: album, writer: writer});
       }
       logger.debug('list = ' + list);
       putCache(container.sql, list);
@@ -680,6 +694,19 @@ function fetchAlbums(_dao, container) {
     });
   }
 }
+
+Service.prototype.getAlbum = function(id, passkey, callback) {
+  var _dao = this.dao;
+  var sql = "select * from yad_blog_album where id = '" + id + "' and passkey = '" + passkey + "'";
+  logger.debug('getAlbum sql: ' + sql);
+  _dao.query(sql, function(results) {
+    var result = null;
+    if (results.length > 0)
+      result = results[0];
+    logger.debug('result = ' + result);
+    callback(result);
+  });
+};
 
 Service.prototype.getGallery = function(condition, callback) {
   logger.debug('enter to getGallery in Service');

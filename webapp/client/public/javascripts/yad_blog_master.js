@@ -864,36 +864,3 @@ function showToolbar() {
 }
 
 CKEDITOR.disableAutoInline = true;
-
-function showBox(box) {
-  var box_name = box.name;
-  var focus_name = box.focus;
-  var title_name = box.title_name;
-  var title_value = box.title_value;
-  if (title_name != null && title_value != null)
-    $('#'+title_name).html(title_value);
-  var box_dia = $('#' + box_name);
-  box_dia.fadeIn(300);
-  var popMargTop = (box_dia.height() + 24) / 2;
-  var popMargLeft = (box_dia.width() + 24) / 2;
-  box_dia.css({
-    'margin-top' : -popMargTop,
-    'margin-left' : -popMargLeft
-  });
-  $('body').append('<div id="mask"></div>');
-  $('#mask').fadeIn(300);
-  if (focus_name != null)
-    $('#'+focus_name).focus();
-}
-
-function closeBox(box) {
-  var box_name = box.name;
-  var message_name = box.message;
-  var box_dia = $('#' + box_name);
-  if (message_name != null)
-    $('#'+message_name).html('');
-  box_dia.fadeOut(300 , function() {
-    $('#mask').remove();
-  });
-}
-

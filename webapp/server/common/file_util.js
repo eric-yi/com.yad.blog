@@ -7,6 +7,8 @@
 Path = require('path');
 Fs = require('fs');
 var mode = '0755';
+logger_util = require('../common/logger_util');
+var logger = logger_util.getLogger();
 
 exports.mkdir = function(dir) {
   var arr = dir.split('/');
@@ -23,9 +25,9 @@ exports.mkdir = function(dir) {
     if(arr.length){
       _mkdir(cur + "/" + arr.shift());
     }
-  }
+  };
   arr.length && _mkdir(arr.shift());
-}
+};
 
 exports.read = function(filename) {
   if (Fs.existsSync(filename))
@@ -40,11 +42,28 @@ exports.writeContent = function(filename, content) {
   write(filename, content);
 };
 
-exports.write = write;
-
 function write(filename, content) {
   Fs.writeFile(filename, content, function(err) {
     if (err)
       throw err;
   });
-}
+};
+exports.write = write;
+
+exports.listFiles = function(dir, callback) {
+  var res = [];
+  try {
+    var files = Fs.readdirSync(dir);
+    files.forEach(function(file) {
+      var pathname = dir+'/'+file, stat=Fs.lstatSync(pathname);
+      if (!stat.isDirectory()){
+        res.push(file);
+      }
+    });
+  } catch(err) {
+    logger.error(err);
+  }
+
+  return res;
+};
+
