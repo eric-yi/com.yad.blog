@@ -91,6 +91,18 @@ values
   (1, 'album1', 'album1', 'Shanghai', 'test for album', '2015-06-15', 1, '1234'),
   (2, 'album2', 'album2', 'Shanghai', 'test for album', '2015-06-15', 1, null);
 
+insert into yad_blog_album
+  (family_id, path, name, place, info, publish_time, open, passkey)
+values
+  (1, 'thailand_150526', '2015泰国行.第一天', '泰国沙巴', '2015泰国沙巴曼谷行', '2015-05-26', 1, '150526'),
+  (1, 'thailand_150527', '2015泰国行.第二天', '泰国沙巴', '2015泰国沙巴曼谷行', '2015-05-27', 1, '150527'),
+  (1, 'thailand_150528', '2015泰国行.第三天', '泰国沙巴', '2015泰国沙巴曼谷行', '2015-05-28', 1, '150528'),
+  (1, 'thailand_150529', '2015泰国行.第四天', '泰国沙巴曼谷', '2015泰国沙巴曼谷行', '2015-05-29', 1, '150529'),
+  (1, 'thailand_150530', '2015泰国行.第五天', '泰国曼谷', '2015泰国沙巴曼谷行', '2015-05-30', 1, '150530'),
+  (1, 'thailand_150531', '2015泰国行.第六天', '泰国曼谷', '2015泰国沙巴曼谷行', '2015-05-31', 1, '150531');
+  (1, 'album2', 'album2', 'Shanghai', 'test for album', '2015-06-15', 1, null);
+
+
 insert into yad_blog_gallery
   (family_id, path, place, info, publish_time)
 values
