@@ -4,6 +4,15 @@
  * yi_xiaobin@163.com
  */
 
+jQuery.ajaxSetup({
+  beforeSend: function() {
+    $('#loader').show();
+  },
+  complete: function() {
+    $('#loader').hide();
+  }
+});
+
 var month2chs = new Array('一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二');
 
 function listCategory(family) {
