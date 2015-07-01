@@ -1,0 +1,65 @@
+<%- include header.htm %>
+
+<%- include content.htm %>
+
+<div id="chamber-box" class="login-popup">
+  <a href="javascript:closeChamber();" class="close"><img src="/images/close_pop.png" class="btn_close" title="Close Window" alt="Close" /></a>
+  <form id="chamberform" class="signin">
+    <fieldset class="textbox">
+      <label class="textbox">
+        <span>密室ID</span>
+        <input id="chamber_id" name="chamber_id" value="" type="text" placeholder="ID">
+      </label>
+      <label class="password">
+        <span>密室咒语</span>
+        <input id="chamber_passkey" name="chamber_passkey" value="" type="password" placeholder="咒语">
+      </label>
+      <button class="submit button" type="button" onclick="enterChamber()">芝麻开门</button>
+      <span id="chamber_message" style="color:red;text-align:center;"></span>
+    </fieldset>
+  </form>
+</div>
+
+<%- include footer.htm %>
+
+<script>
+function showChamber() {
+  showBox({name:'chamber-box', focus:'chamber_passkey'});
+}
+
+function closeChamber() {
+  closeBox({name:'chamber-box', message:'chamber_message'});
+}
+
+function enterChamber() {
+  $('#chamber_message').html('');
+  if ($('#chamber_id').val() == '') {
+    $('#chamber_message').html('ID不能为空');
+    return false;
+  }
+  if ($('#chamber_passkey').val() == '') {
+    $('#chamber_message').html('咒语不能为空');
+    return false;
+  }
+  $.ajax({
+    url: '/chamber/article',
+    type: 'POST',
+    data: $('#chamberform').serialize(),
+    success: function(message) {
+      closeChamber();
+      var content = '<div class="storywrap">';
+      content += message;
+      content += '</div>';
+      $('#content').html(content);
+    },
+    error: function(message) {
+      $('#chamber_message').html(message);
+    }
+  });
+
+}
+
+showChamber();
+</script>
+
+

@@ -16,6 +16,7 @@ var Routes = function(app) {
   var image = require('./image');
   var album = require('./album');
   var gallery = require('./gallery');
+  var chamber = require('./chamber');
 
   app.use('/', index);
   app.use('/category', category);
@@ -29,6 +30,7 @@ var Routes = function(app) {
   app.use('/image', image);
   app.use('/album', album);
   app.use('/gallery', gallery);
+  app.use('/chamber', chamber);
 };
 
 module.exports = function(app) {

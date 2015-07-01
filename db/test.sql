@@ -72,6 +72,10 @@ values
   (29, 4, 6, '标题9', '9', '2013-09-14 12:00:00'),
   (30, 2, 6, '面向GC的Java编程', '9', '2015-05-18 12:00:00');
 
+insert into yad_blog_article
+  (id, family_id, category_id, title, path_name, publish_time, status, passkey)
+values
+  (31, 2, 6, '面向GC的Java编程', '9', '2015-05-18 12:00:00', 3, 'yad');
 
 insert into yad_blog_comment
   (id, target_type, target_id, article_id, name, email, content, reply_time)

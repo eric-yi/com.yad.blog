@@ -61,13 +61,13 @@ MysqlPool.prototype.update = function(sql, callback) {
 
 MysqlPool.prototype.total = function(sql, callback) {
   var count_sql = 'select count(*) as total from (' + sql + ')';
-  logger.debug('query total sql: ' + count_sql);
   query(this.pool, sql, function(results) {
     callback(results[0].total);
   });
 };
 
 function _iud(_pool, sql, callback) {
+  logger.debug('sql: ' + sql);
   _pool.getConnection(function(err, conn) {
     if (err) {
       console.log('Dababase connection error!');
@@ -92,6 +92,7 @@ function _iud(_pool, sql, callback) {
 }
 
 function _iudRetId(_pool, sql, callback) {
+  logger.debug('sql: ' + sql);
   _pool.getConnection(function(err, conn) {
     if (err) {
       console.log('Dababase connection error!');
@@ -122,6 +123,7 @@ function _iudRetId(_pool, sql, callback) {
 
 function query(_pool, sql, callback) {
   logger.debug('enter query in mysql dao');
+  logger.debug('sql: ' + sql);
   _pool.getConnection(function(err, conn) {
     if (err) {
       console.log('Dababase connection error!');

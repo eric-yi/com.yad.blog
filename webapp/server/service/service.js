@@ -106,6 +106,16 @@ Service.prototype.getAbstractComments = function(condition, callback) {
   });
 };
 
+Service.prototype.getPrivateArticle = function(id, passkey, callback) {
+  var sql = 'select * from yad_blog_article where status = "3" and id = "' + id + '" and passkey = "' + passkey + '"';
+  this.dao.query(sql, function(results) {
+    var result;
+    if (results.length > 0)
+      result = results[0];
+    callback(result);
+  });
+};
+
 Service.prototype.getCommentForArticleId = function(article_id, callback) {
   var sql = 'select * from yad_blog_v_comment_info where article_id = "' + article_id + '" order by target_type, reply_time';
   queryComment(this.dao, sql, callback);

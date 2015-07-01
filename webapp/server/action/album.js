@@ -22,6 +22,7 @@ router.get('/path/:path', function(req, res) {
 
 router.post('/open', function(req, res) {
   logger.debug('enter album open');
+  logger.debug('body: ' + req.body);
   var id = req.body.album_id;
   var passkey = req.body.passkey;
   logger.debug('id = ' + id + ', passkey = ' + passkey);

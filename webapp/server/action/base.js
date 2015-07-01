@@ -119,6 +119,7 @@ getFamilies = function(condition, callback) {
 
 getArticleById = function(id) {
   var filename = global.getBlog().article_path + '/' + id + '.' + global.getBlog().article_suffix;
+  logger.debug('article filename: ' + filename);
   var content = service.getArticleContent(filename);
   if (!content) {
     content = getViewHtml(global.getBlog().template_nofound);
@@ -469,6 +470,7 @@ exports.getArticlesInAction = function(condition, res) {
 exports.getArticlesByPage = function(condition, page, res) {
   condition.page = page;
   getArticles(condition, function(dataset) {
+    logger.debug('getArticlesByPage');
     var json = ModelProxy.toArticlePageJson(dataset);
     res.send(json);
   });
@@ -778,6 +780,36 @@ exports.openAlbum = function(id, passkey, res) {
     }
   });
 };
+
+exports.getChamberArticle = function(id, passkey, res) {
+  service.getPrivateArticle(id, passkey, function(result) {
+    logger.debug('get chamber article');
+    if (result) {
+      var content = getArticleById(id);
+      res.send(content);
+    } else {
+      res.send("");
+    }
+  });
+};
+
+function filtArticles(articles, rule) {
+  var filters = [];
+  articles.forEach(function(article) {
+    switch(rule) {
+      case 1: // private, need password
+        if (article.haskey)
+          filters.push(article);
+        break;
+      case 0: // public, open
+      default:
+        if (!article.haskey)
+          filters.push(article);
+        break;
+    }
+  });
+  return filters;
+}
 
 exports.service = service;
 exports.getCategories = getCategories;

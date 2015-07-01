@@ -26,7 +26,7 @@ install:
 	$(NPM) install express-winston
 	mv node_modules $(server)
 
-env :
+env:
 	$(NPM) install -g express-generator
 
 clean:
