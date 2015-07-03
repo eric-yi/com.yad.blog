@@ -62,6 +62,7 @@ var Log = function() {
 };
 
 Blog = function() {
+  var chamber_path = 'chambers';
   var article_path = 'articles';
   var article_suffix = 'htm';
   var article_sumarry_suffix = '_summary';
@@ -91,6 +92,7 @@ Blog = function() {
   var summary_min = 20;
 
   return {
+    chamber_path:               this.chamber_path,
     article_path:               this.article_path,
     article_suffix:             this.article_suffix,
     article_summary_suffix:     this.article_summary_suffix,
@@ -180,6 +182,8 @@ Config.prototype.init = function(path) {
   this.database.name = get(this.props, 'database', 'name');
   this.database.max_connections = get(this.props, 'database', 'max_connection');
 
+  var chamber_path = Path.join(__dirname, '..', get(this.props, 'blog', 'chamber.path'));
+  this.blog.chamber_path = chamber_path;
   var article_path = Path.join(__dirname, '..', get(this.props, 'blog', 'article.path'));
   this.blog.article_path = article_path;
   this.blog.article_suffix = get(this.props, 'blog', 'article.suffix');

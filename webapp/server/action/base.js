@@ -117,14 +117,19 @@ getFamilies = function(condition, callback) {
   });
 };
 
-getArticleById = function(id) {
-  var filename = global.getBlog().article_path + '/' + id + '.' + global.getBlog().article_suffix;
+getArticleContent = function(id, root_dir) {
+  var filename = root_dir + '/' + id + '.' + global.getBlog().article_suffix;
   logger.debug('article filename: ' + filename);
   var content = service.getArticleContent(filename);
   if (!content) {
     content = getViewHtml(global.getBlog().template_nofound);
   }
   return content;
+};
+
+
+getArticleById = function(id) {
+  return getArticleContent(id, global.getBlog().article_path);
 };
 
 getArticleSummary = function(id) {
@@ -781,11 +786,22 @@ exports.openAlbum = function(id, passkey, res) {
   });
 };
 
+getArticleById = function(id, root_dir) {
+  var filename = global.getBlog().article_path + '/' + id + '.' + global.getBlog().article_suffix;
+  logger.debug('article filename: ' + filename);
+  var content = service.getArticleContent(filename);
+  if (!content) {
+    content = getViewHtml(global.getBlog().template_nofound);
+  }
+  return content;
+};
+
+
 exports.getChamberArticle = function(id, passkey, res) {
   service.getPrivateArticle(id, passkey, function(result) {
     logger.debug('get chamber article');
     if (result) {
-      var content = getArticleById(id);
+      var content = getArticleContent(id, global.getBlog().chamber_path);
       res.send(content);
     } else {
       res.send("");
