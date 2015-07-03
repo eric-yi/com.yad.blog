@@ -47,9 +47,7 @@ function enterChamber() {
     data: $('#chamberform').serialize(),
     success: function(message) {
       closeChamber();
-      var content = '<div class="storywrap">';
-      content += message;
-      content += '</div>';
+      content = message;
       $('#content').html(content);
     },
     error: function(message) {

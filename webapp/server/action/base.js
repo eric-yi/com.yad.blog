@@ -142,6 +142,10 @@ getArticleTemplate = function() {
   return getViewHtml(global.getBlog().template_article);
 };
 
+getChamberTemplate = function() {
+  return getViewHtml(global.getBlog().template_chamber);
+};
+
 getAboutTemplate = function() {
   return getViewHtml(global.getBlog().template_about);
 };
@@ -801,8 +805,23 @@ exports.getChamberArticle = function(id, passkey, res) {
   service.getPrivateArticle(id, passkey, function(result) {
     logger.debug('get chamber article');
     if (result) {
-      var content = getArticleContent(id, global.getBlog().chamber_path);
-      res.send(content);
+      var template_html = getChamberTemplate();
+      var d = date_util.split(result.publish_time)
+      var year = d.year;
+      var month = d.mnoth;
+      var day = d.day;
+      var storytitle = result.title;
+      var storycontent = getArticleContent(id, global.getBlog().chamber_path);
+      var args = {
+        id:                   id,
+        year:                 year,
+        month:                month,
+        day:                  day,
+        storytitle:           storytitle,
+        storycontent:         storycontent
+      };
+
+      sendArticle(res, template_html, args);
     } else {
       res.send("");
     }

@@ -85,6 +85,7 @@ Blog = function() {
   var page_next = 'next page';
   var template_nofound = 'template_nofound';
   var template_article = 'template_article';
+  var template_chamber = 'template_chamber';
   var template_about = 'template_about';
   var about_content = 'about_content';
   var recent_feed = 10;
@@ -112,6 +113,7 @@ Blog = function() {
     page_next:                  this.page_next,
     template_nofound:           this.template_notfound,
     template_article:           this.template_article,
+    template_chamber:           this.template_chamber,
     template_about:             this.template_about,
     about_content:              this.about_content,
     recent_feed:                this.recent_feed,
@@ -207,6 +209,7 @@ Config.prototype.init = function(path) {
   this.blog.page_next = get(this.props, 'blog', 'page.next');
   this.blog.template_notfound = get(this.props, 'blog', 'template.notfound');
   this.blog.template_article = get(this.props, 'blog', 'template.article');
+  this.blog.template_chamber = get(this.props, 'blog', 'template.chamber');
   this.blog.template_about = get(this.props, 'blog', 'template.about');
   this.blog.about_content = get(this.props, 'blog', 'about.content');
   this.blog.recent_feed = get(this.props, 'blog', 'recent.feed');
