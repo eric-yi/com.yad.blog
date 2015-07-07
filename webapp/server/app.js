@@ -24,6 +24,7 @@ app.use(expressWinston.logger(logger.expressLogger()));
 app.use(expressWinston.errorLogger(logger.expressLogger()));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
+//app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '..', 'client/public')));
 app.use(session({

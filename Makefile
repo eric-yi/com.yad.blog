@@ -15,7 +15,9 @@ install:
 	$(NPM) install static-favicon
 	$(NPM) install morgan
 	$(NPM) install cookie-parser
+#	$(NPM) install body-parser@1.13.1
 	$(NPM) install body-parser
+#	$(NPM) install express-session@1.11.3
 	$(NPM) install express-session
 	$(NPM) install MD5
 	$(NPM) install -g node-gyp 

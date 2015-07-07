@@ -80,7 +80,7 @@ Service.prototype.getArticleParameter = function(id, callback) {
 
 Service.prototype.getAbstractArticles = function(condition, callback) {
   handlePage(condition.page);
-  var sql = 'select * from yad_blog_article where a.status = 0 order by publish_time desc limit ' + condition.page.start + ', ' + condition.page.end;
+  var sql = 'select * from yad_blog_article where status = 0 order by publish_time desc limit ' + condition.page.start + ', ' + condition.page.end;
   this.dao.query(sql, function(results) {
     var list = [];
     for (var n  in results) {
@@ -548,7 +548,7 @@ Service.prototype.updateAbout = function(content) {
 function resourcesInFamily(_dao, id, callback) {
   var sql = 'select category_id from yad_blog_category_family where family_id = ' + id;
   _dao.query(sql, function(category_ids) {
-    sql = 'select * from yad_blog_article where family_id = ' + id;
+    sql = 'select * from yad_blog_article where status = 0 and family_id = ' + id;
     _dao.query(sql, function(articles) {
       callback({
         category_ids: category_ids,
@@ -570,7 +570,7 @@ function resourcesInCategory(_dao, id, callback) {
       ids += ',' + cat_id;
       cat_idList.push(cat_id);
     }
-    sql = 'select * from yad_blog_article where category_id in (' + ids + ')';
+    sql = 'select * from yad_blog_article where status = 0 and category_id in (' + ids + ')';
     _dao.query(sql, function(results) {
       var ar_idList = [];
       for (var n in results) {
