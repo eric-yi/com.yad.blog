@@ -99,6 +99,54 @@ function listAlbum(family) {
 }
 */
 
+function showResume() {
+  showBox({name:'resume-box', focus:'passkey'});
+}
+
+function closeResume() {
+  closeBox({name:'resume-box', message:'resume_message'});
+}
+
+function enterResume() {
+  if ($('#resume_passkey').val() == '') {
+    $('#resume_message').html('密钥不能为空');
+    return false;
+  }
+  $.ajax({
+    url: '/about/resume/dad/open',
+    type: 'POST',
+    data: $('#resumeform').serialize(),
+    success: function(message) {
+      var message = $.parseJSON(message);
+      if (message.success == 'true') {
+        $('#resume_message').html('');
+        closeResume();
+        $.ajax({
+          url: '/about/resume/dad/open',
+          type: 'POST',
+          data: $('#resumeform').serialize(),
+          success: function(message) {
+            var message = $.parseJSON(message);
+            if (message.success == 'true') {
+              closeResume();
+              window.location.target = '_blank';
+              window.location.href = '/about/resume/dad/view?key=' + message.msg;
+            } else {
+              $('#resume_message').html('密钥错了');
+            }
+          }
+        });
+      } else {
+        $('#resume_message').html('密钥错了');
+        return false;
+      }
+    },
+    error: function(message) {
+      $('#resume_message').html(message);
+    }
+  });
+}
+
 function showAlbum(haskey, id, name, path) {
   if (haskey) {
     showBox({name:'album-box', focus:'passkey'});

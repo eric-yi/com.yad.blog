@@ -120,7 +120,7 @@ getFamilies = function(condition, callback) {
 getArticleContent = function(id, root_dir) {
   var filename = root_dir + '/' + id + '.' + global.getBlog().article_suffix;
   logger.debug('article filename: ' + filename);
-  var content = service.getArticleContent(filename);
+  var content = service.getFileContent(filename);
   if (!content) {
     content = getViewHtml(global.getBlog().template_nofound);
   }
@@ -134,7 +134,7 @@ getArticleById = function(id) {
 
 getArticleSummary = function(id) {
   var filename = global.getBlog().article_path + '/' + id + global.getBlog().article_summary_suffix + '.' + global.getBlog().article_suffix;
-  var content = service.getArticleContent(filename);
+  var content = service.getFileContent(filename);
   return content;
 };
 
@@ -150,19 +150,31 @@ getAboutTemplate = function() {
   return getViewHtml(global.getBlog().template_about);
 };
 
+getResumeTemplate = function() {
+  return getViewHtml(global.getBlog().template_resume);
+};
+
 getAboutContent = function() {
   return getViewHtml(global.getBlog().about_content);
 };
 
 getFeedContent = function() {
   var filename = global.getServer().view + '/' + global.getBlog().template_feed + '.xml';
-  var content = service.getArticleContent(filename);
+  var content = service.getFileContent(filename);
   return content;
 };
 
 function getViewHtml(name) {
   var filename = global.getServer().view + '/' + name + '.' + global.getBlog().article_suffix;
-  var content = service.getArticleContent(filename);
+  logger.debug("view html filename: " + filename);
+  var content = service.getFileContent(filename);
+  return content;
+}
+
+function getResumeHtml(member, name) {
+  var filename = global.getResume().path + '/' + member + '/' + name + '.htm';
+  logger.debug('resume html: ' + filename);
+  var content = service.getFileContent(filename);
   return content;
 }
 
@@ -176,8 +188,9 @@ exports.getAbout = function(res) {
     var storytitle = '';
     var reply_num = 0;
     if (info) {
+      logger.debug('enter getAbout info');
       if (info.about_time) {
-        var d = date_util.split(info.about_time)
+        var d = date_util.split(info.about_time);
         year = d.year;
         month = d.month;
         day = d.day;
@@ -186,6 +199,7 @@ exports.getAbout = function(res) {
       if (info.about_title)       storytitle = info.about_title;
       if (info.about_reply_num)   reply_num = info.about_reply_num;
     }
+    logger.debug('before getAboutContent');
     var storycontent = getAboutContent();
     var args = {
       year:                 year,
@@ -197,6 +211,7 @@ exports.getAbout = function(res) {
       reply_num:            reply_num
     };
 
+    logger.debug('send about');
     if (reply_num != 0) {
       service.getCommentForAbout(function(comments) {
         var comment_list = sortComments(comments);
@@ -207,6 +222,64 @@ exports.getAbout = function(res) {
       sendArticle(res, template_html, args);
     }
   });
+};
+
+exports.getResume = function(member) {
+  var template_html = getResumeTemplate();
+  var name = '';
+  var job = '';
+  var birthday = '';
+  var email = '';
+  var residence = '';
+  var mobile = '';
+  var diplomas = '';
+  var github = '';
+  var motto = '';
+  var introduce = getResumeHtml(member, 'introduce');
+  var prologue = getResumeHtml(member, 'prologue');
+  var education = getResumeHtml(member, 'education');
+  var skills = getResumeHtml(member, 'skills');
+  var works = getResumeHtml(member, 'works');
+  var projects = getResumeHtml(member, 'projects');
+  var interests = getResumeHtml(member, 'interests');
+  var contact = getResumeHtml(member, 'contact');
+
+  var resume = global.getResume();
+  logger.debug('resume = ' + resume.toString());
+  if (member == 'dad') {
+    name = resume.dad_name;
+    job = resume.dad_job;
+    birthday = resume.dad_birthday;
+    email = resume.dad_email;
+    residence = resume.dad_residence;
+    mobile = resume.dad_mobile;
+    diplomas = resume.dad_diplomas;
+    github = resume.dad_github;
+    motto = resume.dad_motto;
+  }
+  var args = {
+    name:         name,
+    job:          job,
+    birthday:     birthday,
+    email:        email,
+    residence:    residence,
+    mobile:       mobile,
+    diplomas:     diplomas,
+    introduce:    introduce,
+    prologue:     prologue,
+    github:       github,
+    motto:        motto,
+    education:    education,
+    skills:       skills,
+    works:        works,
+    projects:     projects,
+    interests:    interests,
+    contact:      contact
+  };
+  var tag_resume = new tag.Resume(args);
+  var html = tag.apply(template_html, tag_resume.toList());
+
+  return html;
 };
 
 exports.getFeed = function(callback) {
@@ -440,7 +513,7 @@ function pushChildTree(redList, comment, tree) {
 
 function sendArticle(res, template_html, args) {
   var tag_article = new tag.Article(args);
-  var html = tag.apply(template_html, tag_article.toList());;
+  var html = tag.apply(template_html, tag_article.toList());
   res.send(html);
 }
 
@@ -793,7 +866,7 @@ exports.openAlbum = function(id, passkey, res) {
 getArticleById = function(id, root_dir) {
   var filename = global.getBlog().article_path + '/' + id + '.' + global.getBlog().article_suffix;
   logger.debug('article filename: ' + filename);
-  var content = service.getArticleContent(filename);
+  var content = service.getFileContent(filename);
   if (!content) {
     content = getViewHtml(global.getBlog().template_nofound);
   }

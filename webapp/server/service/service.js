@@ -126,7 +126,7 @@ Service.prototype.getCommentForAbout = function(callback) {
   queryComment(this.dao, sql, callback);
 };
 
-Service.prototype.getArticleContent = function(filename) {
+Service.prototype.getFileContent = function(filename) {
   return file_util.read(filename);
 }
 
@@ -325,7 +325,9 @@ Service.prototype.addComment = function(comment, callback) {
 Service.prototype.getInfo = function(callback) {
   var sql = 'select a.*, b.* from yad_blog_info a, (select count(*) as about_reply_num from yad_blog_comment where target_type = 3) b';
   this.dao.query(sql, function(results) {
+    logger.debug('service getInfo results: ' + results);
     var info = ModelProxy.genInfo(results[0]);
+    logger.debug('service getInfo info: ' + info);
     callback(info);
   });
 };

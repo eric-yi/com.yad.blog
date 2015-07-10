@@ -30,6 +30,8 @@ app.use(express.static(path.join(__dirname, '..', 'client/public')));
 app.use(session({
   secret: '0GBlJZ9EKBt2Zbi2flRPvztczCewBxXK',
   //store: sessionStore,
+  //resave: false,
+  //saveUninitialized: true,
   cookie: {maxAge: global.getServer().session_expired}
 }));
 //app.use(bodyParser({uploadDir: global.getServer().upload_path, keepExtensions: true }));
@@ -74,6 +76,5 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
-
 
 module.exports = app;

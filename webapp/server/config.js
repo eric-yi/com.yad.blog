@@ -61,6 +61,44 @@ var Log = function() {
   };
 };
 
+var Resume = function() {
+  var path = 'resume';
+  var dad_name = '';
+  var dad_job = '';
+  var dad_birthday = '';
+  var dad_email = '';
+  var dad_residence = '';
+  var dad_mobile = '';
+  var dad_diplomas = '';
+  var dad_github = '';
+  var dad_motto = '';
+
+  return {
+    path: this.path,
+    dad_name: this.dad_name,
+    dad_job: this.dad_job,
+    dad_birthday: this.dad_birthday,
+    dad_email: this.dad_email,
+    dad_residence: this.dad_residence,
+    dad_mobile: this.dad_mobile,
+    dad_diplomas: this.dad_diplomas,
+    dad_github: this.dad_github,
+    dad_motto: this.dad_motto,
+
+    toString: function() {
+      return    'dad_name: ' + this.dad_name
+              + ', dad_job: ' + this.dad_job
+              + ', dad_birthday: ' + this.dad_birthday
+              + ', dad_email: ' + this.dad_email
+              + ', dad_residence: ' + this.dad_residence
+              + ', dad_mobile: ' + this.dad_mobile
+              + ', dad_diplomas: ' + this.dad_diplomas
+              + ', dad_github: ' + this.dad_github
+              + ', dad_motto: ' + this.dad_motto;
+    }
+  };
+};
+
 Blog = function() {
   var chamber_path = 'chambers';
   var article_path = 'articles';
@@ -87,6 +125,7 @@ Blog = function() {
   var template_article = 'template_article';
   var template_chamber = 'template_chamber';
   var template_about = 'template_about';
+  var template_resume = 'template_resume';
   var about_content = 'about_content';
   var recent_feed = 10;
   var template_feed = 'template_feed';
@@ -115,6 +154,7 @@ Blog = function() {
     template_article:           this.template_article,
     template_chamber:           this.template_chamber,
     template_about:             this.template_about,
+    template_resume:            this.template_resume,
     about_content:              this.about_content,
     recent_feed:                this.recent_feed,
     template_feed:              this.template_feed,
@@ -127,7 +167,8 @@ Config = function() {
   this.server = new Server();
   this.database = new Database();
   this.blog = new Blog();
-	this.log = new Log();
+  this.log = new Log();
+  this.resume = new Resume();
   this.x = 1;
 };
 
@@ -211,6 +252,7 @@ Config.prototype.init = function(path) {
   this.blog.template_article = get(this.props, 'blog', 'template.article');
   this.blog.template_chamber = get(this.props, 'blog', 'template.chamber');
   this.blog.template_about = get(this.props, 'blog', 'template.about');
+  this.blog.template_resume = get(this.props, 'blog', 'template.resume');
   this.blog.about_content = get(this.props, 'blog', 'about.content');
   this.blog.recent_feed = get(this.props, 'blog', 'recent.feed');
   this.blog.template_feed = get(this.props, 'blog', 'template.feed');
@@ -221,12 +263,24 @@ Config.prototype.init = function(path) {
   this.log.common_log = log_path + '/' + get(this.props, 'log', 'common.log');
   this.log.error_log = log_path + '/' + get(this.props, 'log', 'error.log');
   this.log.level = get(this.props, 'log', 'level');
+
+  this.resume.path = Path.join(public_path, 'resume');
+  this.resume.dad_name = get(this.props, 'resume', 'dad.name');
+  this.resume.dad_job = get(this.props, 'resume', 'dad.job');
+  this.resume.dad_birthday = get(this.props, 'resume', 'dad.birthday');
+  this.resume.dad_email = get(this.props, 'resume', 'dad.email');
+  this.resume.dad_residence = get(this.props, 'resume', 'dad.residence');
+  this.resume.dad_mobile = get(this.props, 'resume', 'dad.mobile');
+  this.resume.dad_diplomas = get(this.props, 'resume', 'dad.diplomas');
+  this.resume.dad_github = get(this.props, 'resume', 'dad.github');
+  this.resume.dad_motto = get(this.props, 'resume', 'dad.motto');
 };
 
 Config.prototype.server = this.server;
 Config.prototype.database = this.database;
 Config.prototype.blog = this.blog;
 Config.prototype.log = this.log;
+Config.prototype.resume = this.resume;
 
 get = function(props, a, e) {
   if (a == null || e == null) return null;

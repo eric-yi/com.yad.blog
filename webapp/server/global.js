@@ -36,6 +36,10 @@ Global.prototype.getLog = function() {
   return this.config.log;
 };
 
+Global.prototype.getResume = function() {
+  return this.config.resume;
+};
+
 var global = new Global();
 exports.getGlobal = function() {
   return global;

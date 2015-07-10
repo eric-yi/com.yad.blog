@@ -19,4 +19,19 @@
   </form>
 </div>
 
+<div id="resume-box" class="login-popup">
+  <a href="javascript:closeResume();" class="close"><img src="/images/close_pop.png" class="btn_close" title="Close Window" alt="Close" /></a>
+  <form id="resumeform" class="signin">
+    <fieldset class="textbox">
+      <label class="password">
+        <span>开启密钥</span>
+        <input id="resume_passkey" name="resume_passkey" value="" type="password" placeholder="密钥">
+      </label>
+      <button class="submit button" type="button" onclick="enterResume()">开启</button>
+      <span id="resume_message" style="color:red;text-align:center;"></span>
+    </fieldset>
+  </form>
+</div>
+
+
 <%- include footer.htm %>
