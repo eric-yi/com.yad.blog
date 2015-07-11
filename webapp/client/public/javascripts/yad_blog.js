@@ -129,8 +129,14 @@ function enterResume() {
             var message = $.parseJSON(message);
             if (message.success == 'true') {
               closeResume();
-              window.location.target = '_blank';
-              window.location.href = '/about/resume/dad/view?key=' + message.msg;
+              $.fancybox.open({
+                href: '/about/resume/dad/view?key=' + message.msg,
+                type: 'iframe',
+                width: '100%',
+                height: '100%',
+                closeBtn: true,
+                padding: 5
+              });
             } else {
               $('#resume_message').html('密钥错了');
             }
