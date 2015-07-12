@@ -264,7 +264,7 @@ Config.prototype.init = function(path) {
   this.log.error_log = log_path + '/' + get(this.props, 'log', 'error.log');
   this.log.level = get(this.props, 'log', 'level');
 
-  this.resume.path = Path.join(public_path, 'resume');
+  this.resume.path = Path.join(__dirname, '..' , 'resume');
   this.resume.dad_name = get(this.props, 'resume', 'dad.name');
   this.resume.dad_job = get(this.props, 'resume', 'dad.job');
   this.resume.dad_birthday = get(this.props, 'resume', 'dad.birthday');
